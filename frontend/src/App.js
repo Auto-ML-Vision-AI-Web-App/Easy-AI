@@ -1,5 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+
+
+function api_test () {
+  const request = 'http://localhost:8080/'
+  axios.get(request)
+        .then(function(response) {
+            console.log(response.data)
+            console.log("성공");
+        })
+        .catch(function(error) {
+            console.log("실패");
+        })
+};
 
 function App() {
   return (
@@ -7,16 +21,9 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Eavy AI App
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={api_test}>API Test</button>
       </header>
     </div>
   );
