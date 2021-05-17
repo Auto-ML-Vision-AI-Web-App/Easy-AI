@@ -1,6 +1,5 @@
 package com.eavy;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,10 +10,13 @@ import java.io.IOException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
 public class Controller {
 
     private final ResourceLoader resourceLoader;
+
+    public Controller(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     // *******************************
     /* meaningless method */
