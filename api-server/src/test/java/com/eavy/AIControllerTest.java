@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+@SpringBootTest
 @AutoConfigureMockMvc
 class AIControllerTest {
 
@@ -25,17 +26,33 @@ class AIControllerTest {
     @Autowired
     ResourceLoader resourceLoader;
 
+    @Autowired
+    AIRepository repository;
+
     @DisplayName("Get model info")
     @Test
     void getModelInfo() throws Exception {
-        mockMvc.perform(get("/model"))
+
+        AI ai = new AI("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
+        repository.save(ai);
+
+        mockMvc.perform(get("/model/" + ai.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("MLPClassifier")))
-                .andExpect(jsonPath("$.activation", is("logistic")))
-                .andExpect(jsonPath("$.learningRate", is("adaptive")))
-                .andExpect(jsonPath("$.hiddenLayerSizes", is(50)))
-                .andExpect(jsonPath("$.momentum", is(0.1)))
-                .andExpect(jsonPath("$.solver", is("sgd")))
+                .andExpect(jsonPath("$.name", is(ai.getName())))
+                .andExpect(jsonPath("$.activation", is(ai.getActivation())))
+                .andExpect(jsonPath("$.learningRate", is(ai.getLearningRate())))
+                .andExpect(jsonPath("$.hiddenLayerSizes", is(ai.getHiddenLayerSizes())))
+                .andExpect(jsonPath("$.momentum", is(ai.getMomentum())))
+                .andExpect(jsonPath("$.solver", is(ai.getSolver())))
+                .andDo(print());
+    }
+
+    @DisplayName("Get model info - fail")
+    @Test
+    void getModelInfoFail() throws Exception {
+
+        mockMvc.perform(get("/model/9999"))
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 

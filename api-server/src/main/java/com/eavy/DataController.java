@@ -1,6 +1,9 @@
 package com.eavy;
 
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @CrossOrigin(origins = "http://localhost:3000")
-@RestController
+@Controller
 public class DataController {
 
     private final ResourceLoader resourceLoader;
@@ -22,11 +25,11 @@ public class DataController {
     }
 
     @PostMapping("/data")
-    public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<String> fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
         String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
         if(!extension.equals("jpg") && !extension.equals("png")) {
-            return "fail";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
         }
 
         byte[] bytes = file.getBytes();
@@ -35,7 +38,7 @@ public class DataController {
         bufferedOutputStream.write(bytes);
         bufferedOutputStream.flush();
         bufferedOutputStream.close();
-        return "success";
+        return new ResponseEntity<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
     }
 
 }

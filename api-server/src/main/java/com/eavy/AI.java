@@ -1,6 +1,14 @@
 package com.eavy;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class AI {
+
+    @Id @GeneratedValue
+    Long id;
 
     String name;
     String activation;
@@ -9,6 +17,9 @@ public class AI {
     double momentum;
     String solver;
 
+    public AI() {
+    }
+
     public AI(String name, String activation, String learningRate, int hiddenLayerSizes, double momentum, String solver) {
         this.name = name;
         this.activation = activation;
@@ -16,6 +27,14 @@ public class AI {
         this.hiddenLayerSizes = hiddenLayerSizes;
         this.momentum = momentum;
         this.solver = solver;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -64,5 +83,17 @@ public class AI {
 
     public void setSolver(String solver) {
         this.solver = solver;
+    }
+
+    @Override
+    public String toString() {
+        return "AI{" +
+                "name='" + name + '\'' +
+                ", activation='" + activation + '\'' +
+                ", learningRate='" + learningRate + '\'' +
+                ", hiddenLayerSizes=" + hiddenLayerSizes +
+                ", momentum=" + momentum +
+                ", solver='" + solver + '\'' +
+                '}';
     }
 }
