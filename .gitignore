@@ -24,4 +24,4 @@ hs_err_pid*
 
 frontend-template/node_modules
 frontend-template2/node_modules
-
+.DS_Store
