@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -35,6 +34,7 @@ public class DataController {
         byte[] bytes = file.getBytes();
         BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(
                 new FileOutputStream("./src/main/resources/images/" + file.getOriginalFilename()));
+
         bufferedOutputStream.write(bytes);
         bufferedOutputStream.flush();
         bufferedOutputStream.close();

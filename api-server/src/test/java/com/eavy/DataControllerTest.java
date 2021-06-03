@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@SpringBootTest
 @AutoConfigureMockMvc
 class DataControllerTest {
 
@@ -26,7 +27,7 @@ class DataControllerTest {
     @Autowired
     ResourceLoader resourceLoader;
 
-    @DisplayName("Image file upload success")
+    @DisplayName("Image file upload - success")
     @Test
     void fileUploadSuccess() throws Exception {
         // TODO png에 대해 테스트 되지 않음
@@ -39,7 +40,7 @@ class DataControllerTest {
                 .andExpect(content().string(HttpStatus.OK.getReasonPhrase()));
     }
 
-    @DisplayName("Image file upload fail(no image file)")
+    @DisplayName("Image file upload - fail(no image file)")
     @Test
     void fileUploadFail() throws Exception {
         // TODO txt 이외의 다른 형식에 대해 테스트 되지 않음
