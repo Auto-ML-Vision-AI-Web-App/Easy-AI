@@ -38,25 +38,29 @@ export default function Components(props) {
   return (
     <div>
       <Header
-        brand="Material Kit React"
+        brand="Easy AI"
         rightLinks={<HeaderLinks />}
         fixed
-        color="transparent"
+        color="dark"
         changeColorOnScroll={{
           height: 400,
           color: "white",
         }}
         {...rest}
       />
-      <Parallax image={require("assets/img/bg4.jpg").default}>
+      <Parallax
+      image={require("assets/img/workers-5246640_1920.jpg").default}>
         <div className={classes.container}>
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>Material Kit React.</h1>
+                <h1 className={classes.title}>Easy AI</h1>
                 <h3 className={classes.subtitle}>
-                  A Badass Material-UI Kit based on Material Design.
+                  클릭만으로 자신만의 AI를 만들어보세요
                 </h3>
+                <Button color="info">
+                round
+              </Button>
               </div>
             </GridItem>
           </GridContainer>
