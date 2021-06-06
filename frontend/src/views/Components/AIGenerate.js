@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
+import { Redirect, useHistory} from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     cardRoot: {
@@ -70,8 +72,8 @@ export default function AIGenerate() {
                                 <Grid item xs={6}>
                                     <ImgMediaCard
                                         card_value="object-detection"
-                                        card_title="탐지하기"
-                                        card_content="탐지하기란 사진에 여러 물체가 있을 때 각각의 물체 주변에 네모 상자를 두르고 물체명을 붙이는 작업입니다.    "
+                                        card_title="물체 탐지하기"
+                                        card_content="물체 탐지하기란 사진에 여러 물체가 있을 때 각각의 물체 주변에 네모 상자를 두르고 물체명을 붙이는 작업입니다.    "
                                         card_img="https://machinelearningmastery.com/wp-content/uploads/2018/12/Example-of-Object-Detection-with-Faster-R-CNN-on-the-MS-COCO-Dataset.png"
                                     ></ImgMediaCard>
                                 </Grid>
@@ -122,28 +124,34 @@ import Typography from '@material-ui/core/Typography';
 
 function ImgMediaCard(props) {
     const classes = useStyles();
-
+    const history = useHistory();
     function cardClick(card_value) {
         const api = axios.create({
             baseURL: 'http://localhost:8080'
         })
-        console.log(card_value)
+        //console.log(card_value)
         api.get('/model', {
             params: {
                 modelName: card_value
             }
         }).then(function (response) {
-            alert("ok")
-            console.log(response);
+            console.log(response.data);
+            history.push({
+                pathname: '/admin/ai-checking',
+                state:{
+                    result_model : card_value,
+                    model_url : response.data
+                }
+            })
+            //history.push("/admin/ai-checking");
         }).catch(function (error) {
-            alert("no");
             console.log(error);
         });
     }
 
     return (
         <Card className={classes.cardRoot}>
-            <CardActionArea card_value={props.card_value} onClick={ () => { cardClick(props.card_value); } }>
+            <CardActionArea card_value={props.card_value} onClick={() => { cardClick(props.card_value); }}>
                 <CardMedia
                     component="img"
                     alt="test"

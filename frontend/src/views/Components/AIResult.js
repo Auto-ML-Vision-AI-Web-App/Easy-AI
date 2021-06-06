@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
+import { Link} from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -24,13 +26,16 @@ const useStyles = makeStyles((theme) => ({
 export default function AIResult(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    //const getParams = this.props.location.state.result_model;
 
     return (
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
-                        <h4>{props.result_model}</h4>
+                        <h2><strong>AI 결과 확인하기</strong></h2>
+                        <h4>{props.location.state.result_model}</h4>
+                        <Link>{props.location.state.model_url}</Link>
                     </Paper>
                 </Grid>
             </Grid>
