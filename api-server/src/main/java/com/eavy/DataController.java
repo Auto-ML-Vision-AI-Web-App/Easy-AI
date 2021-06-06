@@ -23,24 +23,23 @@ public class DataController {
         this.resourceLoader = resourceLoader;
     }
 
-    @PostMapping("/data")
-    public ResponseEntity<String> fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
-        if(!extension.equals("jpg") && !extension.equals("png")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
+    @PostMapping("/upload")
+    public ResponseEntity<String> fileUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
+        for(MultipartFile file : files) {
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            if (!extension.equals("jpg") && !extension.equals("png")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
+            }
+
+            byte[] bytes = file.getBytes();
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(
+                    new FileOutputStream("./images/" + file.getOriginalFilename()));
+
+            bufferedOutputStream.write(bytes);
+            bufferedOutputStream.flush();
+            bufferedOutputStream.close();
         }
-
-        byte[] bytes = file.getBytes();
-//        BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(
-//                new FileOutputStream("./src/main/resources/images/" + file.getOriginalFilename()));
-
-        BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(
-                new FileOutputStream("./images/" + file.getOriginalFilename()));
-
-        bufferedOutputStream.write(bytes);
-        bufferedOutputStream.flush();
-        bufferedOutputStream.close();
         return new ResponseEntity<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
     }
 

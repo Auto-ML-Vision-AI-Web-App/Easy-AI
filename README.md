@@ -23,7 +23,7 @@ path : frontend/
 **Request:**
 ```
 HTTP Method = POST
-Request URI = /data
+Request URI = /upload
 Parameters = {}
 Headers = [Content-Type:"multipart/form-data;charset=UTF-8"]
 Body = null
@@ -57,7 +57,6 @@ Cookies = []
 ### Vision AI 결과 확인
 
 ```
-**Request:**
 HTTP Method = GET
 Request URI = /model/1
 Parameters = {}
