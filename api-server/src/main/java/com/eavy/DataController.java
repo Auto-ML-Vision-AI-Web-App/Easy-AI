@@ -1,5 +1,6 @@
 package com.eavy;
 
+import org.apache.tika.Tika;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,11 @@ public class DataController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> fileUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
+        Tika tika = new Tika();
         for(MultipartFile file : files) {
-            String originalFilename = file.getOriginalFilename();
-            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-            if (!extension.equals("jpg") && !extension.equals("png")) {
+            String mimeType = tika.detect(file.getOriginalFilename());
+            if(!mimeType.startsWith("image"))
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
-            }
 
             byte[] bytes = file.getBytes();
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(
