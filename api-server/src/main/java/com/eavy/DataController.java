@@ -32,8 +32,11 @@ public class DataController {
         }
 
         byte[] bytes = file.getBytes();
+//        BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(
+//                new FileOutputStream("./src/main/resources/images/" + file.getOriginalFilename()));
+
         BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(
-                new FileOutputStream("./src/main/resources/images/" + file.getOriginalFilename()));
+                new FileOutputStream("./images/" + file.getOriginalFilename()));
 
         bufferedOutputStream.write(bytes);
         bufferedOutputStream.flush();
