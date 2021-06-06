@@ -22,6 +22,5 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-frontend-template/node_modules
-frontend-template2/node_modules
+frontend/node_modules
 .DS_Store
