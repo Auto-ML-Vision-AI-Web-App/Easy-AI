@@ -17,6 +17,25 @@ public class AIController {
         this.repository = repository;
     }
 
+    // for demo
+    @GetMapping("/model")
+    public ResponseEntity<String> getModelForDemo(@RequestParam String modelName) {
+        String url = null;
+        if(modelName.equals("image-classification")) {
+            url = "https://drive.google.com/file/d/1s4iHkIf7iyanAAqslq6rPxNFf5phUj0o/view?usp=sharing";
+        }
+        else if(modelName.equals("object-detection")) {
+            url = "https://drive.google.com/file/d/19TEc7SYQ1lh-6ZqCt6cNJybaTIqzpfXK/view?usp=sharing";
+        }
+        else if(modelName.equals("colorization")) {
+            url = "https://drive.google.com/file/d/11xD8Q3bh_nMsK1RoqMG9niiiU6xkMaeK/view?usp=sharing";
+        }
+        else if(modelName.equals("style-transfer")) {
+            url = "https://drive.google.com/file/d/1PZK_4OmlxH5lFlCKeG5m4NZwFilj_Irm/view?usp=sharing";
+        }
+        return new ResponseEntity<>(url, HttpStatus.OK);
+    }
+
     @GetMapping("/model/{modelId}")
     public ResponseEntity<AI> getModel(@PathVariable Long modelId) {
         Optional<AI> byId = repository.findById(modelId);
