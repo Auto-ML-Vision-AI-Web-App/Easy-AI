@@ -20,7 +20,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-  }
+  },
+  fixedHeight: {
+    height: 240,
+},
 }));
 
 export default function DataCheck() {
@@ -29,13 +32,13 @@ export default function DataCheck() {
 
   return (
         <>
-          <Grid container>
-            <Grid item xs={12}>
+          <Grid container spacing={3}>
+                <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <h4>데이터 전처리하기</h4>
                     </Paper>
+                </Grid>
             </Grid>
-          </Grid>
         </>
   );
 }
