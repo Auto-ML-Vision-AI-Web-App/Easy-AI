@@ -35,6 +35,7 @@ export default function DataUpload() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
+                      <h2><strong>데이터 업로드하기</strong></h2>
                       <Basic />
                     </Paper>
             </Grid>

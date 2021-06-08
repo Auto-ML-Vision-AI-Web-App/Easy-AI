@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
@@ -24,18 +24,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AIResult(props) {
+    const [isSetAI, setAI] = useState();
+
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     //const getParams = this.props.location.state.result_model;
-
     return (
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <h2><strong>AI 결과 확인하기</strong></h2>
+                        <div>
+                        {props.location.state==undefined ?
+                        <div>
+                        <h3>현재 AI를 생성하지 않았습니다.</h3>
+                        <h4>AI 생성하기를 눌러 AI를 생성해주세요.</h4>
+                        </div>
+                        :
+                        <div>
                         <h4>{props.location.state.result_model}</h4>
                         <Link>{props.location.state.model_url}</Link>
+                        </div>
+                        }</div>
                     </Paper>
                 </Grid>
             </Grid>
