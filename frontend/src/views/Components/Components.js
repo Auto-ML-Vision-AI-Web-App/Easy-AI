@@ -44,7 +44,7 @@ export default function Components(props) {
         color="dark"
         changeColorOnScroll={{
           height: 400,
-          color: "white",
+          color: "info",
         }}
         {...rest}
       />
@@ -60,7 +60,7 @@ export default function Components(props) {
                 </h3>
                 
                 <Link to={"/admin"} className={classes.link}>
-                  <Button color="github">
+                  <Button color="info">
                     <h4><strong>지금 바로 AI 만들기</strong></h4>
                   </Button>
                 </Link>

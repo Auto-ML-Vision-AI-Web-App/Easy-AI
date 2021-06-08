@@ -32,7 +32,7 @@ export default function HeaderLinks(props) {
           buttonText="AI 만들기"
           buttonProps={{
             className: classes.navLink,
-            color : "primary"
+            color : "info"
           }}
           buttonIcon={Apps}
           dropdownList={[
