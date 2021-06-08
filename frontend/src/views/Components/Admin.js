@@ -16,7 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import { mainListItems, secondaryListItems } from './listItems';
+import { homeListItems, mainListItems, secondaryListItems } from './listItems';
 import DataUpload from './DataUpload';
 import DataCheck from './DataCheck';
 import AIGenerate from './AIGenerate';
@@ -163,6 +163,8 @@ export default function Admin() {
             <ChevronLeftIcon />
           </IconButton>
         </div>
+        <Divider />
+        <List>{homeListItems}</List>
         <Divider />
         <List>{mainListItems}</List>
         <Divider />

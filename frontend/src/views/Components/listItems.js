@@ -3,38 +3,44 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import PeopleIcon from '@material-ui/icons/People';
+import HomeIcon from '@material-ui/icons/Home';
+import PublishIcon from '@material-ui/icons/Publish';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import BuildIcon from '@material-ui/icons/Build';
 
 import { Link } from "react-router-dom";
 
-  
-export const mainListItems = (
+export const homeListItems = (
   <div>
     <ListItem button component={Link} to="/">
       <ListItemIcon>
-        <DashboardIcon />
+        <HomeIcon />
       </ListItemIcon>
       <ListItemText primary="Home" />
     </ListItem>
+  </div>
+);
+
+export const mainListItems = (
+  <div>
+    <ListSubheader inset>Make AI</ListSubheader>
     <ListItem button component={Link} to="/admin/data-uploading">
       <ListItemIcon>
-        <DashboardIcon />
+        <PublishIcon />
       </ListItemIcon>
       <ListItemText primary="데이터 업로드하기" />
     </ListItem>
     <ListItem button component={Link} to="/admin/data-checking">
       <ListItemIcon>
-        <AccountTreeIcon />
+        <PermMediaIcon />
       </ListItemIcon>
       <ListItemText primary="데이터 확인하기" />
     </ListItem>
     <ListItem button component={Link} to="/admin/ai-making">
       <ListItemIcon>
-        <PeopleIcon />
+        <BuildIcon />
       </ListItemIcon>
       <ListItemText primary="AI 만들기" />
     </ListItem>
@@ -49,12 +55,12 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
+    <ListSubheader inset>My Projects</ListSubheader>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <ListItemText primary="Projects" />
     </ListItem>
   </div>
 );
