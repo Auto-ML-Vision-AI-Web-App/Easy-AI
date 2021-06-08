@@ -63,13 +63,13 @@ class Basic extends Component {
     })
     var frm = new FormData();
     var photoFile = document.getElementById("file");
-    frm.append("file", photoFile.files[0]);
+    frm.append("files", photoFile.files[0]);
     //console.log(photoFile.files[0]===undefined);
     if(photoFile.files[0]===undefined){
       alert("데이터가 없습니다. 데이터를 입력해주세요.")
       return;
     }
-    api.post('/data', frm, {
+    api.post('/upload', frm, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
