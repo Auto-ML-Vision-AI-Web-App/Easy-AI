@@ -5,16 +5,17 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 
 @Component
 public class AppRunner implements ApplicationRunner {
 
-    public static void main(String[] args) {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        System.out.println(AppRunner.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    public static void main(String[] args) throws IOException {
+//        Page<Blob> list = storage.list("breath-of-ai");
+//        list.iterateAll().forEach(b -> {
+//            URL url = b.signUrl(15l, TimeUnit.MINUTES);
+//            System.out.println(url);
+//        });
     }
 
     private final ResourceLoader resourceLoader;
@@ -25,7 +26,6 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Path path = Paths.get("cl/images/");
-        System.out.println(path.getFileName());
+
     }
 }
