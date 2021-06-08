@@ -1,5 +1,7 @@
 package com.eavy;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ResourceLoader;
@@ -11,11 +13,16 @@ import java.io.IOException;
 public class AppRunner implements ApplicationRunner {
 
     public static void main(String[] args) throws IOException {
-//        Page<Blob> list = storage.list("breath-of-ai");
-//        list.iterateAll().forEach(b -> {
-//            URL url = b.signUrl(15l, TimeUnit.MINUTES);
-//            System.out.println(url);
-//        });
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "hello");
+        System.out.println(jsonObject.toString());
+        JSONObject jsonObject2 = new JSONObject();
+        jsonObject2.put("name", "world");
+        System.out.println(jsonObject2.toString());
+        jsonArray.add(jsonObject);
+        jsonArray.add(jsonObject2);
+        System.out.println(jsonArray.toString());
     }
 
     private final ResourceLoader resourceLoader;
