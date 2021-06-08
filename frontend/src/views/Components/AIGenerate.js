@@ -143,7 +143,6 @@ function ImgMediaCard(props) {
                     model_url : response.data
                 }
             })
-            //history.push("/admin/ai-checking");
         }).catch(function (error) {
             console.log(error);
         });

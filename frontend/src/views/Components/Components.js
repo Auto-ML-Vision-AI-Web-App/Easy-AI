@@ -58,6 +58,7 @@ export default function Components(props) {
                 <h3 className={classes.subtitle}>
                   클릭만으로 자신만의 AI를 만들어보세요
                 </h3>
+                
                 <Link to={"/admin"} className={classes.link}>
                   <Button color="github">
                     <h4><strong>지금 바로 AI 만들기</strong></h4>

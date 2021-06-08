@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +34,7 @@ export default function DataCheck() {
           <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
-                        <h4>데이터 전처리하기</h4>
+                      <h2><strong>데이터 확인하기</strong></h2>
                     </Paper>
                 </Grid>
             </Grid>
