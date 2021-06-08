@@ -22,5 +22,10 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# unnecessary
 frontend/node_modules
 .DS_Store
+
+# critical information
+api-server/src/main/resources/breath-of-ai-282d25539b0d.json
+
