@@ -55,7 +55,6 @@ public class DataController {
     @PostMapping("/upload")
     public ResponseEntity<String> fileUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
         Tika tika = new Tika();
-//        Storage storage = StorageOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(resourceLoader.getResource("classpath:breath-of-ai-282d25539b0d.json").getInputStream())).build().getService();
         for(MultipartFile file : files) {
             String mimeType = tika.detect(file.getOriginalFilename());
             if(!mimeType.startsWith("image"))
@@ -65,7 +64,9 @@ public class DataController {
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
         }
-        return new ResponseEntity<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
+        // TODO 실제 프로젝트 아이디
+        final int PROJECT_ID = 1;
+        return new ResponseEntity<>(String.valueOf(PROJECT_ID), HttpStatus.OK);
     }
 
     @PostMapping("/upload-local")
