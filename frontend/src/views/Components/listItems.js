@@ -56,11 +56,11 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>My Projects</ListSubheader>
-    <ListItem button>
+    <ListItem button component={Link} to="/admin/projects">
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Projects" />
+      <ListItemText primary="프로젝트 관리하기" />
     </ListItem>
   </div>
 );

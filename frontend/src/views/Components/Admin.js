@@ -20,6 +20,7 @@ import DataUpload from './DataUpload';
 import DataCheck from './DataCheck';
 import AIGenerate from './AIGenerate';
 import AIResult from './AIResult';
+import Projects from './Projects';
 
 import { Redirect, Switch, Route } from "react-router-dom";
 
@@ -183,6 +184,7 @@ export default function Admin() {
           <Route path="/admin/data-checking" exact component={DataCheck} />
           <Route path="/admin/ai-making" exact component={AIGenerate} />
           <Route path="/admin/ai-checking" exact component={AIResult} />
+          <Route path="/admin/projects" exact component={Projects} />
           <Redirect from="/admin" to="/admin/data-uploading" />
         </Switch>
         <Box pt={4}>
