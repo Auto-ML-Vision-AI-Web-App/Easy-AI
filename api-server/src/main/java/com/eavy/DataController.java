@@ -13,10 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -39,8 +36,9 @@ public class DataController {
         this.objectMapper = objectMapper;
     }
 
-    @GetMapping("/data")
-    public ResponseEntity<String> getData() {
+    @GetMapping("/data/{projectId}")
+    public ResponseEntity<String> getData(@PathVariable Integer projectId) {
+        // TODO projectId에 따라 해당 프로젝트의 학습 데이터 리턴하도록 수정
         Page<Blob> list = storage.list("breath-of-ai");
         JSONArray jsonArray = new JSONArray();
         list.iterateAll().forEach(b -> {
