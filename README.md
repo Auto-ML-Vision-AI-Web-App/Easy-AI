@@ -16,7 +16,32 @@ path : frontend/
 > npm run start
 ```
 
-## REST API
+## API
+
+### 학습 데이터 요청
+
+**Request:**
+
+```
+HTTP Method = GET
+Request URI = /data/{projectId}
+Parameters = {}
+Headers = []
+Body = null
+Session Attrs = {}
+```
+
+**Response - 정상적인 요청인 경우:**
+```
+Status = 200
+Error message = null
+Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"5669"]
+Content type = text/plain;charset=UTF-8
+Body = [{"filename":"file1","url":url1}, {"filename":"file2","url":url2}, ...]
+    Forwarded URL = null
+Redirected URL = null
+Cookies = []
+```
 
 ### 학습 데이터 입력
 
@@ -34,9 +59,9 @@ Session Attrs = {}
 ```
 Status = 200
 Error message = null
-Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"7"]
+Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"text/plain;charset=UTF-8", Content-Length:"1"]
 Content type = text/plain;charset=UTF-8
-Body = success
+Body = {projectId}
 Forwarded URL = null
 Redirected URL = null
 Cookies = []
@@ -55,39 +80,7 @@ Cookies = []
 ```
 
 ### Vision AI 결과 확인
-
-```
-HTTP Method = GET
-Request URI = /model/1
-Parameters = {}
-Headers = []
-Body = null
-Session Attrs = {}
-```
-
-**Response - 정상 요청인 경우:**
-```
-Status = 200
-Error message = null
-Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Type:"application/json"]
-Content type = application/json
-Body = {"id":1,"name":"MLPClassifier","activation":"logistic","learningRate":"adaptive","hiddenLayerSizes":50,"momentum":0.1,"solver":"sgd"}
-Forwarded URL = null
-Redirected URL = null
-Cookies = []
-```
-
-**Response - 잘못된 요청인 경우:**
-```
-Status = 404
-Error message = null
-Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"]
-Content type = null
-Body =
-Forwarded URL = null
-Redirected URL = null
-Cookies = []
-```
+.
 
 ### Vision AI 생성
 

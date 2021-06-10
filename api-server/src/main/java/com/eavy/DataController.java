@@ -13,10 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -39,8 +36,9 @@ public class DataController {
         this.objectMapper = objectMapper;
     }
 
-    @GetMapping("/data")
-    public ResponseEntity<String> getData() {
+    @GetMapping("/data/{projectId}")
+    public ResponseEntity<String> getData(@PathVariable Integer projectId) {
+        // TODO projectId에 따라 해당 프로젝트의 학습 데이터 리턴하도록 수정
         Page<Blob> list = storage.list("breath-of-ai");
         JSONArray jsonArray = new JSONArray();
         list.iterateAll().forEach(b -> {
@@ -55,7 +53,6 @@ public class DataController {
     @PostMapping("/upload")
     public ResponseEntity<String> fileUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
         Tika tika = new Tika();
-//        Storage storage = StorageOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(resourceLoader.getResource("classpath:breath-of-ai-282d25539b0d.json").getInputStream())).build().getService();
         for(MultipartFile file : files) {
             String mimeType = tika.detect(file.getOriginalFilename());
             if(!mimeType.startsWith("image"))
@@ -65,7 +62,9 @@ public class DataController {
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
         }
-        return new ResponseEntity<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
+        // TODO 실제 프로젝트 아이디
+        final int PROJECT_ID = 1;
+        return new ResponseEntity<>(String.valueOf(PROJECT_ID), HttpStatus.OK);
     }
 
     @PostMapping("/upload-local")

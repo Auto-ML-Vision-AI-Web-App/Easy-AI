@@ -9,7 +9,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,17 +27,25 @@ class DataControllerTest {
     @Autowired
     ResourceLoader resourceLoader;
 
+    @DisplayName("Get data by projectId")
+    @Test
+    void getDataByProjectId() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/data/1"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
     @DisplayName("Image file upload - success")
     @Test
     void fileUploadSuccess() throws Exception {
         // TODO png에 대해 테스트 되지 않음
         String originalFilename = "test_file.jpg";
-        MockMultipartFile mockFile = new MockMultipartFile("file", originalFilename, "image/jpeg", getClass().getResourceAsStream("/images/wakeupcat.jpg"));
+        MockMultipartFile mockFile = new MockMultipartFile("files", originalFilename, "image/jpeg", getClass().getResourceAsStream("/images/wakeupcat.jpg"));
 
-        mockMvc.perform(multipart("/data").file(mockFile))
+        mockMvc.perform(multipart("/upload").file(mockFile))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().string(HttpStatus.OK.getReasonPhrase()));
+                .andExpect(content().string("1")); // projectId
     }
 
     @DisplayName("Image file upload - fail(no image file)")
