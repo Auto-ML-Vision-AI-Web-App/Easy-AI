@@ -1,17 +1,29 @@
 import React, {useState} from 'react';
+import { Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
+  stepButton: {
+    border: "red",
+    backgroundColor: "#eee6c4",
+    color: "black",
+    fontSize: 30,
+    margin : '10px',
+    "&:hover,&:focus": {
+      backgroundColor: "#333333",
+      color: "#fff",
+      boxShadow:
+        "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
+    },
+  },
   root: {
     display: 'flex',
   },
@@ -35,7 +47,7 @@ export default function DataCheck(props) {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
-
+  
   return (
         <>
           <Grid container spacing={3}>
@@ -56,13 +68,16 @@ export default function DataCheck(props) {
                         }</div>
                     </Paper>
                     <center>
-                    <IconButton disabled={prevBtnDisabled} color="secondary" aria-label="go to next step">
-                    <SkipPreviousIcon style={{ fontSize: 80 }}/>
-                    </IconButton>
-                    
-                    <IconButton disabled={nextBtnDisabled} color="secondary" aria-label="go to next step">
-                    <SkipNextIcon style={{ fontSize: 80 }} />
-                    </IconButton>
+                    <Button component={Link} to="/admin/data-uploading"
+                    disabled={prevBtnDisabled}
+                    className={classes.stepButton}>
+                    이전
+                    </Button>
+                    <Button component={Link} to="/admin/ai-making"
+                    disabled={nextBtnDisabled}
+                    className={classes.stepButton}>
+                    다음
+                    </Button>
                     </center>
                 </Grid>
             </Grid>

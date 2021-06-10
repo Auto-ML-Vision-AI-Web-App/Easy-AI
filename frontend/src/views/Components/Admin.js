@@ -25,9 +25,9 @@ import { Redirect, Switch, Route } from "react-router-dom";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography variant="body2" color="textPrimary" align="center">
       {'Copyright © '}
-      <a color="inherit" href="seoyeonju1198@gmail.com/">
+      <a style={{color:"gray"}} href="seoyeonju1198@gmail.com/" >
         h01010
       </a>{' '}
       {new Date().getFullYear()}

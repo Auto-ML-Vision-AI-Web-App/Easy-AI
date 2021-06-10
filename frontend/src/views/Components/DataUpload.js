@@ -1,12 +1,11 @@
 import React, {useState, Component} from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import clsx from 'clsx';
 
 //file-upload-drop-zone
@@ -14,6 +13,19 @@ import Dropzone from 'react-dropzone';
 import '../../assets/css/dataupload.css'
 
 const useStyles = makeStyles((theme) => ({
+  stepButton: {
+    border: "red",
+    backgroundColor: "#eee6c4",
+    color: "black",
+    fontSize: 30,
+    margin : '10px',
+    "&:hover,&:focus": {
+      backgroundColor: "#333333",
+      color: "#fff",
+      boxShadow:
+        "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
+    },
+  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -32,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
 export default function DataUpload() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [btnDisabled, setBtnDisabled] = useState(true)
-  const [isData, setData] = useState(null)
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
   
   return (
         <>
@@ -41,12 +53,23 @@ export default function DataUpload() {
             <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                       <h2><strong>데이터 업로드하기</strong></h2>
-                      <Basic />
+                      <Basic isUploaded = {
+                        function(_isData){
+                          setBtnDisabled(false)
+                          console.log({btnDisabled})
+                      }.bind(this)}/>
                     </Paper>
                     <center>
-                    <IconButton disabled={btnDisabled} color="secondary" aria-label="go to next step">
-                    <SkipNextIcon style={{ fontSize: 80 }} />
-                    </IconButton>
+                    <Button component={Link} to="/admin"
+                    disabled={prevBtnDisabled}
+                    className={classes.stepButton}>
+                    이전
+                    </Button>
+                    <Button component={Link} to="/admin/data-checking"
+                    disabled={nextBtnDisabled}
+                    className={classes.stepButton}>
+                    다음
+                    </Button>
                     </center>
             </Grid>
           </Grid>
@@ -68,6 +91,7 @@ class Basic extends Component {
   
   imgUpload(e){
     e.preventDefault();
+    var upload_this = this;
     const api = axios.create({
       baseURL: 'http://localhost:8080'
     })
@@ -88,6 +112,9 @@ class Basic extends Component {
       }
       }).then(function (response) {
         alert("데이터가 업로드되었습니다.")
+        upload_this.props.isUploaded(
+          true
+        );
         console.log(response);
       }).catch(function (error) {
         alert("데이터 형식이 잘못되었습니다. 이미지 형식을 넣어주세요.");
@@ -116,7 +143,7 @@ class Basic extends Component {
               <h4>Files</h4>
               <ul>{files}</ul>
             </aside>
-            <center><Button onClick={this.imgUpload.bind(this)} variant="contained">업로드하기</Button></center>
+            <center><Button style={{backgroundColor: "#04ABC1", color:"white"}} onClick={this.imgUpload.bind(this)} variant="contained">업로드하기</Button></center>
           </section>
         )}
       </Dropzone>
