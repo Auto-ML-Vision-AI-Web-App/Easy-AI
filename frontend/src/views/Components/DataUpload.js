@@ -1,9 +1,12 @@
-import React, {Component} from 'react';
+import React, {useState, Component} from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import clsx from 'clsx';
 
 //file-upload-drop-zone
@@ -29,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 export default function DataUpload() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [btnDisabled, setBtnDisabled] = useState(true)
+  const [isData, setData] = useState(null)
   
   return (
         <>
@@ -38,6 +43,11 @@ export default function DataUpload() {
                       <h2><strong>데이터 업로드하기</strong></h2>
                       <Basic />
                     </Paper>
+                    <center>
+                    <IconButton disabled={btnDisabled} color="secondary" aria-label="go to next step">
+                    <SkipNextIcon style={{ fontSize: 80 }} />
+                    </IconButton>
+                    </center>
             </Grid>
           </Grid>
         </>
@@ -61,14 +71,17 @@ class Basic extends Component {
     const api = axios.create({
       baseURL: 'http://localhost:8080'
     })
-    var frm = new FormData();
+    const frm = new FormData();
     var photoFile = document.getElementById("file");
-    frm.append("files", photoFile.files[0]);
-    //console.log(photoFile.files[0]===undefined);
     if(photoFile.files[0]===undefined){
       alert("데이터가 없습니다. 데이터를 입력해주세요.")
       return;
     }
+    var idx=0;
+    for (idx=0; idx < photoFile.files.length; idx++) {
+      frm.append("files", photoFile.files[idx]);
+    }
+    
     api.post('/upload', frm, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -80,6 +93,7 @@ class Basic extends Component {
         alert("데이터 형식이 잘못되었습니다. 이미지 형식을 넣어주세요.");
         console.log(error);
       });
+      
   }
 
   render() {
