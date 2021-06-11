@@ -46,6 +46,7 @@ export default function DataUpload() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
+  const [projectId, setProjectId] = useState(null)
   
   return (
         <>
@@ -54,9 +55,10 @@ export default function DataUpload() {
                     <Paper className={fixedHeightPaper}>
                       <h2><strong>데이터 업로드하기</strong></h2>
                       <Basic isUploaded = {
-                        function(_isData){
-                          setBtnDisabled(false)
-                          console.log({btnDisabled})
+                        function(_isData, _projectID){
+                          setNextBtnDisabled(false)
+                          setProjectId(_projectID)
+                          console.log(_projectID)
                       }.bind(this)}/>
                     </Paper>
                     <center>
@@ -65,11 +67,18 @@ export default function DataUpload() {
                     className={classes.stepButton}>
                     이전
                     </Button>
-                    <Button component={Link} to="/admin/data-checking"
+                    <Link to={{
+                    pathname : "/admin/data-checking",
+                    state : {
+                        projectId : projectId,
+                    }
+                    }}
+                    ><Button 
                     disabled={nextBtnDisabled}
                     className={classes.stepButton}>
                     다음
                     </Button>
+                    </Link>
                     </center>
             </Grid>
           </Grid>
@@ -113,7 +122,7 @@ class Basic extends Component {
       }).then(function (response) {
         alert("데이터가 업로드되었습니다.")
         upload_this.props.isUploaded(
-          true
+          true, response.data
         );
         console.log(response);
       }).catch(function (error) {
@@ -137,10 +146,10 @@ class Basic extends Component {
           <section >
             <div {...getRootProps({className: 'dropzone'})}>
               <input id="file" {...getInputProps()} />
-              <h3><strong>파일들을 끌어다 놓거나, 클릭하여 자신의 데이터들을 선택하세요</strong></h3>
+              <h3><strong>파일들을 끌어다 놓거나, 이곳을 클릭하여 자신의 데이터들을 선택하세요</strong></h3>
             </div>
             <aside>
-              <h4>Files</h4>
+              <h5>Files</h5>
               <ul>{files}</ul>
             </aside>
             <center><Button style={{backgroundColor: "#04ABC1", color:"white"}} onClick={this.imgUpload.bind(this)} variant="contained">업로드하기</Button></center>
