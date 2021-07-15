@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.ai;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

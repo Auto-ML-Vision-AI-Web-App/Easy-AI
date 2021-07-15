@@ -1,5 +1,6 @@
 package com.eavy;
 
+import com.eavy.ai.AIRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

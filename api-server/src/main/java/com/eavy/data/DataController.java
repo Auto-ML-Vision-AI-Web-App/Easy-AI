@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.paging.Page;

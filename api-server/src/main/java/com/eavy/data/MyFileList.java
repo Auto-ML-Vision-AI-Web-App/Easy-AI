@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.data;
 
 import java.net.URL;
 import java.util.ArrayList;

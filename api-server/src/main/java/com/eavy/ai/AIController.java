@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.ai;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

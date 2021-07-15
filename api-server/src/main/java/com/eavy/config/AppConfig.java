@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.config;
 
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.Storage;

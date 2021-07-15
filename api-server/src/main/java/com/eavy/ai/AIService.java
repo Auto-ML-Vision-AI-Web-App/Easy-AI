@@ -1,4 +1,4 @@
-package com.eavy;
+package com.eavy.ai;
 
 public class AIService {
 }
