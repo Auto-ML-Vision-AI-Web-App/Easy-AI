@@ -7,6 +7,8 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import org.apache.tika.Tika;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -34,15 +37,17 @@ public class DataController {
     }
 
     @GetMapping("/data/{projectId}")
-    public ResponseEntity<MyFileList> getData(@PathVariable Integer projectId) {
+    public ResponseEntity<String> getData(@PathVariable Integer projectId) {
         // TODO projectId에 따라 해당 프로젝트의 학습 데이터 리턴하도록 수정
         Page<Blob> list = storage.list("breath-of-ai");
-        MyFileList myFileList = new MyFileList();
+        JSONArray jsonArray = new JSONArray();
         list.iterateAll().forEach(b -> {
-            myFileList.files.add(new MyFile(b.getName(), b.signUrl(15l, TimeUnit.MINUTES)));
+            JSONObject json = new JSONObject();
+            json.put("filename", b.getName());
+            json.put("url", b.signUrl(15l, TimeUnit.MINUTES));
+            jsonArray.add(json);
         });
-        myFileList.size = myFileList.files.size();
-        return new ResponseEntity<>(myFileList, HttpStatus.OK);
+        return new ResponseEntity<>(jsonArray.toString(), HttpStatus.OK);
     }
 
     @PostMapping("/upload")

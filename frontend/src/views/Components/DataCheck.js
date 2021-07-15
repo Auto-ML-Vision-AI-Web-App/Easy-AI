@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
-
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
@@ -45,9 +45,39 @@ const useStyles = makeStyles((theme) => ({
 export default function DataCheck(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(false)
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(false)
+  const [dataValue, setDataValue] = useState(0)
   
+  function showData(projectId){
+    var _returned_div = null;
+    console.log("hello")
+    const api = axios.create({
+      baseURL: 'http://localhost:8080/'
+    })
+    api.get('data/'+projectId, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+      }).then(function (response) {
+        //alert("데이터 요청 성공")
+        let returned_data = response.data
+        let searchvalue = '{';
+        let pos = 0;
+        var count=0;
+        while (true) {
+          let foundPos = returned_data.indexOf(searchvalue, pos);
+          if (foundPos == -1) break;
+          count++;
+          pos = foundPos + 1;
+        }
+        //console.log(count)
+        setDataValue(count)
+      }).catch(function (error) {
+        alert("데이터 요청을 실패하였습니다. 업로드한 데이터를 다시 확인해주세요.");
+        console.log(error);
+      });
+  }
   return (
         <>
           <Grid container spacing={3}>
@@ -62,8 +92,9 @@ export default function DataCheck(props) {
                         </div>
                         :
                         <div>
-                        <h4>{props.location.state.project_id}</h4>
-                        <Link>{props.location.state.data_result}</Link>
+                        {showData(props.location.state.projectId)}
+                        <h4>프로젝트 ID : {props.location.state.projectId}</h4>
+                        <p>데이터 수 : {dataValue}</p>
                         </div>
                         }</div>
                     </Paper>
@@ -83,4 +114,8 @@ export default function DataCheck(props) {
             </Grid>
         </>
   );
+}
+
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
 }
