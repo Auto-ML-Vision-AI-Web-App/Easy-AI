@@ -36,6 +36,9 @@ export default function HeaderLinks(props) {
           }}
           buttonIcon={Apps}
           dropdownList={[
+            <Link to="/login-page" className={classes.dropdownLink}>
+              로그인하기
+            </Link>,
             <Link to="admin/data-uploading" className={classes.dropdownLink}>
               데이터 업로드
             </Link>,
