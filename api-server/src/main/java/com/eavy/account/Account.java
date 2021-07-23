@@ -18,6 +18,9 @@ public class Account {
         this.password = password;
     }
 
+    public Account() {
+    }
+
     public Long getId() {
         return id;
     }
