@@ -5,6 +5,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import People from "@material-ui/icons/People";
 // core components
 import Header from "components/Header/Header.js";
@@ -61,16 +62,16 @@ export default function LoginPage(props) {
                   <p className={classes.divider}>Go to Make Your Own AI</p>
                   <CardBody>
                     <CustomInput
-                      labelText="Email..."
-                      id="email"
+                      labelText="Id..."
+                      id="id"
                       formControlProps={{
                         fullWidth: true,
                       }}
                       inputProps={{
-                        type: "email",
+                        type: "id",
                         endAdornment: (
                           <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
+                            <PermIdentityIcon className={classes.inputIconsColor} />
                           </InputAdornment>
                         ),
                       }}
