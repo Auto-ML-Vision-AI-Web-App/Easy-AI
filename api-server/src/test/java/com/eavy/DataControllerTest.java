@@ -53,9 +53,9 @@ class DataControllerTest {
     void fileUploadFail() throws Exception {
         // TODO txt 이외의 다른 형식에 대해 테스트 되지 않음
         String originalFilename = "test_file.txt";
-        MockMultipartFile mockFile = new MockMultipartFile("file", originalFilename, "text/plain", getClass().getResourceAsStream("/images/test_file.txt"));
+        MockMultipartFile mockFile = new MockMultipartFile("files", originalFilename, "text/plain", getClass().getResourceAsStream("/images/test_file.txt"));
 
-        mockMvc.perform(multipart("/data").file(mockFile))
+        mockMvc.perform(multipart("/upload").file(mockFile))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andExpect(content().string(HttpStatus.BAD_REQUEST.getReasonPhrase()));
