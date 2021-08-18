@@ -2,20 +2,20 @@ package com.eavy.account;
 
 public class AccountDTO {
 
-    private String username;
+    private String userId;
     private int numOfProjects;
 
-    public AccountDTO(String username, int numOfProjects) {
-        this.username = username;
+    public AccountDTO(String userId, int numOfProjects) {
+        this.userId = userId;
         this.numOfProjects = numOfProjects;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getNumOfProjects() {
