@@ -74,6 +74,8 @@ export default function Header(props) {
             brandComponent
           )}
         </div>
+
+        {props.username!=""? <Button color="inherit">Hello,  {props.username}</Button> : ""}
         <Hidden smDown implementation="css">
           {rightLinks}
         </Hidden>

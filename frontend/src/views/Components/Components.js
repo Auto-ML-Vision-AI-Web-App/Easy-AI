@@ -33,13 +33,17 @@ import styles from "assets/jss/material-kit-react/views/components.js";
 const useStyles = makeStyles(styles);
 
 export default function Components(props) {
+  const [loginStatus, setLoginStatus] = React.useState(props.location.state===undefined? false: props.location.state.loginStatus);
+  const [username, setUsername] = React.useState(loginStatus==true? props.location.state.username : "");
+  console.log(loginStatus)
   const classes = useStyles();
   const { ...rest } = props;
   return (
     <div>
       <Header
+        username={username}
         brand="Easy AI"
-        rightLinks={<HeaderLinks />}
+        rightLinks={<HeaderLinks loginStatus={loginStatus}/>}
         fixed
         color="dark"
         changeColorOnScroll={{

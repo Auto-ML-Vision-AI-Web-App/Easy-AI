@@ -49,8 +49,15 @@ export default function LoginPage(props) {
         password: userPw
       }
     }).then(function (response) {
-      console.log(response)
-      console.log(response.data);
+      props.history.push({
+        pathname: '/',
+        state: {
+          loginStatus: true,
+          username: response.data.username,
+          numOfProjects: response.numOfProjects
+        }
+      })
+
     }).catch(function (error) {
       console.log(error);
     });

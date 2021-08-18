@@ -24,6 +24,14 @@ const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
   const classes = useStyles();
+  const accountComponent = props.loginStatus==true?
+  <Link to="/" className={classes.dropdownLink}>
+  로그아웃하기
+  </Link>
+  :
+  <Link to="/login-page" className={classes.dropdownLink}>
+  로그인하기
+  </Link>
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -36,9 +44,7 @@ export default function HeaderLinks(props) {
           }}
           buttonIcon={Apps}
           dropdownList={[
-            <Link to="/login-page" className={classes.dropdownLink}>
-              로그인하기
-            </Link>,
+            accountComponent,
             <Link to="admin/data-uploading" className={classes.dropdownLink}>
               데이터 업로드
             </Link>,
