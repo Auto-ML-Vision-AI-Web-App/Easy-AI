@@ -10,11 +10,11 @@ public class Account {
     @Id
     @GeneratedValue
     Long id;
-    String username;
+    String userId;
     String password;
 
-    public Account(String username, String password) {
-        this.username = username;
+    public Account(String userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
@@ -29,12 +29,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String username) {
+        this.userId = username;
     }
 
     public String getPassword() {
