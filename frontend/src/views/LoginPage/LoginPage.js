@@ -46,11 +46,12 @@ export default function LoginPage(props) {
     })
     api.post('/signin', null, {
       params: {
-        username: userId,
+        userId: userId,
         password: userPw
       }
     }).then(function (response) {
       document.getElementById("login_error_alert").style.display="none";
+      console.log(response)
       props.history.push({
         pathname: '/',
         state: {
