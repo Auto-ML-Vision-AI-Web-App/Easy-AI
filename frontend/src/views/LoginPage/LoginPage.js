@@ -56,7 +56,7 @@ export default function LoginPage(props) {
         pathname: '/',
         state: {
           loginStatus: true,
-          username: response.data.username,
+          username: response.data.userId,
           numOfProjects: response.numOfProjects
         }
       })
