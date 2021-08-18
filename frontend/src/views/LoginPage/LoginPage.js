@@ -10,6 +10,7 @@ import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
+import Alert from '@material-ui/lab/Alert';
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -49,6 +50,7 @@ export default function LoginPage(props) {
         password: userPw
       }
     }).then(function (response) {
+      document.getElementById("login_error_alert").style.display="none";
       props.history.push({
         pathname: '/',
         state: {
@@ -59,6 +61,7 @@ export default function LoginPage(props) {
       })
 
     }).catch(function (error) {
+      document.getElementById("login_error_alert").style.display="block";
       console.log(error);
     });
   };
@@ -89,6 +92,7 @@ export default function LoginPage(props) {
                     <h4>Login</h4>
 
                   </CardHeader>
+                  <Alert id="login_error_alert" style={{display:'none'}} severity="error">로그인에 실패했습니다.<br></br>아이디와 패스워드를 확인해주세요.</Alert>
                   <p className={classes.divider}>Go to Make Your Own AI</p>
                   <CardBody>
                     <CustomInput
