@@ -14,10 +14,10 @@ public class AccountService {
     }
 
     public AccountDTO signIn(Account account) {
-        Optional<Account> byUsername = accountRepository.findByUsername(account.getUsername());
+        Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
         if(byUsername.isPresent()) {
             Account found = byUsername.get();
-            return new AccountDTO(found.getUsername(), 1);
+            return new AccountDTO(found.getUserId(), 1);
         }
         return null;
     }
