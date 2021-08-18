@@ -34,7 +34,7 @@ const useStyles = makeStyles(styles);
 
 export default function Components(props) {
   const [loginStatus, setLoginStatus] = React.useState(props.location.state===undefined? false: props.location.state.loginStatus);
-  const [username, setUsername] = React.useState(loginStatus==true? props.location.state.username : "");
+  const [username, setUsername] = React.useState(props.location.state==undefined? "":props.location.state.username);
   console.log(loginStatus)
   const classes = useStyles();
   const { ...rest } = props;
