@@ -3,7 +3,7 @@ import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,21 +16,23 @@ import { Apps, CloudDownload } from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function HeaderLinks(props) {
+function HeaderLinks(props) {
+  const onLogout = () => {
+    props.onLogout(false);
+  };
   const classes = useStyles();
-  const accountComponent = props.loginStatus==true?
-  <Link to="/" className={classes.dropdownLink}>
-  로그아웃하기
+  const accountComponent = props.loginStatus == true ?
+    <Link to="#" onClick={onLogout} className={classes.dropdownLink}>
+      로그아웃하기
   </Link>
-  :
-  <Link to="/login-page" className={classes.dropdownLink}>
-  로그인하기
+    :
+    <Link to="/login-page" className={classes.dropdownLink}>
+      로그인하기
   </Link>
   return (
     <List className={classes.list}>
@@ -40,7 +42,7 @@ export default function HeaderLinks(props) {
           buttonText="AI 만들기"
           buttonProps={{
             className: classes.navLink,
-            color : "info"
+            color: "info"
           }}
           buttonIcon={Apps}
           dropdownList={[
@@ -63,3 +65,5 @@ export default function HeaderLinks(props) {
     </List>
   );
 }
+
+export default withRouter(HeaderLinks)

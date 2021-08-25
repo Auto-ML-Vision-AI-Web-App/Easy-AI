@@ -43,7 +43,12 @@ export default function Components(props) {
       <Header
         username={username}
         brand="Easy AI"
-        rightLinks={<HeaderLinks loginStatus={loginStatus}/>}
+        rightLinks={<HeaderLinks onLogout={
+          function(_loginStatus){
+            setLoginStatus(_loginStatus)
+            setUsername("")
+          }}
+          loginStatus={loginStatus}/>}
         fixed
         color="dark"
         changeColorOnScroll={{
