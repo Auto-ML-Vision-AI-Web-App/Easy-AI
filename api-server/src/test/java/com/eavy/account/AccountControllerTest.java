@@ -61,7 +61,7 @@ class AccountControllerTest {
                         .param("userId", TEST_ID)
                         .param("password", TEST_PASSWORD))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk());
     }
 
     @DisplayName("[회원가입 실패] 중복된 아이디")
@@ -74,7 +74,7 @@ class AccountControllerTest {
                         .param("userId", account.getUserId())
                         .param("password", account.getPassword()))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
 }

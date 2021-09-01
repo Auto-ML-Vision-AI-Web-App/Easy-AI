@@ -24,4 +24,12 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<AccountDTO> signUp(Account account) {
+        Account savedAccount = accountService.signUp(account);
+        if(savedAccount == null)
+            return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.ok().body(null);
+    }
+
 }
