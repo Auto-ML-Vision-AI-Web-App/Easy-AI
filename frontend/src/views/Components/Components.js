@@ -3,6 +3,7 @@ import React from "react";
 import classNames from "classnames";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
+import axios from 'axios';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
@@ -31,6 +32,19 @@ import SectionDownload from "./Sections/SectionDownload.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 
 const useStyles = makeStyles(styles);
+
+const aiServerTest = () => {
+  const api = axios.create({
+    baseURL: 'http://168.188.125.50:20014'
+  })
+  api.post('/', null, {
+    //params
+  }).then(function (response) {
+    console.log(response.data)
+  }).catch(function (error) {
+    console.log(error);
+  });
+}
 
 export default function Components(props) {
   const [loginStatus, setLoginStatus] = React.useState(props.location.state===undefined? false: props.location.state.loginStatus);
@@ -73,6 +87,10 @@ export default function Components(props) {
                     <h4><strong>지금 바로 AI 만들기</strong></h4>
                   </Button>
                 </Link>
+                <br></br>
+                <Button onClick={aiServerTest}>
+                    <h4><strong>AI 서버 테스트</strong></h4>
+                </Button>
               </div>
             </GridItem>
           </GridContainer>
