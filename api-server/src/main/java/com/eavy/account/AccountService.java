@@ -16,7 +16,7 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder; // TODO sign-up시 password encoding
+    private final PasswordEncoder passwordEncoder;
 
     public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
@@ -30,6 +30,15 @@ public class AccountService implements UserDetailsService {
             return new AccountDTO(found.getUserId(), 1);
         }
         return null;
+    }
+
+    public Account signUp(Account account) {
+        Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
+        if(byUsername.isPresent()) {
+            return null; // 이미 존재하는 아이디
+        }
+        Account AccountWithEncodedPassword = new Account(account.getUserId(), passwordEncoder.encode(account.password));
+        return accountRepository.save(AccountWithEncodedPassword);
     }
 
     @Override
