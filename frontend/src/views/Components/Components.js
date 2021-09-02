@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from '@material-ui/lab/Alert';
 // @material-ui/icons
 // core components
 import Header from "components/Header/Header.js";
@@ -35,9 +36,9 @@ const useStyles = makeStyles(styles);
 
 const aiServerTest = () => {
   const api = axios.create({
-    baseURL: 'http://168.188.125.50:20014'
+    baseURL: 'http://168.188.125.50:20017'
   })
-  api.post('/', null, {
+  api.get('/', null, {
     //params
   }).then(function (response) {
     console.log(response.data)

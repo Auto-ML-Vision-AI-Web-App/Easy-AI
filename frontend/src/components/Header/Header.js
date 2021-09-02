@@ -5,6 +5,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from '@material-ui/lab/Alert';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -74,8 +75,8 @@ export default function Header(props) {
             brandComponent
           )}
         </div>
-
         {props.username!=""? <Button color="inherit">Hello,  {props.username}</Button> : ""}
+        <Alert id="logout_alert" style={{display: "none"}} severity="success">로그아웃에 성공하였습니다.</Alert>
         <Hidden smDown implementation="css">
           {rightLinks}
         </Hidden>

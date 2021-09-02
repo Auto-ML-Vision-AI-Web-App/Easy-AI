@@ -24,6 +24,10 @@ const useStyles = makeStyles(styles);
 function HeaderLinks(props) {
   const onLogout = () => {
     props.onLogout(false);
+    document.getElementById("logout_alert").style.display = "";
+    setTimeout(
+      ()=> document.getElementById("logout_alert").style.display = "none",
+      2000);
   };
   const classes = useStyles();
   const accountComponent = props.loginStatus == true ?
