@@ -1,5 +1,6 @@
 package com.eavy.account;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -43,13 +46,14 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Optional<Account> user = accountRepository.findByUserId(userId);
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-        if(user.isPresent()) {
-            Account account = user.get();
-            return new User(account.getUserId(), account.getPassword(), authorities);
-        }
-        throw new UsernameNotFoundException("User not found in the database");
+        Account account = accountRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(userId + " not found in the database"));
+        return new User(account.userId, account.getPassword(), authorities(account.getRoles()));
+    }
+
+    private Collection<? extends GrantedAuthority> authorities(Set<AccountRole> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toSet());
     }
 }
