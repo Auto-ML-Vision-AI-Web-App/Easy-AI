@@ -1,8 +1,7 @@
 package com.eavy.account;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -12,6 +11,9 @@ public class Account {
     Long id;
     String userId;
     String password;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<AccountRole> roles;
 
     public Account(String userId, String password) {
         this.userId = userId;
@@ -45,4 +47,11 @@ public class Account {
         this.password = password;
     }
 
+    public Set<AccountRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<AccountRole> roles) {
+        this.roles = roles;
+    }
 }
