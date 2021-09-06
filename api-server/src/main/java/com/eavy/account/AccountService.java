@@ -40,8 +40,8 @@ public class AccountService implements UserDetailsService {
         if(byUsername.isPresent()) {
             return null; // 이미 존재하는 아이디
         }
-        Account AccountWithEncodedPassword = new Account(account.getUserId(), passwordEncoder.encode(account.password));
-        return accountRepository.save(AccountWithEncodedPassword);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        return accountRepository.save(account);
     }
 
     @Override

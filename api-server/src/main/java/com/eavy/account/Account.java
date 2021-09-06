@@ -15,9 +15,10 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> roles;
 
-    public Account(String userId, String password) {
+    public Account(String userId, String password, Set<AccountRole> roles) {
         this.userId = userId;
         this.password = password;
+        this.roles = roles;
     }
 
     public Account() {
