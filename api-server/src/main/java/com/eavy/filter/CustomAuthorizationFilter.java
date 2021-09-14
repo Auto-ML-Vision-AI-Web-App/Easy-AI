@@ -34,7 +34,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         // TODO request.getServletInfo()로 url 정보를 가져오는 건 테스트 코드에서 제대로 동작하지 않고
         // TODO request.getPathInfo()로 url 정보를 가져오는 건 실제 코드에서 제대로 동작하지 않고
         // TODO 일단 항상 filter를 통과하도록 되어 있는 상태
-        if(request.getServletPath().equals("/signin") || request.getServletPath().equals("/signup") || request.getMethod().equals(HttpMethod.GET.name())) {
+        if(request.getServletPath().equals("/signin") || request.getServletPath().equals("/signup")) {
             filterChain.doFilter(request, response);
         }
         else {
