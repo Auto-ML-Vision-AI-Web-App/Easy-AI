@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.eavy.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +31,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/login")) {
+        // TODO request.getServletInfo()로 url 정보를 가져오는 건 테스트 코드에서 제대로 동작하지 않고
+        // TODO request.getPathInfo()로 url 정보를 가져오는 건 실제 코드에서 제대로 동작하지 않고
+        // TODO 일단 항상 filter를 통과하도록 되어 있는 상태
+        if(request.getServletPath().equals("/signin") || request.getServletPath().equals("/signup") || request.getMethod().equals(HttpMethod.GET.name())) {
             filterChain.doFilter(request, response);
         }
         else {
