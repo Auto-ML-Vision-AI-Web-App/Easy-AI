@@ -34,18 +34,6 @@ import styles from "assets/jss/material-kit-react/views/components.js";
 
 const useStyles = makeStyles(styles);
 
-const aiServerTest = () => {
-  const api = axios.create({
-    baseURL: 'http://168.188.125.50:20017'
-  })
-  api.get('/', null, {
-    //params
-  }).then(function (response) {
-    console.log(response.data)
-  }).catch(function (error) {
-    console.log(error);
-  });
-}
 
 export default function Components(props) {
   const [loginStatus, setLoginStatus] = React.useState(props.location.state===undefined? false: props.location.state.loginStatus);
@@ -53,6 +41,21 @@ export default function Components(props) {
   console.log(loginStatus)
   const classes = useStyles();
   const { ...rest } = props;
+
+  const aiServerTest = () => {
+    const api = axios.create({
+      baseURL: 'http://168.188.125.50:20017'
+    })
+    api.get('/', null, {
+      //params
+    }).then(function (response) {
+      console.log(response.data)
+      alert("projectId : "+response.data.projectId+"\nprojectType : "+response.data.projectType);
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+
   return (
     <div>
       <Header
