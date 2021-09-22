@@ -60,7 +60,7 @@ export default function AIResult(props) {
                                 :
                                 <div>
                                     <h4>AI 종류 : {props.location.state.result_model}</h4>
-                                    <Link style={{color:"gray"}}>AI 링크 : {props.location.state.model_url}</Link>
+                                    <Link style={{color:"gray"}}>AI 링크 : {props.location.state.result_message}</Link>
                                 </div>
                             }</div>
                     </Paper>

@@ -5,8 +5,9 @@ import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { Redirect, useHistory} from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AIGenerate() {
+    const [loadingStatus, setLoadingStatus] = React.useState(false)
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -51,6 +53,9 @@ export default function AIGenerate() {
             <Grid container spacing={3}>
                 <Grid alignItems="center" item xs={12}>
                     <Paper className={classes.paper}>
+                        {loadingStatus?
+                        <LinearProgress id="loadingProgress" style={{display : 'block'}}/>
+                        :<LinearProgress id="loadingProgress" style={{display : 'none'}}/>}
                         <h2><strong>AI 만들기</strong></h2>
                         <p>설명을 읽고 만들고자 하는 AI를 선택하세요(선택 1)</p>
                         <Grid
@@ -63,6 +68,9 @@ export default function AIGenerate() {
                             <div className={classes.card_box}>
                                 <Grid item xs={6}>
                                     <ImgMediaCard
+                                        setLoadingStatus={function(_status){
+                                            setLoadingStatus(_status)
+                                        }}
                                         card_value="image-classification"
                                         card_title="이미지 분류하기"
                                         card_content="이미지 분류하기란 사진이 무슨 사진인지 구별해주는 작업입니다. 단순 예로는, 사진처럼 이 사진이 의자인지 아닌지를 구분해줍니다."
@@ -125,12 +133,14 @@ import Typography from '@material-ui/core/Typography';
 function ImgMediaCard(props) {
     const classes = useStyles();
     const history = useHistory();
-    function cardClick(card_value) {
+
+    function aiMaking(card_value) {
+        props.setLoadingStatus(true);
+        console.log("AI model making start");
         const api = axios.create({
-            baseURL: 'http://localhost:8080'
+            baseURL: 'http://168.188.125.50:20017'
         })
-        //console.log(card_value)
-        api.get('/model', {
+        api.post('/ai-making', {
             params: {
                 modelName: card_value
             }
@@ -138,11 +148,12 @@ function ImgMediaCard(props) {
             console.log(response.data);
             history.push({
                 pathname: '/admin/ai-checking',
-                state:{
-                    result_model : card_value,
-                    model_url : response.data
+                state: {
+                    result_model: card_value,
+                    result_message: response.data
                 }
             })
+            props.setLoadingStatus(false)
         }).catch(function (error) {
             console.log(error);
         });
@@ -150,7 +161,7 @@ function ImgMediaCard(props) {
 
     return (
         <Card className={classes.cardRoot}>
-            <CardActionArea card_value={props.card_value} onClick={() => { cardClick(props.card_value); }}>
+            <CardActionArea card_value={props.card_value} onClick={() => { aiMaking(props.card_value); }}>
                 <CardMedia
                     component="img"
                     alt="test"
