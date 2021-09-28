@@ -8,7 +8,7 @@ import javax.persistence.Id;
 public class Model {
 
     @Id @GeneratedValue
-    Long id;
+    Integer id;
 
     String name;
     String activation;
@@ -29,11 +29,11 @@ public class Model {
         this.solver = solver;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -8,7 +8,7 @@ public class Account {
 
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     String userId;
     String password;
     @ElementCollection(fetch = FetchType.EAGER)
@@ -24,11 +24,11 @@ public class Account {
     public Account() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
