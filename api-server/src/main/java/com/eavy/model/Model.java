@@ -1,11 +1,11 @@
-package com.eavy.ai;
+package com.eavy.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class AI {
+public class Model {
 
     @Id @GeneratedValue
     Long id;
@@ -17,10 +17,10 @@ public class AI {
     double momentum;
     String solver;
 
-    public AI() {
+    public Model() {
     }
 
-    public AI(String name, String activation, String learningRate, int hiddenLayerSizes, double momentum, String solver) {
+    public Model(String name, String activation, String learningRate, int hiddenLayerSizes, double momentum, String solver) {
         this.name = name;
         this.activation = activation;
         this.learningRate = learningRate;

@@ -1,4 +1,4 @@
-package com.eavy.ai;
+package com.eavy.model;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
-public class AIController {
+public class ModelController {
 
-    private final AIRepository repository;
+    private final ModelRepository repository;
 
-    public AIController(AIRepository repository) {
+    public ModelController(ModelRepository repository) {
         this.repository = repository;
     }
 
@@ -37,8 +37,8 @@ public class AIController {
     }
 
     @GetMapping("/model/{modelId}")
-    public ResponseEntity<AI> getModel(@PathVariable Long modelId) {
-        Optional<AI> byId = repository.findById(modelId);
+    public ResponseEntity<Model> getModel(@PathVariable Long modelId) {
+        Optional<Model> byId = repository.findById(modelId);
         if(byId.isPresent())
             return new ResponseEntity<>(byId.get(), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class AIController {
     public ResponseEntity makeModel(@RequestParam String name) {
         if(name == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
-        AI ai = new AI();
+        Model ai = new Model();
         ai.setName(name);
         // TODO save to repository
         return new ResponseEntity(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
