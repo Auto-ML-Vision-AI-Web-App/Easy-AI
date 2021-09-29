@@ -63,7 +63,7 @@ public class AccountController {
             AccountDTO accountDTO = objectMapper.convertValue(account, AccountDTO.class);
             return ResponseEntity.ok(accountDTO);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // TODO Test

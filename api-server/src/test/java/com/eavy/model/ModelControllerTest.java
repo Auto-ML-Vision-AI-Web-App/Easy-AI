@@ -87,7 +87,7 @@ class ModelControllerTest {
         mockMvc.perform(get("/models")
                         .param("modelId", "987654321")
                         .header("Authorization", "Bearer " + accessToken))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 

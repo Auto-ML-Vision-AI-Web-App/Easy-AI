@@ -41,7 +41,7 @@ public class ModelController {
         Optional<Model> byId = repository.findById(modelId);
         if(byId.isPresent())
             return new ResponseEntity<>(byId.get(), HttpStatus.OK);
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/models")
