@@ -18,7 +18,7 @@ public class ModelController {
     }
 
     // for demo
-    @GetMapping("/model")
+    @GetMapping("/models/demo")
     public ResponseEntity<String> getModelForDemo(@RequestParam String modelName) {
         String url = null;
         if(modelName.equals("image-classification")) {
@@ -36,20 +36,20 @@ public class ModelController {
         return new ResponseEntity<>(url, HttpStatus.OK);
     }
 
-    @GetMapping("/model/{modelId}")
-    public ResponseEntity<Model> getModel(@PathVariable Long modelId) {
+    @GetMapping("/models")
+    public ResponseEntity<Model> getModel(@RequestParam Integer modelId) {
         Optional<Model> byId = repository.findById(modelId);
         if(byId.isPresent())
             return new ResponseEntity<>(byId.get(), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/make-model")
+    @PostMapping("/models")
     public ResponseEntity makeModel(@RequestParam String name) {
         if(name == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
-        Model ai = new Model();
-        ai.setName(name);
+        Model model = new Model();
+        model.setName(name);
         // TODO save to repository
         return new ResponseEntity(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
     }
