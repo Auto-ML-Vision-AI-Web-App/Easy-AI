@@ -36,3 +36,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### credentials ###
+src/main/resources/credentials/

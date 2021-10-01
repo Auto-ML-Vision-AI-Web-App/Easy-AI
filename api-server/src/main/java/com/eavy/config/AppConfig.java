@@ -20,7 +20,7 @@ public class AppConfig {
 
     @Bean
     public Storage storage() throws IOException {
-        Storage storage = StorageOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(resourceLoader.getResource("classpath:breath-of-ai-282d25539b0d.json").getInputStream())).build().getService();
+        Storage storage = StorageOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(resourceLoader.getResource("classpath:/credentials/service-account-key.json").getInputStream())).build().getService();
         return storage;
     }
 
