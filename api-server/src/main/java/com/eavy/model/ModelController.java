@@ -11,10 +11,10 @@ import java.util.Optional;
 @Controller
 public class ModelController {
 
-    private final ModelRepository repository;
+    private final ModelRepository modelRepository;
 
-    public ModelController(ModelRepository repository) {
-        this.repository = repository;
+    public ModelController(ModelRepository modelRepository) {
+        this.modelRepository = modelRepository;
     }
 
     // for demo
@@ -38,20 +38,17 @@ public class ModelController {
 
     @GetMapping("/models")
     public ResponseEntity<Model> getModel(@RequestParam Integer modelId) {
-        Optional<Model> byId = repository.findById(modelId);
-        if(byId.isPresent())
-            return new ResponseEntity<>(byId.get(), HttpStatus.OK);
+        Optional<Model> optionalModel = modelRepository.findById(modelId);
+        if(optionalModel.isPresent())
+            return new ResponseEntity<>(optionalModel.get(), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/models")
-    public ResponseEntity makeModel(@RequestParam String name) {
-        if(name == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
-        Model model = new Model();
-        model.setName(name);
-        // TODO save to repository
-        return new ResponseEntity(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
+    public ResponseEntity<Model> createModel(Model model) {
+        // TODO validation or add default values
+        modelRepository.save(model);
+        return ResponseEntity.ok(model);
     }
 
 }

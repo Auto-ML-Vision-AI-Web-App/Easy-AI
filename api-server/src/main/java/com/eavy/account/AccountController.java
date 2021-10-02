@@ -46,6 +46,7 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
+    // TODO validation
     @PostMapping("/signup")
     public ResponseEntity<AccountDTO> signUp(Account account) {
         Account savedAccount = accountService.signUp(account);

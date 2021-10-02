@@ -2,8 +2,6 @@ package com.eavy.model;
 
 import com.eavy.account.Account;
 import com.eavy.account.AccountService;
-import com.eavy.model.Model;
-import com.eavy.model.ModelRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,7 @@ import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ModelControllerTest {
 
@@ -91,23 +91,44 @@ class ModelControllerTest {
                 .andDo(print());
     }
 
-    // TODO 모델 생성 테스트
-    /*@DisplayName("모델 생성")
+    @DisplayName("모델 생성")
     @Test
-    void makeModelSuccess() throws Exception {
+    void createModel() throws Exception {
+        Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
         mockMvc.perform(post("/models")
-                .param("name", "LinearRegression"))
+                        .param("name", model.getName())
+                        .param("activation", model.getActivation())
+                        .param("learningRate", model.getLearningRate())
+                        .param("hiddenLayerSizes", String.valueOf(model.getHiddenLayerSizes()))
+                        .param("momentum", String.valueOf(model.getMomentum()))
+                        .param("solver", model.getSolver())
+                        .header("Authorization", "Bearer " + accessToken))
+                .andExpect(jsonPath("$.name", is(model.getName())))
+                .andExpect(jsonPath("$.activation", is(model.getActivation())))
+                .andExpect(jsonPath("$.learningRate", is(model.getLearningRate())))
+                .andExpect(jsonPath("$.hiddenLayerSizes", is(model.getHiddenLayerSizes())))
+                .andExpect(jsonPath("$.momentum", is(model.getMomentum())))
+                .andExpect(jsonPath("$.solver", is(model.getSolver())))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
-    @DisplayName("모델 생성 실패 - 유효하지 않은 토큰")
+    // TODO validation test or default value test
+    /*@DisplayName("모델 생성 실패 - 모델 검증 실패")
     @Test
     void makeModelFail() throws Exception {
         mockMvc.perform(post("/make-model"))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }*/
+
+    @DisplayName("모델 생성 실패 - 유효하지 않은 토큰")
+    @Test
+    void createModelFail_notValidToken() throws Exception {
+        mockMvc.perform(post("/make-model"))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
 
     public String generateToken(String userId, String password) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/signin")
