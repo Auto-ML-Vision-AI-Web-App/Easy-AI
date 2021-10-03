@@ -1,38 +1,27 @@
 package com.eavy.account;
 
+import com.eavy.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-
 import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
-class AccountControllerTest {
+class AccountControllerTest extends ControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
     @Autowired
     private AccountService accountService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private final String TEST_ID = "TESTID";
-    private final String TEST_PASSWORD = "TESTPASSWORD";
 
     @DisplayName("로그인")
     @Test

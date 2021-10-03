@@ -2,18 +2,12 @@ package com.eavy.model;
 
 import com.eavy.account.Account;
 import com.eavy.account.AccountService;
+import com.eavy.common.ControllerTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,20 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ModelControllerTest {
+class ModelControllerTest extends ControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ResourceLoader resourceLoader;
-
-    @Autowired
-    ModelRepository repository;
+    ModelRepository modelRepository;
 
     @Autowired
     AccountService accountService;
@@ -53,7 +38,7 @@ class ModelControllerTest {
     @Test
     void getModel() throws Exception {
         Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
-        repository.save(model);
+        modelRepository.save(model);
 
         mockMvc.perform(get("/models")
                         .param("modelId", model.getId().toString())
@@ -72,7 +57,7 @@ class ModelControllerTest {
     @Test
     void getModelFail_notValidToken() throws Exception {
         Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
-        repository.save(model);
+        modelRepository.save(model);
 
         mockMvc.perform(get("/models")
                         .param("modelId", model.getId().toString())
@@ -128,17 +113,6 @@ class ModelControllerTest {
         mockMvc.perform(post("/make-model"))
                 .andExpect(status().isForbidden())
                 .andDo(print());
-    }
-
-    public String generateToken(String userId, String password) throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/signin")
-                        .param("userId", userId)
-                        .param("password", password))
-                .andReturn();
-
-        String content = mvcResult.getResponse().getContentAsString();
-        JacksonJsonParser jsonParser = new JacksonJsonParser();
-        return jsonParser.parseMap(content).get("access-token").toString();
     }
 
 }
