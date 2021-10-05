@@ -1,12 +1,10 @@
 package com.eavy.model;
 
 import com.eavy.account.Account;
-import com.eavy.account.AccountService;
 import com.eavy.common.ControllerTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.Matchers.is;
@@ -16,22 +14,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ModelControllerTest extends ControllerTest {
 
     @Autowired
     ModelRepository modelRepository;
 
-    @Autowired
-    AccountService accountService;
-
-    Account account;
-    String accessToken;
-
     @BeforeAll
     void setUp() throws Exception {
-        account = accountService.signUp(new Account("qwer", "1234", null));
-        accessToken = generateToken(account.getUserId(), "1234");
+        String userId = "qwer";
+        String password = "1234";
+        testUser = accountService.signUp(new Account(userId, password, null));
+        accessToken = generateToken(userId, password);
     }
 
     @DisplayName("모델 조회")
