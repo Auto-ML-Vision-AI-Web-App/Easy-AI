@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -46,13 +48,17 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
-    // TODO validation
     @PostMapping("/signup")
-    public ResponseEntity<AccountDTO> signUp(Account account) {
-        Account savedAccount = accountService.signUp(account);
-        if(savedAccount == null)
-            return ResponseEntity.badRequest().body(null);
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity signUp(@Valid Account account, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("username and password should be not empty");
+        }
+        try {
+            Account savedAccount = accountService.signUp(account);
+            return ResponseEntity.ok().body(null);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // TODO Test

@@ -1,6 +1,8 @@
 package com.eavy.account;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -9,7 +11,9 @@ public class Account {
     @Id
     @GeneratedValue
     Integer id;
+    @NotEmpty
     String userId;
+    @NotEmpty
     String password;
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

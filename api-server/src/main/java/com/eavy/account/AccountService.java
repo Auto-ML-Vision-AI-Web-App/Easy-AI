@@ -38,7 +38,7 @@ public class AccountService implements UserDetailsService {
     public Account signUp(Account account) {
         Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
         if(byUsername.isPresent()) {
-            return null; // 이미 존재하는 아이디
+            throw new RuntimeException("username '" + account.getUserId() + "' already exists");
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
