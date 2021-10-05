@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,16 +63,11 @@ public class AccountController {
         }
     }
 
-    // TODO Test
     @GetMapping("/users")
-    public ResponseEntity getUser(@RequestParam String userId) {
-        Optional<Account> optionalAccount = accountRepository.findByUserId(userId);
-        if(optionalAccount.isPresent()) {
-            Account account = optionalAccount.get();
-            AccountDTO accountDTO = objectMapper.convertValue(account, AccountDTO.class);
-            return ResponseEntity.ok(accountDTO);
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity getUser(Principal principal) {
+        Optional<Account> optionalAccount = accountRepository.findByUserId(principal.getName());
+        AccountDTO accountDTO = objectMapper.convertValue(optionalAccount.get(), AccountDTO.class);
+        return ResponseEntity.ok(accountDTO);
     }
 
     // TODO Test
