@@ -2,6 +2,7 @@ package com.eavy.model;
 
 import com.eavy.account.Account;
 import com.eavy.common.ControllerTest;
+import com.eavy.token.TokenManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,41 +20,42 @@ class ModelControllerTest extends ControllerTest {
     @Autowired
     ModelRepository modelRepository;
 
+    private Account account;
+    private String accessToken;
+    private Model model;
+
     @BeforeAll
-    void setUp() throws Exception {
-        String userId = "qwer";
-        String password = "1234";
-        testUser = accountService.signUp(new Account(userId, password, null));
-        accessToken = generateToken(userId, password);
+    void init() {
+        account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD, null));
+        accessToken = TokenManager.generateAccessToken(TEST_ID);
+        model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
     }
 
     @DisplayName("모델 조회")
     @Test
     void getModel() throws Exception {
-        Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
-        modelRepository.save(model);
+        Model savedModel = modelRepository.save(model);
 
         mockMvc.perform(get("/models")
-                        .param("modelId", model.getId().toString())
+                        .param("modelId", savedModel.getId().toString())
                         .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(model.getName())))
-                .andExpect(jsonPath("$.activation", is(model.getActivation())))
-                .andExpect(jsonPath("$.learningRate", is(model.getLearningRate())))
-                .andExpect(jsonPath("$.hiddenLayerSizes", is(model.getHiddenLayerSizes())))
-                .andExpect(jsonPath("$.momentum", is(model.getMomentum())))
-                .andExpect(jsonPath("$.solver", is(model.getSolver())))
+                .andExpect(jsonPath("$.name", is(savedModel.getName())))
+                .andExpect(jsonPath("$.activation", is(savedModel.getActivation())))
+                .andExpect(jsonPath("$.learningRate", is(savedModel.getLearningRate())))
+                .andExpect(jsonPath("$.hiddenLayerSizes", is(savedModel.getHiddenLayerSizes())))
+                .andExpect(jsonPath("$.momentum", is(savedModel.getMomentum())))
+                .andExpect(jsonPath("$.solver", is(savedModel.getSolver())))
                 .andDo(print());
     }
 
     @DisplayName("모델 조회 실패 - 유효하지 않은 토큰")
     @Test
     void getModelFail_notValidToken() throws Exception {
-        Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
-        modelRepository.save(model);
+        Model savedModel = modelRepository.save(model);
 
         mockMvc.perform(get("/models")
-                        .param("modelId", model.getId().toString())
+                        .param("modelId", savedModel.getId().toString())
                         .header("Authorization", "Bearer " + "FAKE-ACCESS-TOKEN"))
                 .andExpect(status().isForbidden())
                 .andDo(print());
@@ -72,7 +74,6 @@ class ModelControllerTest extends ControllerTest {
     @DisplayName("모델 생성")
     @Test
     void createModel() throws Exception {
-        Model model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
         mockMvc.perform(post("/models")
                         .param("name", model.getName())
                         .param("activation", model.getActivation())
