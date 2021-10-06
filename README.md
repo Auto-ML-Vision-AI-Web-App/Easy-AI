@@ -1,4 +1,4 @@
-# POC
+# Easy-AI
 
 POC단계를 위한 repository입니다.  
 6월까지 POC를 구현해보며, flow와 전체 architecture를 이해해봅니다.
