@@ -1,10 +1,8 @@
 package com.eavy.token;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.eavy.account.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +21,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/token")
 public class TokenController {
 
-    private final AccountService accountService;
-
-    public TokenController(AccountService accountService) {
-        this.accountService = accountService;
-    }
-
     @GetMapping("/check")
     public ResponseEntity checkToken() {
         return ResponseEntity.ok(null);
@@ -43,8 +35,7 @@ public class TokenController {
                 String refreshToken = authorizationHeader.substring("Bearer ".length());
                 DecodedJWT decodedJWT = TokenManager.verifyToken(refreshToken);
                 String username = decodedJWT.getSubject();
-                User user = (User) accountService.loadUserByUsername(username);
-                String accessToken = TokenManager.generateAccessToken(user);
+                String accessToken = TokenManager.generateAccessToken(username);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access-token", accessToken);
                 tokens.put("refresh-token", refreshToken);
