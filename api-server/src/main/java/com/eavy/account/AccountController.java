@@ -1,28 +1,25 @@
 package com.eavy.account;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.eavy.token.TokenManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -82,17 +79,10 @@ public class AccountController {
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refreshToken = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes(StandardCharsets.UTF_8));
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(refreshToken);
+                DecodedJWT decodedJWT = TokenManager.verifyToken(refreshToken);
                 String username = decodedJWT.getSubject();
-                Optional<Account> optionalAccount = accountRepository.findByUserId(username);
-                Account account = optionalAccount.orElse(null);
-                String accessToken = JWT.create()
-                        .withSubject(account.getUserId())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-                        .withClaim("roles", account.getRoles().stream().map(AccountRole::name).collect(Collectors.toList()))
-                        .sign(algorithm);
+                User user = (User) accountService.loadUserByUsername(username);
+                String accessToken = TokenManager.generateAccessToken(user);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access-token", accessToken);
                 tokens.put("refresh-token", refreshToken);
