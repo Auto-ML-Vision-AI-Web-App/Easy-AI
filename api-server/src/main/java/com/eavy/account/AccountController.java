@@ -70,7 +70,6 @@ public class AccountController {
         return ResponseEntity.ok(accountDTO);
     }
 
-    // TODO Test
     @GetMapping("/token/check")
     public ResponseEntity checkToken() {
         return ResponseEntity.ok(null);
