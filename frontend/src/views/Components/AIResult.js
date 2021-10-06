@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import axios from 'axios';
+
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -45,6 +47,23 @@ export default function AIResult(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     //const getParams = this.props.location.state.result_model;
+    const downLoadAI = (e) =>{
+        const api = axios.create({
+            baseURL: 'http://168.188.125.50:20017'
+        })
+        api.get('/ai-downloading').then(function (response) {
+            console.log(response.data);
+            /*history.push({
+                pathname: '/admin/ai-checking',
+                state: {
+                    result_model: card_value,
+                    result_message: response.data
+                }
+            })*/
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
     return (
         <>
             <Grid container spacing={3}>
@@ -55,12 +74,12 @@ export default function AIResult(props) {
                             {props.location.state == undefined ?
                                 <div>
                                     <h3>현재 AI를 생성하지 않았습니다.</h3>
-                                    <h4>AI 생성하기를 눌러 AI를 생성해주세요.</h4>
+                                    <h4>AI 만들기 눌러 AI를 생성해주세요.</h4>
                                 </div>
                                 :
                                 <div>
                                     <h4>AI 종류 : {props.location.state.result_model}</h4>
-                                    <Link style={{color:"gray"}}>AI 링크 : {props.location.state.result_message}</Link>
+                                    <Button onClick={downLoadAI} style={{color:"gray"}}>AI 링크 : {props.location.state.result_message}</Button>
                                 </div>
                             }</div>
                     </Paper>

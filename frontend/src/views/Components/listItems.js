@@ -9,6 +9,8 @@ import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
+import TouchAppIcon from '@material-ui/icons/Build';
+//need to update
 
 import { Link } from "react-router-dom";
 
@@ -26,6 +28,12 @@ export const homeListItems = (
 export const mainListItems = (
   <div>
     <ListSubheader inset>Make AI</ListSubheader>
+    <ListItem button component={Link} to="/admin/ai-choosing">
+      <ListItemIcon>
+        <TouchAppIcon />
+      </ListItemIcon>
+      <ListItemText primary="AI 선택하기" />
+    </ListItem>
     <ListItem button component={Link} to="/admin/data-uploading">
       <ListItemIcon>
         <PublishIcon />

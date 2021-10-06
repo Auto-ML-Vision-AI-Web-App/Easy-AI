@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DataUpload() {
+export default function DataUpload(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
@@ -53,7 +53,20 @@ export default function DataUpload() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
-                      <h2><strong>데이터 업로드하기</strong></h2>
+                    <div>
+                        {props.location.state==undefined ?
+                        <div>
+                        <h3>현재 데이터가 업로드 되지 않았습니다.</h3>
+                        <h4>데이터 업로드하기를 눌러 데이터를 입력해주세요.</h4>
+                        </div>
+                        :
+                        <div>
+                        {/*showData(props.location.state.projectId)*/}
+                        <h4>프로젝트 Type : {props.location.state.selectedType}</h4>
+                        <p>데이터 수 : XX</p>
+                        </div>
+                      }</div>
+                      <h4>데이터 업로드하기</h4>
                       <Basic isUploaded = {
                         function(_isData, _projectID){
                           setNextBtnDisabled(false)

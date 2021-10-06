@@ -18,9 +18,10 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import { homeListItems, mainListItems, secondaryListItems } from './listItems';
 import DataUpload from './DataUpload';
 import DataCheck from './DataCheck';
-import AIGenerate from './AIGenerate';
+import AIChoose from './AIChoose';
 import AIResult from './AIResult';
 import Projects from './Projects';
+import AIGenerate from './AIGenerate';
 
 import { Redirect, Switch, Route } from "react-router-dom";
 
@@ -130,6 +131,7 @@ function AccountCircleIcon(props) {
 export default function Admin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [AIType, setAIType_Admin] = React.useState("")
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -180,10 +182,22 @@ export default function Admin() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
         <Switch>
+          <Route path="/admin/ai-choosing" exact
+            component={()=>
+            <AIChoose
+              setAIType={function (_type) {
+                setAIType_Admin(_type)
+              }}
+            ></AIChoose>} />
           <Route path="/admin/data-uploading" exact component={DataUpload} />
           <Route path="/admin/data-checking" exact component={DataCheck} />
-          <Route path="/admin/ai-making" exact component={AIGenerate} />
+          <Route path="/admin/ai-making" exact 
+            component={()=>
+            <AIGenerate
+              AIType={AIType}
+            ></AIGenerate>} />
           <Route path="/admin/ai-checking" exact component={AIResult} />
+
           <Route path="/admin/projects" exact component={Projects} />
           <Redirect from="/admin" to="/admin/data-uploading" />
         </Switch>
