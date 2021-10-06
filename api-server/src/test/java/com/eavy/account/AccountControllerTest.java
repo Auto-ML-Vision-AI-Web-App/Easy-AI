@@ -118,18 +118,4 @@ class AccountControllerTest extends ControllerTest {
                 .andExpect(status().isForbidden());
     }
 
-    @DisplayName("토큰 검사")
-    @Test
-    void checkToken() throws Exception {
-        mockMvc.perform(get("/token/check")
-                        .header("Authorization", "Bearer " + accessToken))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/token/check")
-                        .header("Authorization", "Bearer " + "FAKE-ACCESS-TOKEN"))
-                .andDo(print())
-                .andExpect(status().isForbidden());
-    }
-
 }
