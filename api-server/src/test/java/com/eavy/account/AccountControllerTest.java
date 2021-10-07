@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Set;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,7 +21,7 @@ class AccountControllerTest extends ControllerTest {
     @DisplayName("로그인")
     @Test
     void signIn() throws Exception {
-        Account account = new Account(TEST_ID, TEST_PASSWORD, Set.of(AccountRole.ADMIN, AccountRole.USER));
+        Account account = new Account(TEST_ID, TEST_PASSWORD);
         accountService.signUp(account);
 
         mockMvc.perform(post("/signin")
@@ -74,7 +72,7 @@ class AccountControllerTest extends ControllerTest {
     @DisplayName("회원가입 실패 - 중복된 아이디")
     @Test
     void signUpFailure_usernameAlreadyExists() throws Exception {
-        Account account = new Account(TEST_ID, TEST_PASSWORD, Set.of(AccountRole.ADMIN, AccountRole.USER));
+        Account account = new Account(TEST_ID, TEST_PASSWORD);
         accountService.signUp(account);
 
         mockMvc.perform(post("/signup")
@@ -87,7 +85,7 @@ class AccountControllerTest extends ControllerTest {
     @DisplayName("회원 조회")
     @Test
     void getUser() throws Exception {
-        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD, Set.of(AccountRole.ADMIN)));
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.userId);
 
         mockMvc.perform(get("/users")

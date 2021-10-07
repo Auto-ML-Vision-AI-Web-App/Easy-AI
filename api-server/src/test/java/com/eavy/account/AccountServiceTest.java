@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,7 +29,7 @@ class AccountServiceTest {
     void loadByUsername_success() {
         String userId = "USERID";
         String password = "PASSWORD";
-        Account account = new Account(userId, password, Set.of(AccountRole.ADMIN, AccountRole.USER));
+        Account account = new Account(userId, password);
         accountService.signUp(account);
 
         UserDetailsService userDetailsService = this.accountService;

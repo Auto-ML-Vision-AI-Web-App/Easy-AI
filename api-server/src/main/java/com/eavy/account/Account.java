@@ -15,14 +15,10 @@ public class Account {
     String userId;
     @NotEmpty
     String password;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<AccountRole> roles;
 
-    public Account(String userId, String password, Set<AccountRole> roles) {
+    public Account(String userId, String password) {
         this.userId = userId;
         this.password = password;
-        this.roles = roles;
     }
 
     public Account() {
@@ -52,11 +48,4 @@ public class Account {
         this.password = password;
     }
 
-    public Set<AccountRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<AccountRole> roles) {
-        this.roles = roles;
-    }
 }

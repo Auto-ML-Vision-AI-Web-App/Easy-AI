@@ -1,9 +1,10 @@
 package com.eavy;
 
 import com.eavy.account.Account;
-import com.eavy.account.AccountRepository;
 import com.eavy.account.AccountRole;
 import com.eavy.account.AccountService;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ResourceLoader;
@@ -24,9 +25,9 @@ public class AppRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Account account1 = new Account("h01010", "1234", Set.of(AccountRole.ADMIN, AccountRole.USER));
-        Account account2 = new Account("db17", "asdf", Set.of(AccountRole.ADMIN, AccountRole.USER));
-        Account account3 = new Account("kdh15", "qwer", Set.of(AccountRole.ADMIN, AccountRole.USER));
+        Account account1 = new Account("h01010", "1234");
+        Account account2 = new Account("db17", "asdf");
+        Account account3 = new Account("kdh15", "qwer");
         accountService.signUp(account1);
         accountService.signUp(account2);
         accountService.signUp(account3);

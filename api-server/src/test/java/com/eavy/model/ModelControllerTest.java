@@ -26,7 +26,7 @@ class ModelControllerTest extends ControllerTest {
 
     @BeforeAll
     void init() {
-        account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD, null));
+        account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         accessToken = TokenManager.generateAccessToken(TEST_ID);
         model = new Model("MLPClassifier", "logistic", "adaptive", 50, 0.1, "sgd");
     }
