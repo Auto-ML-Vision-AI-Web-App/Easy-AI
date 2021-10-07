@@ -1,51 +1,79 @@
 package com.eavy.data;
 
+import com.eavy.account.Account;
 import com.eavy.common.ControllerTest;
+import com.eavy.token.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DataControllerTest extends ControllerTest {
 
-    @DisplayName("Get data by projectId")
+    @DisplayName("데이터(이미지) 업로드")
     @Test
-    void getDataByProjectId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/data/1"))
+    void fileUpload() throws Exception {
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+
+        String filename1 = "test_file.jpg";
+        MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
+        String filename2 = "test_file.png";
+        MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/jpeg", getClass().getResourceAsStream("/images/test-image.png"));
+
+        mockMvc.perform(multipart("/data/upload")
+                        .file(mockFile1)
+                        .file(mockFile2)
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
-    @DisplayName("Image file upload - success")
+    @DisplayName("데이터(이미지) 업로드 실패 - 이미지가 아닌 파일")
     @Test
-    void fileUploadSuccess() throws Exception {
-        // TODO png에 대해 테스트 되지 않음
-        String originalFilename = "test_file.jpg";
-        MockMultipartFile mockFile = new MockMultipartFile("files", originalFilename, "image/jpeg", getClass().getResourceAsStream("/images/wakeupcat.jpg"));
+    void fileUploadFail_NotImage() throws Exception {
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
 
-        mockMvc.perform(multipart("/upload").file(mockFile))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().string("1")); // projectId
+        String filename = "test-text.txt";
+        MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
+
+        mockMvc.perform(multipart("/data/upload")
+                        .file(mockFile)
+                        .header("Authorization", "Bearer " + accessToken))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 
-    @DisplayName("Image file upload - fail(no image file)")
+    @DisplayName("데이터(이미지) 업로드 실패 - 업로드 할 데이터가 없는 경우")
     @Test
-    void fileUploadFail() throws Exception {
-        // TODO txt 이외의 다른 형식에 대해 테스트 되지 않음
-        String originalFilename = "test_file.txt";
-        MockMultipartFile mockFile = new MockMultipartFile("files", originalFilename, "text/plain", getClass().getResourceAsStream("/images/test_file.txt"));
+    void fileUploadFail_NoFiles() throws Exception {
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
 
-        mockMvc.perform(multipart("/upload").file(mockFile))
+        mockMvc.perform(multipart("/data/upload")
+                        .header("Authorization", "Bearer " + accessToken))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
-                .andExpect(content().string(HttpStatus.BAD_REQUEST.getReasonPhrase()));
+                .andDo(print());
+    }
+
+    @DisplayName("데이터(이미지) 업로드 실패 - 유효하지 않은 토큰")
+    @Test
+    void fileUploadFail_NotValidToken() throws Exception {
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+
+        String filename = "test-text.txt";
+        MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
+
+        mockMvc.perform(multipart("/data/upload")
+                        .file(mockFile)
+                        .header("Authorization", "Bearer " + accessToken.substring(1)))
+                .andExpect(status().isForbidden())
+                .andDo(print());
     }
 
 }
