@@ -9,7 +9,7 @@ import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
-import TouchAppIcon from '@material-ui/icons/Build';
+import TouchAppIcon from '@material-ui/icons/TouchApp';
 //need to update
 
 import { Link } from "react-router-dom";
