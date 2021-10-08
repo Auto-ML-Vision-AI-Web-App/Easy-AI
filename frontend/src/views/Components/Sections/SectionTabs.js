@@ -21,116 +21,39 @@ export default function SectionTabs() {
     <div className={classes.section}>
       <div className={classes.container}>
         <div id="nav-tabs">
-          <h3>Navigation Tabs</h3>
+          <h3>Easy AI란 무엇인가요?</h3>
           <GridContainer>
-            <GridItem xs={12} sm={12} md={6}>
+            <GridItem xs={12} sm={12} md={12}>
               <h3>
-                <small>Tabs with Icons on Card</small>
+                <small>우리 Easy AI는요...</small>
               </h3>
               <CustomTabs
                 headerColor="primary"
                 tabs={[
                   {
-                    tabName: "Profile",
+                    tabName: "Easy AI",
                     tabIcon: Face,
                     tabContent: (
                       <p className={classes.textCenter}>
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. So when you get something that has
-                        the name Kanye West on it, it’s supposed to be pushing
-                        the furthest possibilities. I will be the leader of a
-                        company that ends up being worth billions of dollars,
-                        because I got the answers. I understand culture. I am
-                        the nucleus.
+                        Easy AI 설명을 넣는다넣는다넣는다
                       </p>
                     ),
                   },
                   {
-                    tabName: "Messages",
+                    tabName: "Github",
                     tabIcon: Chat,
                     tabContent: (
                       <p className={classes.textCenter}>
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. I will be the leader of a company
-                        that ends up being worth billions of dollars, because I
-                        got the answers. I understand culture. I am the nucleus.
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at.
+                        https://github.com/Auto-ML-Vision-AI-Web-App
                       </p>
                     ),
                   },
                   {
-                    tabName: "Settings",
+                    tabName: "Blog",
                     tabIcon: Build,
                     tabContent: (
                       <p className={classes.textCenter}>
-                        think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. So when you get something that has
-                        the name Kanye West on it, it’s supposed to be pushing
-                        the furthest possibilities. I will be the leader of a
-                        company that ends up being worth billions of dollars,
-                        because I got the answers. I understand culture. I am
-                        the nucleus.
-                      </p>
-                    ),
-                  },
-                ]}
-              />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={6}>
-              <h3>
-                <small>Tabs on Plain Card</small>
-              </h3>
-              <CustomTabs
-                plainTabs
-                headerColor="danger"
-                tabs={[
-                  {
-                    tabName: "Home",
-                    tabContent: (
-                      <p className={classes.textCenter}>
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. So when you get something that has
-                        the name Kanye West on it, it’s supposed to be pushing
-                        the furthest possibilities. I will be the leader of a
-                        company that ends up being worth billions of dollars,
-                        because I got the answers. I understand culture. I am
-                        the nucleus.
-                      </p>
-                    ),
-                  },
-                  {
-                    tabName: "Updates",
-                    tabContent: (
-                      <p className={classes.textCenter}>
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. I will be the leader of a company
-                        that ends up being worth billions of dollars, because I
-                        got the answers. I understand culture. I am the nucleus.
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at.
-                      </p>
-                    ),
-                  },
-                  {
-                    tabName: "History",
-                    tabContent: (
-                      <p className={classes.textCenter}>
-                        think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at. So when you get something that has
-                        the name Kanye West on it, it’s supposed to be pushing
-                        the furthest possibilities. I will be the leader of a
-                        company that ends up being worth billions of dollars,
-                        because I got the answers. I understand culture. I am
-                        the nucleus.
+                        <h1>블로그를 넣는다넣는다</h1>
                       </p>
                     ),
                   },
