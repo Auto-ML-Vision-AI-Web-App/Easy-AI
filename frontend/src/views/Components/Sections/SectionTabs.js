@@ -4,8 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // @material-ui/icons
 import Face from "@material-ui/icons/Face";
-import Chat from "@material-ui/icons/Chat";
-import Build from "@material-ui/icons/Build";
+import GitHubIcon from '@material-ui/icons/GitHub';
+import BookIcon from '@material-ui/icons/Book';
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -28,7 +28,7 @@ export default function SectionTabs() {
                 <small>우리 Easy AI는요...</small>
               </h3>
               <CustomTabs
-                headerColor="primary"
+                headerColor="info"
                 tabs={[
                   {
                     tabName: "Easy AI",
@@ -41,7 +41,7 @@ export default function SectionTabs() {
                   },
                   {
                     tabName: "Github",
-                    tabIcon: Chat,
+                    tabIcon: GitHubIcon,
                     tabContent: (
                       <p className={classes.textCenter}>
                         https://github.com/Auto-ML-Vision-AI-Web-App
@@ -50,7 +50,7 @@ export default function SectionTabs() {
                   },
                   {
                     tabName: "Blog",
-                    tabIcon: Build,
+                    tabIcon: BookIcon,
                     tabContent: (
                       <p className={classes.textCenter}>
                         <h1>블로그를 넣는다넣는다</h1>

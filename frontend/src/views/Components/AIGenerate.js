@@ -155,6 +155,7 @@ function AIGenerate(props) {
           <DialogContentText id="alert-dialog-slide-description">
             업로드한 데이터, 입력한 클래스를 기반으로 AI 생성과정을 시작할 것입니다.<br></br>
             시작하기 전에 다시 한번 'AI 생성 관련 정보들'을 확인해주세요.
+            //시간 걸릴거라고 추가
           </DialogContentText>
         </DialogContent>
         <DialogActions>
