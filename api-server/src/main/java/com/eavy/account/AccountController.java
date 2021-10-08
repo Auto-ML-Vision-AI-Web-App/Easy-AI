@@ -28,11 +28,11 @@ public class AccountController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AccountDTO> signIn(Account account) {
-        AccountDTO accountDTO = accountService.signIn(account);
-        if(accountDTO == null)
+    public ResponseEntity<AccountDto> signIn(Account account) {
+        AccountDto accountDto = accountService.signIn(account);
+        if(accountDto == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(accountDTO);
+        return ResponseEntity.ok(accountDto);
     }
 
     @PostMapping("/signup")
@@ -51,7 +51,7 @@ public class AccountController {
     @GetMapping("/users")
     public ResponseEntity getUser(Principal principal) {
         Optional<Account> optionalAccount = accountRepository.findByUserId(principal.getName());
-        AccountDTO accountDTO = objectMapper.convertValue(optionalAccount.get(), AccountDTO.class);
+        AccountDto accountDTO = objectMapper.convertValue(optionalAccount.get(), AccountDto.class);
         return ResponseEntity.ok(accountDTO);
     }
 

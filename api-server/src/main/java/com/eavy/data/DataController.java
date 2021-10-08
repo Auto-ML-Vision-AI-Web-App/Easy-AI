@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/data")
@@ -41,22 +42,22 @@ public class DataController {
     }
 
     // TODO test
-    @GetMapping("/{projectId}")
-    public ResponseEntity<List<Blob>> getData(@PathVariable Integer projectId) {
-        // TODO projectId에 따라 해당 프로젝트의 학습 데이터 리턴하도록 수정
-        System.out.println(bucketName);
-        Page<Blob> list = storage.list(bucketName);
-//        JSONArray jsonArray = new JSONArray();
-
-        ArrayList<Blob> blobs = new ArrayList<>();
-        list.iterateAll().forEach(blobs::add);
-
-//        list.iterateAll().forEach(b -> {
-//            JSONObject json = new JSONObject();
-//            json.put("filename", b.getName());
-//            json.put("url", b.signUrl(15l, TimeUnit.MINUTES));
-//            jsonArray.add(json);
-//        });
+    @GetMapping
+    public ResponseEntity<List<BlobDto>> getData(Principal principal,
+                                                 @RequestParam String projectName){
+        String prefix = principal.getName() + "/" + projectName;
+        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(prefix));
+        ArrayList<BlobDto> blobs = new ArrayList<>();
+        list.iterateAll().forEach(b -> {
+            if(b.getName().contains(".")) { // file
+                BlobDto blobDto = new BlobDto();
+                blobDto.setName(b.getName());
+                blobDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
+                blobs.add(blobDto);
+            }
+        });
+        if(blobs.isEmpty())
+            return ResponseEntity.noContent().build();
         return ResponseEntity.ok(blobs);
     }
 

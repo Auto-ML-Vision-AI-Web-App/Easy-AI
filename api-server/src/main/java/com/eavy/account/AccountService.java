@@ -22,11 +22,11 @@ public class AccountService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AccountDTO signIn(Account account) {
+    public AccountDto signIn(Account account) {
         Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
         if(byUsername.isPresent()) {
             Account found = byUsername.get();
-            return new AccountDTO(found.getUserId(), 1);
+            return new AccountDto(found.getUserId(), 1);
         }
         return null;
     }

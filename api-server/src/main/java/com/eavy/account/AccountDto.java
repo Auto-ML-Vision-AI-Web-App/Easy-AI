@@ -1,11 +1,11 @@
 package com.eavy.account;
 
-public class AccountDTO {
+public class AccountDto {
 
     private String userId;
     private int numOfProjects;
 
-    public AccountDTO(String userId, int numOfProjects) {
+    public AccountDto(String userId, int numOfProjects) {
         this.userId = userId;
         this.numOfProjects = numOfProjects;
     }
