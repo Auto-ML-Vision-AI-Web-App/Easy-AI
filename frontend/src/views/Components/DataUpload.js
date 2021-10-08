@@ -75,7 +75,7 @@ export default function DataUpload(props) {
                       }.bind(this)}/>
                     </Paper>
                     <center>
-                    <Button component={Link} to="/admin"
+                    <Button component={Link} to="/admin/ai-choosing"
                     disabled={prevBtnDisabled}
                     className={classes.stepButton}>
                     이전

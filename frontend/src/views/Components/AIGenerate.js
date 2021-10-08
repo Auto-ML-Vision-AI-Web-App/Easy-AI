@@ -6,8 +6,19 @@ import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
+import BuildIcon from '@material-ui/icons/Build';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const drawerWidth = 240;
 
@@ -52,6 +63,15 @@ function AIGenerate(props) {
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false)
   const [dataValue, setDataValue] = useState(0)
 
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   function aiMaking(card_value) {
     setLoadingStatus(true);
     console.log("AI model making start");
@@ -65,12 +85,12 @@ function AIGenerate(props) {
     }).then(function (response) {
       console.log(response.data);
       setLoadingStatus(false);
-        history.push({
-          pathname: '/admin/ai-checking',
-          state: {
-              result_model: card_value,
-              result_message: response.data
-          }
+      history.push({
+        pathname: '/admin/ai-checking',
+        state: {
+          result_model: card_value,
+          result_message: response.data
+        }
       })
     }).catch(function (error) {
       console.log(error);
@@ -92,15 +112,23 @@ function AIGenerate(props) {
                 <div>
                   <h4>생성할 AI 종류 : {props.AIType}</h4>
                   <p>데이터 수 : {dataValue}</p>
-                  <Button onClick={() => { aiMaking(props.AIType) }}>지금 바로 생성하기</Button>
+                  <Button
+                    //onClick={() => { aiMaking(props.AIType) }}
+                    onClick={handleClickOpen}
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    className={classes.button}
+                    startIcon={<BuildIcon />}
+                  >지금 바로 생성하기</Button>
                   {loadingStatus ?
-                  <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
-                  : <LinearProgress id="loadingProgress" style={{ display: 'none' }} />}
+                    <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
+                    : <LinearProgress id="loadingProgress" style={{ display: 'none' }} />}
                 </div>
               }</div>
           </Paper>
           <center>
-            <Button component={Link} to="/admin/data-uploading"
+            <Button component={Link} to="/admin/data-checking"
               disabled={prevBtnDisabled}
               className={classes.stepButton}>
               이전
@@ -113,6 +141,31 @@ function AIGenerate(props) {
           </center>
         </Grid>
       </Grid>
+
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"정말 AI를 생성하시겠습니까?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            업로드한 데이터, 입력한 클래스를 기반으로 AI 생성과정을 시작할 것입니다.<br></br>
+            시작하기 전에 다시 한번 'AI 생성 관련 정보들'을 확인해주세요.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { aiMaking(props.AIType) }} color="primary">
+            생성하기
+          </Button>
+          <Button onClick={handleClose} color="secondary">
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
