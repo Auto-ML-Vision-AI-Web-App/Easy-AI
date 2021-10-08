@@ -72,6 +72,7 @@ export default function AIChoose(props) {
                                         card_title="이미지 분류하기"
                                         card_content="이미지 분류하기란 사진이 무슨 사진인지 구별해주는 작업입니다. 단순 예로는, 사진처럼 이 사진이 의자인지 아닌지를 구분해줍니다."
                                         card_img="https://machinelearningmastery.com/wp-content/uploads/2018/12/Example-of-Image-Classification-with-Localization-of-Multiple-Chairs-from-VOC-2012.jpg"
+                                        detail_desc=""
                                     ></ImgMediaCard>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -163,7 +164,7 @@ function ImgMediaCard(props) {
             </CardActionArea>
             <CardActions>
                 <Button size="small" color="primary">
-                    Share
+                    검색해보기
         </Button>
             </CardActions>
         </Card>

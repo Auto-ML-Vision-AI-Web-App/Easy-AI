@@ -199,7 +199,7 @@ export default function Admin() {
           <Route path="/admin/ai-checking" exact component={AIResult} />
 
           <Route path="/admin/projects" exact component={Projects} />
-          <Redirect from="/admin" to="/admin/data-uploading" />
+          <Redirect from="/admin" to="/admin/ai-choosing" />
         </Switch>
         <Box pt={4}>
             <Copyright />
