@@ -27,7 +27,8 @@ class DataControllerTest extends ControllerTest {
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
                         .file(mockFile2)
-                        .header("Authorization", "Bearer " + accessToken))
+                        .header("Authorization", "Bearer " + accessToken)
+                        .param("projectName", "test"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

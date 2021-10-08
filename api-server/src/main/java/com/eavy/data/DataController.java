@@ -63,7 +63,8 @@ public class DataController {
 
     @PostMapping("/upload")
     public ResponseEntity fileUpload(Principal principal,
-                                     @RequestParam("files") MultipartFile[] files) throws IOException {
+                                     @RequestParam String projectName,
+                                     @RequestParam MultipartFile[] files) throws IOException {
         if(files.length == 0)
             return ResponseEntity.badRequest().build();
 
@@ -74,15 +75,11 @@ public class DataController {
                 return ResponseEntity.badRequest().build();
         }
 
-        // TODO proejct id?
-        // TODO naming 지금은 기존 데이터를 덮어쓸 수 있음
-        int count = 1;
-        String prefix = principal.getName() + "/";
+        String prefix = principal.getName() + "/" + projectName + "/";
         for(MultipartFile file : files) {
             String originalFilename = file.getOriginalFilename();
             String mimeType = tika.detect(originalFilename);
-            System.out.println(mimeType);
-            BlobId blobId = BlobId.of(bucketName, prefix + count++ + originalFilename.substring(originalFilename.indexOf('.')));
+            BlobId blobId = BlobId.of(bucketName, prefix + originalFilename);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
         }
