@@ -5,6 +5,7 @@ import com.eavy.model.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 
@@ -14,9 +15,8 @@ public class Project {
     @Id
     Integer id;
     String name;
-    String datasetUrl;
     LocalDateTime createTime;
-    @OneToOne
+    @ManyToOne
     Account account;
     @OneToOne
     Model model;
@@ -43,5 +43,13 @@ public class Project {
 
     public void setModel(Model ai) {
         this.model = ai;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

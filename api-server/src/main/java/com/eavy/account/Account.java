@@ -1,8 +1,11 @@
 package com.eavy.account;
 
+import com.eavy.project.Project;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +18,8 @@ public class Account {
     String userId;
     @NotEmpty
     String password;
+    @OneToMany(mappedBy = "account")
+    List<Project> projects;
 
     public Account(String userId, String password) {
         this.userId = userId;
@@ -48,4 +53,11 @@ public class Account {
         this.password = password;
     }
 
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 }
