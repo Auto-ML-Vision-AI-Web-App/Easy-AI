@@ -31,9 +31,8 @@ public class ProjectController {
         Account account = optionalAccount.get();
         if(account.getProjects().stream().anyMatch(p -> p.getName().equals(projectName)))
             return ResponseEntity.badRequest().body("project name '" + projectName + "' already exists");
-        Project project = new Project();
-        project.setAccount(account);
-        account.getProjects().add(project);
+        Project project = new Project(projectName);
+        account.addProject(project);
         projectRepository.save(project);
         return ResponseEntity.ok(projectName);
     }

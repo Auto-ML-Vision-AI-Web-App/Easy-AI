@@ -13,11 +13,18 @@ public class Project {
     @GeneratedValue
     Integer id;
     String name;
-    LocalDateTime createTime;
+    LocalDateTime createTime = LocalDateTime.now();
     @ManyToOne
     Account account;
     @OneToOne
     Model model;
+
+    public Project() {
+    }
+
+    public Project(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;

@@ -6,10 +6,7 @@ import com.eavy.token.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,16 +35,13 @@ class ProjectControllerTest extends ControllerTest {
     @Test
     void createProjectFail_AlreadyExists() throws Exception {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        Project project = new Project();
-        String projectName = "prj1";
-        project.setName(projectName);
-        project.setAccount(account);
-        account.getProjects().add(project);
+        Project project = new Project("prj1");
+        account.addProject(project);
         projectRepository.save(project);
         String accessToken = TokenManager.generateAccessToken(TEST_ID);
 
         mockMvc.perform(post("/projects")
-                        .param("projectName", projectName)
+                        .param("projectName", project.getName())
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
