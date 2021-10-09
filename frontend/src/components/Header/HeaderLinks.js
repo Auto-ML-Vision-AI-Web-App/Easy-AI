@@ -51,6 +51,9 @@ function HeaderLinks(props) {
           buttonIcon={Apps}
           dropdownList={[
             accountComponent,
+            <Link to="admin/ai-choosing" className={classes.dropdownLink}>
+              AI 선택하기
+            </Link>,
             <Link to="admin/data-uploading" className={classes.dropdownLink}>
               데이터 업로드
             </Link>,

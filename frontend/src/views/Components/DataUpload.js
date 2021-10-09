@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 
+import CustomFileInputCard from "components/CustomInput/CustomFileInputCard.js";
+
 //file-upload-drop-zone
 import Dropzone from 'react-dropzone';
 import '../../assets/css/dataupload.css'
@@ -44,9 +46,11 @@ const useStyles = makeStyles((theme) => ({
 export default function DataUpload(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
-  const [projectId, setProjectId] = useState(null)
+  const [class1Name, setClass1Name] = useState("");
+  const [class2Name, setClass2Name] = useState("");
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+  const [projectId, setProjectId] = useState(null);
   
   return (
         <>
@@ -54,6 +58,7 @@ export default function DataUpload(props) {
             <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                     <div>
+                    <h2><strong>데이터 업로드하기</strong></h2>
                         {props.location.state==undefined ?
                         <div>
                         <h3>현재 데이터가 업로드 되지 않았습니다.</h3>
@@ -62,17 +67,25 @@ export default function DataUpload(props) {
                         :
                         <div>
                         {/*showData(props.location.state.projectId)*/}
-                        <h4>프로젝트 Type : {props.location.state.selectedType}</h4>
+                        <h4><strong>생성 AI 종류 : {props.location.state.selectedType}</strong></h4>
                         <p>데이터 수 : XX</p>
                         </div>
                       }</div>
-                      <h4>데이터 업로드하기</h4>
-                      <Basic isUploaded = {
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={4}>
+                          <CustomFileInputCard dataClass="class1"></CustomFileInputCard>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <CustomFileInputCard dataClass="class2"></CustomFileInputCard>
+                        </Grid>
+                      </Grid>
+                      {/*<Basic isUploaded = {
                         function(_isData, _projectID){
                           setNextBtnDisabled(false)
                           setProjectId(_projectID)
                           console.log(_projectID)
-                      }.bind(this)}/>
+                      }.bind(this)}/>*/}
                     </Paper>
                     <center>
                     <Button component={Link} to="/admin/ai-choosing"
@@ -159,7 +172,7 @@ class Basic extends Component {
           <section >
             <div {...getRootProps({className: 'dropzone'})}>
               <input id="file" {...getInputProps()} />
-              <h3><strong>파일들을 끌어다 놓거나, 이곳을 클릭하여 자신의 데이터들을 선택하세요</strong></h3>
+              <h3><strong>이곳을 클릭하여 자신의 데이터들을 선택하세요</strong></h3>
             </div>
             <aside>
               <h5>Files</h5>
