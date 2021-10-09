@@ -5,6 +5,7 @@ import com.eavy.project.Project;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class Account {
     @NotEmpty
     String password;
     @OneToMany(mappedBy = "account")
-    List<Project> projects;
+    List<Project> projects = new ArrayList<>();
 
     public Account(String userId, String password) {
         this.userId = userId;

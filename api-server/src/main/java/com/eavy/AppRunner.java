@@ -1,16 +1,12 @@
 package com.eavy;
 
 import com.eavy.account.Account;
-import com.eavy.account.AccountRole;
 import com.eavy.account.AccountService;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 @Component
 public class AppRunner implements ApplicationRunner {

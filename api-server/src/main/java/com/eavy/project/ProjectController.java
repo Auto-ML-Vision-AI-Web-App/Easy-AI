@@ -28,8 +28,10 @@ public class ProjectController {
     public ResponseEntity createProject(Principal principal,
                                         @RequestParam String projectName) {
         Optional<Account> optionalAccount = accountRepository.findByUserId(principal.getName());
-        Project project = new Project();
         Account account = optionalAccount.get();
+        if(account.getProjects().stream().anyMatch(p -> p.getName().equals(projectName)))
+            return ResponseEntity.badRequest().body("project name '" + projectName + "' already exists");
+        Project project = new Project();
         project.setAccount(account);
         account.getProjects().add(project);
         projectRepository.save(project);
