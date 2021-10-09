@@ -105,7 +105,6 @@ export default function Components(props) {
         <SectionTabs />
         <SectionBasics />
         <SectionNavbars />
-        <SectionTabs />
         <SectionPills />
         <SectionNotifications />
         <SectionTypography />
