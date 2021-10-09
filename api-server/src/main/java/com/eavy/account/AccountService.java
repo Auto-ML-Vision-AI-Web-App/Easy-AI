@@ -47,4 +47,8 @@ public class AccountService implements UserDetailsService {
         return new User(account.userId, account.getPassword(), Collections.<SimpleGrantedAuthority>emptyList());
     }
 
+    public Optional<Account> findByUserId(String userId) {
+        return this.accountRepository.findByUserId(userId);
+    }
+
 }

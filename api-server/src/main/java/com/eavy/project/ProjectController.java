@@ -16,18 +16,18 @@ import java.util.Optional;
 @Controller
 public class ProjectController {
 
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final ProjectRepository projectRepository;
 
-    public ProjectController(AccountRepository accountRepository, ProjectRepository projectRepository) {
-        this.accountRepository = accountRepository;
+    public ProjectController(AccountService accountService, ProjectRepository projectRepository) {
+        this.accountService = accountService;
         this.projectRepository = projectRepository;
     }
 
     @PostMapping
     public ResponseEntity createProject(Principal principal,
                                         @RequestParam String projectName) {
-        Optional<Account> optionalAccount = accountRepository.findByUserId(principal.getName());
+        Optional<Account> optionalAccount = accountService.findByUserId(principal.getName());
         Account account = optionalAccount.get();
         if(account.getProjects().stream().anyMatch(p -> p.getName().equals(projectName)))
             return ResponseEntity.badRequest().body("project name '" + projectName + "' already exists");

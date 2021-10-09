@@ -18,12 +18,10 @@ import java.util.Optional;
 public class AccountController {
 
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
     private final ObjectMapper objectMapper;
 
-    public AccountController(AccountService accountService, AccountRepository accountRepository, ObjectMapper objectMapper) {
+    public AccountController(AccountService accountService, ObjectMapper objectMapper) {
         this.accountService = accountService;
-        this.accountRepository = accountRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -50,7 +48,7 @@ public class AccountController {
 
     @GetMapping("/users")
     public ResponseEntity getUser(Principal principal) {
-        Optional<Account> optionalAccount = accountRepository.findByUserId(principal.getName());
+        Optional<Account> optionalAccount = accountService.findByUserId(principal.getName());
         AccountDto accountDTO = objectMapper.convertValue(optionalAccount.get(), AccountDto.class);
         return ResponseEntity.ok(accountDTO);
     }
