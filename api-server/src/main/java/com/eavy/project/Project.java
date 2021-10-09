@@ -3,16 +3,14 @@ package com.eavy.project;
 import com.eavy.account.Account;
 import com.eavy.model.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 public class Project {
 
     @Id
+    @GeneratedValue
     Integer id;
     String name;
     LocalDateTime createTime;
