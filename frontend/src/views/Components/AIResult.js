@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#eee6c4",
         color: "black",
         fontSize: 30,
-        margin : '10px',
+        margin: '10px',
         "&:hover,&:focus": {
-          backgroundColor: "#333333",
-          color: "#fff",
-          boxShadow:
-            "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
+            backgroundColor: "#333333",
+            color: "#fff",
+            boxShadow:
+                "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
         },
-      },
+    },
     container: {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
@@ -47,22 +47,52 @@ export default function AIResult(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     //const getParams = this.props.location.state.result_model;
-    const downLoadAI = (e) =>{
-        const api = axios.create({
-            baseURL: 'http://168.188.125.50:20017'
+    const downLoadAI = (e) => {
+        axios({
+            method: 'get',
+            url: 'http://168.188.125.50:20017//ai-downloading',
+            responseType: 'arraybuffer',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then(function (res) {
+                //console.log(response.data);
+                const disposition = res.attachment_filename;
+                //const disposition = res.request.getResponseHeader('Content-Disposition')
+                var fileName = "";
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) {
+                    fileName = matches[1].replace(/['"]/g, '');
+                }
+                let blob = new Blob([res.data], { type: 'application/zip' })
+
+                const downloadUrl = URL.createObjectURL(blob)
+                let a = document.createElement("a");
+                a.href = downloadUrl;
+                //a.download = fileName;
+                a.download = 'my-model.zip'
+                document.body.appendChild(a);
+                a.click();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        /*const api = axios.create({
+            baseURL: 'http://168.188.125.50:20017',
         })
         api.get('/ai-downloading').then(function (response) {
             console.log(response.data);
-            /*history.push({
+            history.push({
                 pathname: '/admin/ai-checking',
                 state: {
                     result_model: card_value,
                     result_message: response.data
                 }
-            })*/
+            })
         }).catch(function (error) {
             console.log(error);
-        });
+        });*/
     }
     return (
         <>
@@ -79,20 +109,20 @@ export default function AIResult(props) {
                                 :
                                 <div>
                                     <h4>AI 종류 : {props.location.state.result_model}</h4>
-                                    <Button onClick={downLoadAI} style={{color:"gray"}}>AI 링크 : {props.location.state.result_message}</Button>
+                                    <Button onClick={downLoadAI} style={{ color: "gray" }}>AI 링크 : {props.location.state.result_message}</Button>
                                 </div>
                             }</div>
                     </Paper>
                     <center>
-                    <Button component={Link} to="/admin/ai-making"
-                    disabled={prevBtnDisabled}
-                    className={classes.stepButton}>
-                    이전
+                        <Button component={Link} to="/admin/ai-making"
+                            disabled={prevBtnDisabled}
+                            className={classes.stepButton}>
+                            이전
                     </Button>
-                    <Button component={Link} to="/admin/dashboard"
-                    disabled={nextBtnDisabled}
-                    className={classes.stepButton}>
-                    다음
+                        <Button component={Link} to="/admin/dashboard"
+                            disabled={nextBtnDisabled}
+                            className={classes.stepButton}>
+                            다음
                     </Button>
                     </center>
                 </Grid>
