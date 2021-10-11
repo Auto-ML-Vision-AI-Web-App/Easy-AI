@@ -59,19 +59,11 @@ export default function AIResult(props) {
             .then(function (res) {
                 //console.log(response.data);
                 const disposition = res.attachment_filename;
-                //const disposition = res.request.getResponseHeader('Content-Disposition')
-                var fileName = "";
-                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                var matches = filenameRegex.exec(disposition);
-                if (matches != null && matches[1]) {
-                    fileName = matches[1].replace(/['"]/g, '');
-                }
                 let blob = new Blob([res.data], { type: 'application/zip' })
 
                 const downloadUrl = URL.createObjectURL(blob)
                 let a = document.createElement("a");
                 a.href = downloadUrl;
-                //a.download = fileName;
                 a.download = 'my-model.zip'
                 document.body.appendChild(a);
                 a.click();
