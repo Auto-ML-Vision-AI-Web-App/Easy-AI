@@ -64,9 +64,12 @@ public class DataController {
     @PostMapping("/upload")
     public ResponseEntity fileUpload(Principal principal,
                                      @RequestParam String projectName,
+                                     @RequestParam(required = false) String className,
                                      @RequestParam MultipartFile[] files) throws IOException {
         if(files.length == 0)
             return ResponseEntity.badRequest().build();
+        if(projectName.isEmpty())
+            return ResponseEntity.badRequest().body("project name is empty");
 
         Tika tika = new Tika();
         for(MultipartFile file : files) {
@@ -76,6 +79,9 @@ public class DataController {
         }
 
         String prefix = principal.getName() + "/" + projectName + "/";
+        if(className != null && !className.isEmpty()) {
+            prefix += className + "/";
+        };
         for(MultipartFile file : files) {
             String originalFilename = file.getOriginalFilename();
             String mimeType = tika.detect(originalFilename);
