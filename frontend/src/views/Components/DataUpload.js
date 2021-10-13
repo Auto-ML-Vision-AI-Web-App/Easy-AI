@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import Button from "components/CustomButtons/Button.js";
 
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import clsx from 'clsx';
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 500,
+    height: 700,
   },
 }));
 
@@ -55,9 +55,9 @@ export default function DataUpload(props) {
   const [projectId, setProjectId] = useState(null);
 
   const changeClassName = (_name, _className) => {
-    console.log(_name + " + "+_className);
-    if(_name === "Class 1") setClass1Name(_className);
-    if(_name === "Class 2") setClass2Name(_className);
+    console.log(_name + " + " + _className);
+    if (_name === "Class 1") setClass1Name(_className);
+    if (_name === "Class 2") setClass2Name(_className);
   };
 
 
@@ -86,21 +86,25 @@ export default function DataUpload(props) {
               <Grid item xs={12}>
                 <p>각 버튼을 눌러, 해당 데이터를 업로드해주세요.</p>
               </Grid>
+              
               <Grid item xs={6}>
                 <CustomFileInputCard dataClass="Class 1" onChange={changeClassName}></CustomFileInputCard>
               </Grid>
               <Grid item xs={6}>
                 <CustomFileInputCard dataClass="Class 2" onChange={changeClassName}></CustomFileInputCard>
               </Grid>
+
+              <Grid item xs={12}>
+
+                <Button
+                  variant="contained"
+                  color="info"
+                  className={classes.button}
+                  startIcon={<CloudUploadIcon />}
+                >Upload인데, 지금은 일단 작동x</Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                startIcon={<CloudUploadIcon />}
-              >Upload</Button>
-            </Grid>
+
             {/*<Basic isUploaded = {
                         function(_isData, _projectID){
                           setNextBtnDisabled(false)
