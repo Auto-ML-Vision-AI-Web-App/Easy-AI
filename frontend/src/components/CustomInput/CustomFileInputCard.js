@@ -1,4 +1,6 @@
 import React, { useState, Component } from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -49,7 +51,10 @@ export default function MediaCard(props) {
               </Typography>
             </Grid>
               <Typography variant="body2" color="textSecondary" component="p">
-                <Basic isUploaded = {
+                <Basic
+                projectName={props.projectName}
+                classLabelName={classLabelName}
+                isUploaded = {
                         function(_isData, _projectID){
                           setNextBtnDisabled(false)
                           setProjectId(_projectID)
@@ -92,16 +97,19 @@ class Basic extends Component {
     for (idx = 0; idx < photoFile.files.length; idx++) {
       frm.append("files", photoFile.files[idx]);
     }
+    console.log("projectName : "+ upload_this.props.projectName)
+    frm.append("projectName", upload_this.props.projectName);
+    frm.append("className", upload_this.props.classLabelName);
 
-    api.post('/upload', frm, {
+    api.post('/data/upload', frm, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(function (response) {
       alert("데이터가 업로드되었습니다.")
-      upload_this.props.isUploaded(
+      /*upload_this.props.isUploaded(
         true, response.data
-      );
+      );*/
       console.log(response);
     }).catch(function (error) {
       alert("데이터 형식이 잘못되었습니다. 이미지 형식을 넣어주세요.");

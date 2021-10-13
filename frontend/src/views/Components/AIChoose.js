@@ -46,8 +46,9 @@ export default function AIChoose(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    const setAIType_AIChoose = (_type) =>{
-        props.setAIType(_type)
+    const setAIProject_AIChoose = (_type, _projectName) =>{
+        props.setAIType(_type);
+        props.setProjectName(_projectName);
     }
     return (
         <>
@@ -67,7 +68,7 @@ export default function AIChoose(props) {
                             <div className={classes.card_box}>
                                 <Grid item xs={6}>
                                     <ImgMediaCard
-                                        setAIType={setAIType_AIChoose}
+                                        setAIProject={setAIProject_AIChoose}
                                         card_value="image-classification"
                                         card_title="이미지 분류하기"
                                         card_content="이미지 분류하기란 사진이 무슨 사진인지 구별해주는 작업입니다. 단순 예로는, 사진처럼 이 사진이 의자인지 아닌지를 구분해줍니다."
@@ -133,14 +134,15 @@ function ImgMediaCard(props) {
     const history = useHistory();
 
     function aiMaking(card_value) {
+        const test_name = "test_project_0";
         console.log("AI model choosing");
         history.push({
             pathname: '/admin/data-uploading',
-            state: {
+            /*state: {
                 selectedType: card_value
-            }
+            }*/
         })
-        props.setAIType(card_value);
+        props.setAIProject(card_value, test_name);
     }
 
     return (

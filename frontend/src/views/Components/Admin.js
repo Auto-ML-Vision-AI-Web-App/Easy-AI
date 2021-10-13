@@ -131,13 +131,19 @@ function AccountCircleIcon(props) {
 export default function Admin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [AIType, setAIType_Admin] = React.useState("")
+  const [AIType, setAIType_Admin] = React.useState("");
+  const [projectName, setProjectName_Admin] = React.useState("");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const setProjectName = (_projectName) =>{
+    console.log("Admin projectName : "+ _projectName)
+    setProjectName_Admin(_projectName);
+  }
 
   return (
     <div className={classes.root}>
@@ -188,8 +194,13 @@ export default function Admin() {
               setAIType={function (_type) {
                 setAIType_Admin(_type)
               }}
+              setProjectName={setProjectName}
             ></AIChoose>} />
-          <Route path="/admin/data-uploading" exact component={DataUpload} />
+          <Route path="/admin/data-uploading" exact component={()=>
+            <DataUpload
+              AIType={AIType}
+              projectName={projectName}
+            ></DataUpload>} />
           <Route path="/admin/data-checking" exact component={DataCheck} />
           <Route path="/admin/ai-making" exact 
             component={()=>

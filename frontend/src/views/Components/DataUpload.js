@@ -69,7 +69,7 @@ export default function DataUpload(props) {
           <Paper className={fixedHeightPaper}>
             <div>
               <h2><strong>데이터 업로드하기</strong></h2>
-              {props.location.state == undefined ?
+              {props.AIType === "" ?
                 <div>
                   <h3>현재 데이터가 업로드 되지 않았습니다.</h3>
                   <h4>데이터 업로드하기를 눌러 데이터를 입력해주세요.</h4>
@@ -77,7 +77,7 @@ export default function DataUpload(props) {
                 :
                 <div>
                   {/*showData(props.location.state.projectId)*/}
-                  <h4><strong>생성 AI 종류 : {props.location.state.selectedType}</strong></h4>
+                  <h4><strong>생성 AI 종류 : {props.AIType}</strong></h4>
                   <p>데이터 수 : XX</p>
                 </div>
               }</div>
@@ -86,12 +86,12 @@ export default function DataUpload(props) {
               <Grid item xs={12}>
                 <p>각 버튼을 눌러, 해당 데이터를 업로드해주세요.</p>
               </Grid>
-              
+
               <Grid item xs={6}>
-                <CustomFileInputCard dataClass="Class 1" onChange={changeClassName}></CustomFileInputCard>
+                <CustomFileInputCard projectName={props.projectName} dataClass="Class 1" onChange={changeClassName}></CustomFileInputCard>
               </Grid>
               <Grid item xs={6}>
-                <CustomFileInputCard dataClass="Class 2" onChange={changeClassName}></CustomFileInputCard>
+                <CustomFileInputCard projectName={props.projectName} dataClass="Class 2" onChange={changeClassName}></CustomFileInputCard>
               </Grid>
 
               <Grid item xs={12}>
