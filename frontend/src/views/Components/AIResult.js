@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, Component, Fragment } from 'react';
+import { Link } from "react-router-dom";
+
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import axios from 'axios';
@@ -7,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
-import { Link } from "react-router-dom";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 1000,
     },
 }));
 
@@ -50,7 +53,7 @@ export default function AIResult(props) {
     const downLoadAI = (e) => {
         axios({
             method: 'get',
-            url: 'http://168.188.125.50:20017//ai-downloading',
+            url: 'http://168.188.125.50:20017/ai-downloading',
             responseType: 'arraybuffer',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -70,21 +73,6 @@ export default function AIResult(props) {
             }).catch(function (error) {
                 console.log(error);
             });
-        /*const api = axios.create({
-            baseURL: 'http://168.188.125.50:20017',
-        })
-        api.get('/ai-downloading').then(function (response) {
-            console.log(response.data);
-            history.push({
-                pathname: '/admin/ai-checking',
-                state: {
-                    result_model: card_value,
-                    result_message: response.data
-                }
-            })
-        }).catch(function (error) {
-            console.log(error);
-        });*/
     }
     return (
         <>
@@ -93,15 +81,17 @@ export default function AIResult(props) {
                     <Paper className={fixedHeightPaper}>
                         <h2><strong>AI 결과 확인하기</strong></h2>
                         <div>
-                            {props.location.state == undefined ?
+                            {props.AIType === "" ?
                                 <div>
                                     <h3>현재 AI를 생성하지 않았습니다.</h3>
                                     <h4>AI 만들기 눌러 AI를 생성해주세요.</h4>
                                 </div>
                                 :
                                 <div>
-                                    <h4>AI 종류 : {props.location.state.result_model}</h4>
-                                    <Button onClick={downLoadAI} style={{ color: "gray" }}>AI 링크 : {props.location.state.result_message}</Button>
+                                    <h4>AI 종류 : {props.AIType}</h4>
+                                    <Button onClick={downLoadAI} style={{ color: "red" }}>AI 다운받기</Button>
+                                    <AccuracyHighCharts historyJson={props.AIHistory} />
+                                    <LossHighCharts historyJson={props.AIHistory} />
                                 </div>
                             }</div>
                     </Paper>
@@ -121,4 +111,144 @@ export default function AIResult(props) {
             </Grid>
         </>
     );
+}
+
+/*React Chart*/
+class AccuracyHighCharts extends Component {
+
+    render() {
+        const jsonfile = this.props.historyJson;
+        const options = {
+            title: {
+                text: 'Model history - Accuracy'
+            },
+
+            yAxis: {
+                tickInterval: 0.01,
+                title: {
+                    text: ''
+                }
+            },
+
+            xAxis: {
+                title: {
+                    text: 'epoch'
+                }
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 0
+                }
+            },
+
+            series: [{
+                name: 'accuracy',
+                data: jsonfile.accuracy
+            }, {
+                name: 'val_accuracy',
+                data: jsonfile.val_accuracy
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        }
+        return (
+            <Fragment>
+                <HighchartsReact highcharts={Highcharts} options={options} />
+            </Fragment>
+        );
+    }
+}
+
+/*React Chart*/
+class LossHighCharts extends Component {
+
+    render() {
+        const jsonfile = this.props.historyJson;
+        const options = {
+            title: {
+                text: 'Model history - Loss'
+            },
+
+            yAxis: {
+                tickInterval: 0.01,
+                title: {
+                    text: ''
+                }
+            },
+
+            xAxis: {
+                title: {
+                    text: 'epoch'
+                }
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 0
+                }
+            },
+
+            series: [{
+                name: 'loss',
+                data: jsonfile.loss
+            }, {
+                name: 'val_loss',
+                data: jsonfile.val_loss
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        }
+        return (
+            <Fragment>
+                <HighchartsReact highcharts={Highcharts} options={options} />
+            </Fragment>
+        );
+    }
 }

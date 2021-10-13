@@ -75,6 +75,7 @@ function AIGenerate(props) {
   function aiMaking(card_value) {
     setLoadingStatus(true);
     console.log("AI model making start");
+    handleClose();
     const api = axios.create({
       baseURL: 'http://168.188.125.50:20017'
     })
@@ -83,14 +84,10 @@ function AIGenerate(props) {
         modelName: card_value
       }
     }).then(function (response) {
-      console.log(response.data);
+      props.setAIHistory(response.data);
       setLoadingStatus(false);
       history.push({
         pathname: '/admin/ai-checking',
-        state: {
-          result_model: card_value,
-          result_message: response.data
-        }
       })
     }).catch(function (error) {
       console.log(error);

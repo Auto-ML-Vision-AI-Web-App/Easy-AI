@@ -133,6 +133,7 @@ export default function Admin() {
   const [open, setOpen] = React.useState(true);
   const [AIType, setAIType_Admin] = React.useState("");
   const [projectName, setProjectName_Admin] = React.useState("");
+  const [AIHistory, setAIHistory_Admin] = React.useState();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -143,6 +144,10 @@ export default function Admin() {
   const setProjectName = (_projectName) =>{
     console.log("Admin projectName : "+ _projectName)
     setProjectName_Admin(_projectName);
+  }
+
+  const setAIHistory = (_history) => { 
+    setAIHistory_Admin(_history);
   }
 
   return (
@@ -206,8 +211,13 @@ export default function Admin() {
             component={()=>
             <AIGenerate
               AIType={AIType}
+              setAIHistory={setAIHistory}
             ></AIGenerate>} />
-          <Route path="/admin/ai-checking" exact component={AIResult} />
+          <Route path="/admin/ai-checking" exact component={()=>
+            <AIResult
+              AIType={AIType}
+              AIHistory={AIHistory}
+            ></AIResult>} />
 
           <Route path="/admin/projects" exact component={Projects} />
           <Redirect from="/admin" to="/admin/ai-choosing" />
