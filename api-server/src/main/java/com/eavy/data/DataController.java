@@ -2,10 +2,7 @@ package com.eavy.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.paging.Page;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -21,44 +18,47 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/data")
 @Controller
 public class DataController {
 
+    private final DataService dataService;
     private final ResourceLoader resourceLoader;
-    private final Storage storage;
     private final ObjectMapper objectMapper;
+    private final Storage storage;
 
     @Value("${BUCKET_NAME}")
     private String bucketName;
 
-    public DataController(ResourceLoader resourceLoader, Storage storage, ObjectMapper objectMapper) {
+    public DataController(ResourceLoader resourceLoader, DataService dataService, ObjectMapper objectMapper, Storage storage) {
         this.resourceLoader = resourceLoader;
-        this.storage = storage;
+        this.dataService = dataService;
         this.objectMapper = objectMapper;
+        this.storage = storage;
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(Principal principal) {
+        Bucket bucket = storage.get(bucketName);
+        Page<Blob> list = bucket.list();
+        list.iterateAll().forEach(b -> {
+            if(b.getName().split("/")[0].equals(principal.getName()))
+                b.delete();
+        });
+        return ResponseEntity.ok().build();
     }
 
     // TODO test
     @GetMapping
     public ResponseEntity<List<BlobDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
-        String prefix = principal.getName() + "/" + projectName;
-        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(prefix));
-        ArrayList<BlobDto> blobs = new ArrayList<>();
-        list.iterateAll().forEach(b -> {
-            if(b.getName().contains(".")) { // file
-                BlobDto blobDto = new BlobDto();
-                blobDto.setName(b.getName());
-                blobDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
-                blobs.add(blobDto);
-            }
-        });
-        if(blobs.isEmpty())
+        String path = principal.getName() + "/" + projectName;
+        ArrayList<BlobDto> allData = dataService.getAllDataByPath(path);
+        if(allData.isEmpty())
             return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(blobs);
+        return ResponseEntity.ok(allData);
     }
 
     @PostMapping("/upload")
