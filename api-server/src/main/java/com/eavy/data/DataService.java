@@ -34,4 +34,16 @@ public class DataService {
         });
         return blobs;
     }
+
+    public String generatePath(String userId, String projectName, String className) {
+        String path = userId + "/" + projectName + "/";
+        if(className != null && !className.isEmpty()) {
+            path += className + "/";
+        };
+        return path;
+    }
+
+    public String generatePath(String userId, String projectName) {
+        return generatePath(userId, projectName, null);
+    }
 }

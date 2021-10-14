@@ -54,7 +54,7 @@ public class DataController {
     @GetMapping
     public ResponseEntity<List<BlobDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
-        String path = principal.getName() + "/" + projectName;
+        String path = dataService.generatePath(principal.getName(), projectName);
         ArrayList<BlobDto> allData = dataService.getAllDataByPath(path);
         if(allData.isEmpty())
             return ResponseEntity.noContent().build();
@@ -78,14 +78,11 @@ public class DataController {
                 return ResponseEntity.badRequest().build();
         }
 
-        String prefix = principal.getName() + "/" + projectName + "/";
-        if(className != null && !className.isEmpty()) {
-            prefix += className + "/";
-        };
+        String path = dataService.generatePath(principal.getName(), projectName, className);
         for(MultipartFile file : files) {
             String originalFilename = file.getOriginalFilename();
             String mimeType = tika.detect(originalFilename);
-            BlobId blobId = BlobId.of(bucketName, prefix + originalFilename);
+            BlobId blobId = BlobId.of(bucketName, path + originalFilename);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
         }
