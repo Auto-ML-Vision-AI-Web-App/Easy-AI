@@ -1,11 +1,15 @@
 package com.eavy.data;
 
 import com.google.api.gax.paging.Page;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +47,27 @@ public class DataService {
         return path;
     }
 
+    public void uploadFileToStorage(String path, MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+        BlobId blobId = BlobId.of(bucketName, path + originalFilename);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+        storage.create(blobInfo, file.getBytes());
+    }
+
+    // TODO implement
+/*    @DeleteMapping
+    public ResponseEntity delete(Principal principal) {
+        Bucket bucket = storage.get(bucketName);
+        Page<Blob> list = bucket.list();
+        list.iterateAll().forEach(b -> {
+            if(b.getName().split("/")[0].equals(principal.getName()))
+                b.delete();
+        });
+        return ResponseEntity.ok().build();
+    }*/
+
     public String generatePath(String userId, String projectName) {
         return generatePath(userId, projectName, null);
     }
+
 }
