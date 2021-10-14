@@ -1,7 +1,6 @@
 package com.eavy.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tika.Tika;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -31,10 +29,10 @@ public class DataController {
 
     // TODO test
     @GetMapping
-    public ResponseEntity<List<BlobDto>> getData(Principal principal,
+    public ResponseEntity<List<DataDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
         String path = dataService.generatePath(principal.getName(), projectName);
-        ArrayList<BlobDto> allData = dataService.getAllDataByPath(path);
+        ArrayList<DataDto> allData = dataService.getAllDataByPath(path);
         if(allData.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok(allData);

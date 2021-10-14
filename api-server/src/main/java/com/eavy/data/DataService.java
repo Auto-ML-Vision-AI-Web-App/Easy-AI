@@ -4,13 +4,10 @@ import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.*;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -28,15 +25,15 @@ public class DataService {
         this.tika = new Tika();
     }
 
-    public ArrayList<BlobDto> getAllDataByPath(String path) {
+    public ArrayList<DataDto> getAllDataByPath(String path) {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path));
-        ArrayList<BlobDto> blobs = new ArrayList<>();
+        ArrayList<DataDto> blobs = new ArrayList<>();
         list.iterateAll().forEach(b -> {
             if(b.getName().contains(".")) { // file
-                BlobDto blobDto = new BlobDto();
-                blobDto.setName(b.getName());
-                blobDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
-                blobs.add(blobDto);
+                DataDto dataDto = new DataDto();
+                dataDto.setName(b.getName());
+                dataDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
+                blobs.add(dataDto);
             }
         });
         return blobs;
