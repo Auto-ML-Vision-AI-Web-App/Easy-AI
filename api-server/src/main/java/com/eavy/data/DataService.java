@@ -2,6 +2,7 @@ package com.eavy.data;
 
 import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.*;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,14 @@ import java.util.concurrent.TimeUnit;
 public class DataService {
 
     private final Storage storage;
+    private final Tika tika;
 
     @Value("${BUCKET_NAME}")
     private String bucketName;
 
     public DataService(Storage storage) {
         this.storage = storage;
+        this.tika = new Tika();
     }
 
     public ArrayList<BlobDto> getAllDataByPath(String path) {
@@ -70,4 +73,8 @@ public class DataService {
         return generatePath(userId, projectName, null);
     }
 
+    public boolean isImageFile(MultipartFile file) {
+        String mimeType = tika.detect(file.getOriginalFilename());
+        return mimeType.startsWith("image");
+    }
 }

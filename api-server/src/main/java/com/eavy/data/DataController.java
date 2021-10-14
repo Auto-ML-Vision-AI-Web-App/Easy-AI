@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,13 +22,11 @@ public class DataController {
     private final DataService dataService;
     private final ResourceLoader resourceLoader;
     private final ObjectMapper objectMapper;
-    private final Tika tika;
 
     public DataController(ResourceLoader resourceLoader, DataService dataService, ObjectMapper objectMapper) {
         this.resourceLoader = resourceLoader;
         this.dataService = dataService;
         this.objectMapper = objectMapper;
-        this.tika = new Tika();
     }
 
     // TODO test
@@ -51,10 +50,10 @@ public class DataController {
         if(projectName.isEmpty())
             return ResponseEntity.badRequest().body("project name is empty");
 
-        for(MultipartFile file : files) {
-            String mimeType = tika.detect(file.getOriginalFilename());
-            if (!mimeType.startsWith("image"))
+        for (MultipartFile multipartFile : files) {
+            if (!dataService.isImageFile(multipartFile)) {
                 return ResponseEntity.badRequest().build();
+            }
         }
 
         String path = dataService.generatePath(principal.getName(), projectName, className);
