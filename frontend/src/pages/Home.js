@@ -17,18 +17,18 @@ import Button from "components/CustomButtons/Button.js";
 import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import SectionBasics from "./Sections/SectionBasics.js";
-import SectionNavbars from "./Sections/SectionNavbars.js";
-import SectionTabs from "./Sections/SectionTabs.js";
-import SectionPills from "./Sections/SectionPills.js";
-import SectionNotifications from "./Sections/SectionNotifications.js";
-import SectionTypography from "./Sections/SectionTypography.js";
-import SectionJavascript from "./Sections/SectionJavascript.js";
-import SectionCarousel from "./Sections/SectionCarousel.js";
-import SectionCompletedExamples from "./Sections/SectionCompletedExamples.js";
-import SectionLogin from "./Sections/SectionLogin.js";
-import SectionExamples from "./Sections/SectionExamples.js";
-import SectionDownload from "./Sections/SectionDownload.js";
+import SectionBasics from "./AdminPage/Sections/SectionBasics.js";
+import SectionNavbars from "./AdminPage/Sections/SectionNavbars.js";
+import SectionTabs from "./AdminPage/Sections/SectionTabs.js";
+import SectionPills from "./AdminPage/Sections/SectionPills.js";
+import SectionNotifications from "./AdminPage/Sections/SectionNotifications.js";
+import SectionTypography from "./AdminPage/Sections/SectionTypography.js";
+import SectionJavascript from "./AdminPage/Sections/SectionJavascript.js";
+import SectionCarousel from "./AdminPage/Sections/SectionCarousel.js";
+import SectionCompletedExamples from "./AdminPage/Sections/SectionCompletedExamples.js";
+import SectionLogin from "./AdminPage/Sections/SectionLogin.js";
+import SectionExamples from "./AdminPage/Sections/SectionExamples.js";
+import SectionDownload from "./AdminPage/Sections/SectionDownload.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
