@@ -93,6 +93,34 @@ function AIGenerate(props) {
       console.log(error);
     });
   }
+
+  const aiServerTest = (e) =>{
+    console.log("starting ai server test - sending parameter")
+    const api = axios.create({
+      baseURL: 'http://168.188.125.50:20017'
+    })
+    api.post('/training', {
+      params: {
+        username: 'user1',
+        projectname: 'image',
+        test_size: 0.3,
+        random_state: 1,
+        max_trials: 1,
+        tuner: 'random',
+        seed: 1,
+        epochs: 10,
+        validation_split: 0.1
+      }
+    }).then(function (response) {
+      props.setAIHistory(response.data);
+      setLoadingStatus(false);
+      history.push({
+        pathname: '/admin/ai-checking',
+      })
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
   return (
     <>
       <Grid container spacing={3}>
@@ -118,6 +146,13 @@ function AIGenerate(props) {
                     className={classes.button}
                     startIcon={<BuildIcon />}
                   >지금 바로 생성하기</Button>
+                  <Button
+                    //onClick={() => { aiMaking(props.AIType) }}
+                    onClick={aiServerTest}
+                    variant="contained"
+                    color="info"
+                    size="large"
+                  >AI 서버에게 파라미터 전하기 (Test용)</Button>
                   {loadingStatus ?
                     <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
                     : <LinearProgress id="loadingProgress" style={{ display: 'none' }} />}
