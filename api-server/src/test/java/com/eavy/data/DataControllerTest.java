@@ -75,7 +75,7 @@ class DataControllerTest extends ControllerTest {
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
-        MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/jpeg", getClass().getResourceAsStream("/images/test-image.png"));
+        MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
         given(dataService.isImageFile(mockFile1)).willReturn(true);
         given(dataService.isImageFile(mockFile2)).willReturn(true);
 

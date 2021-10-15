@@ -30,17 +30,21 @@ public class DataService {
     }
 
     public List<DataDto> getAllDataByPath(String path) {
-        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path));
-        List<DataDto> blobs = new ArrayList<>();
+        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
+        List<DataDto> allData = new ArrayList<>();
         list.iterateAll().forEach(b -> {
-            if(b.getName().contains(".")) { // file
-                DataDto dataDto = new DataDto();
-                dataDto.setName(b.getName());
-                dataDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
-                blobs.add(dataDto);
+            if (!b.isDirectory()) {
+                allData.add(convertBlobToDataDto(b));
             }
         });
-        return blobs;
+        return allData;
+    }
+
+    private DataDto convertBlobToDataDto(Blob b) {
+        DataDto dataDto = new DataDto();
+        dataDto.setName(b.getName());
+        dataDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
+        return dataDto;
     }
 
     public String generatePath(String userId, String projectName, String className) {
@@ -51,6 +55,10 @@ public class DataService {
         return path;
     }
 
+    public String generatePath(String userId, String projectName) {
+        return generatePath(userId, projectName, null);
+    }
+
     public void uploadFileToStorage(String path, MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
         BlobId blobId = BlobId.of(bucketName, path + originalFilename);
@@ -58,24 +66,9 @@ public class DataService {
         storage.create(blobInfo, file.getBytes());
     }
 
-    // TODO implement
-/*    @DeleteMapping
-    public ResponseEntity delete(Principal principal) {
-        Bucket bucket = storage.get(bucketName);
-        Page<Blob> list = bucket.list();
-        list.iterateAll().forEach(b -> {
-            if(b.getName().split("/")[0].equals(principal.getName()))
-                b.delete();
-        });
-        return ResponseEntity.ok().build();
-    }*/
-
-    public String generatePath(String userId, String projectName) {
-        return generatePath(userId, projectName, null);
-    }
-
     public boolean isImageFile(MultipartFile file) {
         String mimeType = tika.detect(file.getOriginalFilename());
         return mimeType.startsWith("image");
     }
+
 }
