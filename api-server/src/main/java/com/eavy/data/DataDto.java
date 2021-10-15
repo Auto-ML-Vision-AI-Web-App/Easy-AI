@@ -2,10 +2,18 @@ package com.eavy.data;
 
 import java.net.URL;
 
-public class BlobDto {
+public class DataDto {
 
     String name;
     URL signUrl;
+
+    public DataDto() {
+    }
+
+    public DataDto(String name, URL signUrl) {
+        this.name = name;
+        this.signUrl = signUrl;
+    }
 
     public String getName() {
         return name;
