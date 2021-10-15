@@ -1,7 +1,10 @@
 package com.eavy.data;
 
 import com.google.api.gax.paging.Page;
-import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -25,9 +29,9 @@ public class DataService {
         this.tika = new Tika();
     }
 
-    public ArrayList<DataDto> getAllDataByPath(String path) {
+    public List<DataDto> getAllDataByPath(String path) {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path));
-        ArrayList<DataDto> blobs = new ArrayList<>();
+        List<DataDto> blobs = new ArrayList<>();
         list.iterateAll().forEach(b -> {
             if(b.getName().contains(".")) { // file
                 DataDto dataDto = new DataDto();

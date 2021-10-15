@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,7 +31,7 @@ public class DataController {
     public ResponseEntity<List<DataDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
         String path = dataService.generatePath(principal.getName(), projectName);
-        ArrayList<DataDto> allData = dataService.getAllDataByPath(path);
+        List<DataDto> allData = dataService.getAllDataByPath(path);
         if(allData.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok(allData);
