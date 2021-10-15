@@ -106,10 +106,10 @@ function AIGenerate(props) {
         test_size: 0.3,
         random_state: 1,
         max_trials: 1,
-        tuner: 'random',
-        seed: 1,
+        //tuner: 'random',
+        //seed: 1,
         epochs: 10,
-        validation_split: 0.1
+        //validation_split: 0.1
       }
     }).then(function (response) {
       props.setAIHistory(response.data);
