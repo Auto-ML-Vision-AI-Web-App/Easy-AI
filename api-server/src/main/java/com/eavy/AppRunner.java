@@ -2,7 +2,6 @@ package com.eavy;
 
 import com.eavy.account.Account;
 import com.eavy.account.AccountService;
-
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ResourceLoader;
