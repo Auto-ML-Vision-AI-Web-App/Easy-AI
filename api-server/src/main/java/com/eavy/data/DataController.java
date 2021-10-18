@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/data")
 @Controller
 public class DataController {

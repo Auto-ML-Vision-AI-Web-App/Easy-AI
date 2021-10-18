@@ -1,7 +1,6 @@
 package com.eavy.project;
 
 import com.eavy.account.Account;
-import com.eavy.account.AccountRepository;
 import com.eavy.account.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
