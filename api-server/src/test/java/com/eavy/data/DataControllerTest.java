@@ -5,7 +5,7 @@ import com.eavy.common.ControllerTest;
 import com.eavy.token.TokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.net.URL;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class DataControllerTest extends ControllerTest {
 
-    @MockBean(name = "dataService")
+    @SpyBean(name = "dataService")
     DataService dataService;
 
     @DisplayName("데이터(이미지) 조회")
@@ -33,7 +33,6 @@ class DataControllerTest extends ControllerTest {
         String path = account.getUserId() + "/" + projectName + "/";
         List<DataDto> allData = List.of(new DataDto("dto", new URL("http://localhost:8080")));
         given(dataService.getAllDataByPath(path)).willReturn(allData);
-        given(dataService.generatePath(account.getUserId(), projectName)).willReturn(path);
 
         mockMvc.perform(get("/data")
                         .header("Authorization", "Bearer " + accessToken)
@@ -49,20 +48,22 @@ class DataControllerTest extends ControllerTest {
         // given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String projectName = "test";
+        String className = "dog";
+        String path = account.getUserId() + "/" + projectName + "/" + className + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
         MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/jpeg", getClass().getResourceAsStream("/images/test-image.png"));
-        given(dataService.isImageFile(mockFile1)).willReturn(true);
-        given(dataService.isImageFile(mockFile2)).willReturn(true);
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
                         .file(mockFile2)
                         .header("Authorization", "Bearer " + accessToken)
-                        .param("projectName", "test")
-                        .param("className", "dog"))
+                        .param("projectName", projectName)
+                        .param("className", className))
                 .andExpect(status().isOk())
+                .andExpect(content().string(path))
                 .andDo(print());
     }
 
@@ -72,19 +73,46 @@ class DataControllerTest extends ControllerTest {
         // given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String projectName = "hello";
+        String path = account.getUserId() + "/" + projectName + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
         MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
-        given(dataService.isImageFile(mockFile1)).willReturn(true);
-        given(dataService.isImageFile(mockFile2)).willReturn(true);
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
                         .file(mockFile2)
                         .header("Authorization", "Bearer " + accessToken)
-                        .param("projectName", "test"))
+                        .param("projectName", projectName))
                 .andExpect(status().isOk())
+                .andExpect(content().string(path))
+                .andDo(print());
+    }
+
+    @DisplayName("데이터(이미지) 업로드 - 모델 테스트용 데이터인 경우")
+    @Test
+    void fileUploadForModelTest() throws Exception {
+        // given
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String projectName = "world";
+        String className = "c1";
+        String path = account.getUserId() + "/" + projectName + "/" + "test" + "/" + className + "/";
+        String filename1 = "test_file.jpg";
+        MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
+        String filename2 = "test_file.png";
+        MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
+
+        mockMvc.perform(multipart("/data/upload")
+                        .file(mockFile1)
+                        .file(mockFile2)
+                        .header("Authorization", "Bearer " + accessToken)
+                        .param("projectName", projectName)
+                        .param("className", className)
+                        .param("isTestData", "true"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(path))
                 .andDo(print());
     }
 
@@ -96,7 +124,6 @@ class DataControllerTest extends ControllerTest {
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String filename = "test-text.txt";
         MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
-        given(dataService.isImageFile(mockFile)).willReturn(false);
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile)

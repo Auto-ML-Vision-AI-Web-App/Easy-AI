@@ -26,14 +26,14 @@ public class DataController {
         this.objectMapper = objectMapper;
     }
 
-    // TODO test
     @GetMapping
     public ResponseEntity<List<DataDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
         String path = dataService.generatePath(principal.getName(), projectName);
         List<DataDto> allData = dataService.getAllDataByPath(path);
-        if(allData.isEmpty())
+        if(allData.isEmpty()) {
             return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(allData);
     }
 
@@ -41,11 +41,14 @@ public class DataController {
     public ResponseEntity uploadFile(Principal principal,
                                      @RequestParam String projectName,
                                      @RequestParam(required = false) String className,
+                                     @RequestParam(required = false) boolean isTestData,
                                      @RequestParam MultipartFile[] files) throws IOException {
-        if(files.length == 0)
+        if(files.length == 0) {
             return ResponseEntity.badRequest().build();
-        if(projectName.isEmpty())
+        }
+        if(projectName.isEmpty()) {
             return ResponseEntity.badRequest().body("project name is empty");
+        }
 
         for (MultipartFile multipartFile : files) {
             if (!dataService.isImageFile(multipartFile)) {
@@ -53,12 +56,15 @@ public class DataController {
             }
         }
 
+        if(isTestData) {
+            projectName += "/test";
+        }
         String path = dataService.generatePath(principal.getName(), projectName, className);
         for(MultipartFile file : files) {
             dataService.uploadFileToStorage(path, file);
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(path);
     }
 
 }
