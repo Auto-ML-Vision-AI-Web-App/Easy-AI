@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
+@CrossOrigin
 @RequestMapping("/data")
 @Controller
 public class DataController {
