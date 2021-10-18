@@ -50,16 +50,17 @@ export default function LoginPage(props) {
         password: userPw
       }
     }).then(function (response) {
-      document.getElementById("login_error_alert").style.display="none";
       console.log(response)
-      props.history.push({
+
+      document.getElementById("login_error_alert").style.display="none";
+      /*props.history.push({
         pathname: '/',
         state: {
           loginStatus: true,
           username: response.data.userId,
           numOfProjects: response.numOfProjects
         }
-      })
+      })*/
 
     }).catch(function (error) {
       document.getElementById("login_error_alert").style.display="block";

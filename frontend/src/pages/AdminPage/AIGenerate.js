@@ -102,14 +102,10 @@ function AIGenerate(props) {
     api.post('/training', {
       params: {
         username: 'user1',
-        projectname: 'image',
+        projectname: 'project1',
         test_size: 0.3,
-        random_state: 1,
         max_trials: 1,
-        //tuner: 'random',
-        //seed: 1,
-        epochs: 10,
-        //validation_split: 0.1
+        epochs: 10
       }
     }).then(function (response) {
       props.setAIHistory(response.data);
@@ -154,14 +150,10 @@ function AIGenerate(props) {
                     size="large"
                   >AI 서버에게 파라미터 전하기 (Test용)<br></br>
                   username: 'user1',<br></br>
-                  projectname: 'image',<br></br>
+                  projectname: 'project1',<br></br>
                   test_size: 0.3,<br></br>
-                  random_state: 1,<br></br>
                   max_trials: 1,<br></br>
-                  tuner: 'random',<br></br>
-                  seed: 1,<br></br>
-                  epochs: 10,<br></br>
-                  validation_split: 0.1<br></br>
+                  epochs: 10<br></br>
                   </Button>
                   {loadingStatus ?
                     <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
