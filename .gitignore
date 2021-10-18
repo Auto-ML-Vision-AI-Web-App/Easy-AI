@@ -27,5 +27,5 @@ frontend/node_modules
 .DS_Store
 
 # critical information
-api-server/src/main/resources/breath-of-ai-282d25539b0d.json
+api-server/src/main/resources/credentials
 .vscode
