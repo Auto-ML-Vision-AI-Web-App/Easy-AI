@@ -1,10 +1,7 @@
 package com.eavy.data;
 
 import com.google.api.gax.paging.Page;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,9 +45,15 @@ public class DataService {
     }
 
     public String generatePath(String userId, String projectName, String className) {
-        String path = userId + "/" + projectName + "/";
-        if(className != null && !className.isEmpty()) {
-            path += className + "/";
+        String path = "";
+        if (userId != null && !userId.isEmpty()) {
+            path += userId + "/";
+            if (projectName != null && !projectName.isEmpty()) {
+                path += projectName + "/";
+                if (className != null && !className.isEmpty()) {
+                    path += className + "/";
+                };
+            };
         };
         return path;
     }
@@ -59,7 +62,18 @@ public class DataService {
         return generatePath(userId, projectName, null);
     }
 
+    public String generatePath(String userId) {
+        return generatePath(userId, null, null);
+    }
+
     public void uploadFileToStorage(String path, MultipartFile file) throws IOException {
+        uploadFileToStorage(path, file, false);
+    }
+
+    public void uploadFileToStorage(String path, MultipartFile file, boolean isTestData) throws IOException {
+        if (isTestData) {
+            deleteByPath(path);
+        }
         String originalFilename = file.getOriginalFilename();
         BlobId blobId = BlobId.of(bucketName, path + originalFilename);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
@@ -69,6 +83,23 @@ public class DataService {
     public boolean isImageFile(MultipartFile file) {
         String mimeType = tika.detect(file.getOriginalFilename());
         return mimeType.startsWith("image");
+    }
+
+    public void deleteUser(String userId) {
+        deleteByPath(generatePath(userId));
+    }
+
+    public void deleteProject(String userId, String projectName) {
+        deleteByPath(generatePath(userId, projectName));
+    }
+
+    private void deleteByPath(String path) {
+        Bucket bucket = storage.get(bucketName);
+        Page<Blob> list = bucket.list();
+        list.iterateAll().forEach(b -> {
+            if (b.getName().startsWith(path))
+                b.delete();
+        });
     }
 
 }

@@ -61,7 +61,7 @@ public class DataController {
         }
         String path = dataService.generatePath(principal.getName(), projectName, className);
         for(MultipartFile file : files) {
-            dataService.uploadFileToStorage(path, file);
+            dataService.uploadFileToStorage(path, file, isTestData);
         }
 
         return ResponseEntity.ok().body(path);
