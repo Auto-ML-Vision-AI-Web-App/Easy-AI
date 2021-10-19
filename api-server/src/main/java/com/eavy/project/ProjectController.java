@@ -4,6 +4,7 @@ import com.eavy.account.Account;
 import com.eavy.account.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.Optional;
 
+@CrossOrigin
 @RequestMapping("/projects")
 @Controller
 public class ProjectController {
