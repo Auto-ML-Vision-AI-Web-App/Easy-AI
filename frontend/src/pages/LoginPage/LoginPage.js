@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import {setCookie, getCookie} from 'components/Cookie.js';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -50,7 +51,9 @@ export default function LoginPage(props) {
         password: userPw
       }
     }).then(function (response) {
-      console.log(response)
+      console.log(response.data);
+      localStorage.setItem('refresh-token',response.data['refresh-token']);
+      setCookie('access-token',response.data['access-token'])
 
       document.getElementById("login_error_alert").style.display="none";
       /*props.history.push({
