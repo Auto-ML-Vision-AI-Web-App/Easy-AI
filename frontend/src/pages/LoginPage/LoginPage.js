@@ -1,6 +1,6 @@
 import React from "react";
 import axios from 'axios';
-import {setCookie, getCookie} from 'components/Cookie.js';
+import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -53,17 +53,13 @@ export default function LoginPage(props) {
     }).then(function (response) {
       console.log(response.data);
       localStorage.setItem('refresh-token',response.data['refresh-token']);
-      setCookie('access-token',response.data['access-token'])
+      setCookie('access-token',response.data['access-token']);
+      setCookie('user-name',userId);
 
       document.getElementById("login_error_alert").style.display="none";
-      /*props.history.push({
-        pathname: '/',
-        state: {
-          loginStatus: true,
-          username: response.data.userId,
-          numOfProjects: response.numOfProjects
-        }
-      })*/
+      props.history.push({
+        pathname: '/'
+      })
 
     }).catch(function (error) {
       document.getElementById("login_error_alert").style.display="block";

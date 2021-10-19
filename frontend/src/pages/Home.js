@@ -1,9 +1,9 @@
 import React from "react";
-// nodejs library that concatenates classes
 import classNames from "classnames";
-// react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from '@material-ui/lab/Alert';
@@ -36,8 +36,8 @@ const useStyles = makeStyles(styles);
 
 
 export default function Components(props) {
-  const [loginStatus, setLoginStatus] = React.useState(props.location.state===undefined? false: props.location.state.loginStatus);
-  const [username, setUsername] = React.useState(props.location.state==undefined? "":props.location.state.username);
+  const [loginStatus, setLoginStatus] = React.useState(getCookie('access-token')===undefined? false:true);
+  const [username, setUsername] = React.useState(getCookie('user-name')===undefined? "":getCookie('user-name'));
   console.log(loginStatus)
   const classes = useStyles();
   const { ...rest } = props;
@@ -64,6 +64,11 @@ export default function Components(props) {
         rightLinks={<HeaderLinks onLogout={
           function(_loginStatus){
             setLoginStatus(_loginStatus)
+
+            /*remove cookie*/
+            removeCookie('access-token');
+            removeCookie('user-name');
+
             setUsername("")
           }}
           loginStatus={loginStatus}/>}
