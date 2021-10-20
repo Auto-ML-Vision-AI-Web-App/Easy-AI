@@ -69,28 +69,6 @@ public class DataService {
         return dataDto;
     }
 
-    public String generatePath(String userId, String projectName, String className) {
-        String path = "";
-        if (userId != null && !userId.isEmpty()) {
-            path += userId + "/";
-            if (projectName != null && !projectName.isEmpty()) {
-                path += projectName + "/";
-                if (className != null && !className.isEmpty()) {
-                    path += className + "/";
-                };
-            };
-        };
-        return path;
-    }
-
-    public String generatePath(String userId, String projectName) {
-        return generatePath(userId, projectName, null);
-    }
-
-    public String generatePath(String userId) {
-        return generatePath(userId, null, null);
-    }
-
     public void uploadFileToStorage(String path, MultipartFile file) throws IOException {
         uploadFileToStorage(path, file, false);
     }
@@ -110,6 +88,15 @@ public class DataService {
         return mimeType.startsWith("image");
     }
 
+    private void deleteByPath(String path) {
+        Bucket bucket = storage.get(bucketName);
+        Page<Blob> list = bucket.list();
+        list.iterateAll().forEach(b -> {
+            if (b.getName().startsWith(path))
+                b.delete();
+        });
+    }
+
     public void deleteUser(String userId) {
         deleteByPath(generatePath(userId));
     }
@@ -118,13 +105,33 @@ public class DataService {
         deleteByPath(generatePath(userId, projectName));
     }
 
-    private void deleteByPath(String path) {
-        Bucket bucket = storage.get(bucketName);
-        Page<Blob> list = bucket.list();
-        list.iterateAll().forEach(b -> {
-            if (b.getName().startsWith(path))
-                b.delete();
-        });
+    public String generatePath(String userId, String projectName, String category, String className) {
+        String path = "";
+        if (userId != null && !userId.isEmpty()) {
+            path += userId + "/";
+            if (projectName != null && !projectName.isEmpty()) {
+                path += projectName + "/";
+                if (category != null && !category.isEmpty()) {
+                    path += category + "/";
+                    if (className != null && !className.isEmpty()) {
+                        path += className + "/";
+                    }
+                }
+            }
+        }
+        return path;
+    }
+
+    public String generatePath(String userId, String projectName, String category) {
+        return generatePath(userId, projectName, category, null);
+    }
+
+    public String generatePath(String userId, String projectName) {
+        return generatePath(userId, projectName, null, null);
+    }
+
+    public String generatePath(String userId) {
+        return generatePath(userId, null, null, null);
     }
 
 }
