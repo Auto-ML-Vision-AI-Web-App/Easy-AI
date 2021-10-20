@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class DataService {
@@ -26,7 +29,7 @@ public class DataService {
         this.tika = new Tika();
     }
 
-    public List<DataDto> getAllDataByPath(String path) {
+    public List<DataDto> getData(String path) {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         List<DataDto> allData = new ArrayList<>();
         list.iterateAll().forEach(b -> {
@@ -35,6 +38,28 @@ public class DataService {
             }
         });
         return allData;
+    }
+
+    public void zipFilesInPathAndWriteTo(String path, OutputStream destOutputStream) throws IOException {
+        ZipOutputStream zipOutputStream = new ZipOutputStream(destOutputStream);
+        zipFilesInPathAndWriteToRecursively(path, zipOutputStream);
+        zipOutputStream.close();
+    }
+
+    private void zipFilesInPathAndWriteToRecursively(String path, ZipOutputStream zipOutputStream) throws IOException {
+        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
+
+        for (Blob b : list.iterateAll()) {
+            if (b.isDirectory()) {
+                zipOutputStream.putNextEntry(new ZipEntry(b.getName()));
+                zipOutputStream.closeEntry();
+                zipFilesInPathAndWriteToRecursively(b.getName(), zipOutputStream);
+            } else {
+                ZipEntry zipEntry = new ZipEntry(b.getName());
+                zipOutputStream.putNextEntry(zipEntry);
+                b.downloadTo(zipOutputStream);
+            }
+        }
     }
 
     private DataDto convertBlobToDataDto(Blob b) {
