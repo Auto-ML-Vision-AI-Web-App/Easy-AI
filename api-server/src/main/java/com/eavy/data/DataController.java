@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -39,30 +40,20 @@ public class DataController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity uploadFile(Principal principal,
-                                     @RequestParam String projectName,
-                                     @RequestParam(required = false) String className,
-                                     @RequestParam(required = false) boolean isTestData,
-                                     @RequestParam MultipartFile[] files) throws IOException {
-        if(files.length == 0) {
-            return ResponseEntity.badRequest().build();
-        }
-        if(projectName.isEmpty()) {
-            return ResponseEntity.badRequest().body("project name is empty");
-        }
-
+    public ResponseEntity uploadImageFiles(Principal principal,
+                                           @RequestParam @NotEmpty String projectName,
+                                           @RequestParam(required = false) @NotEmpty String className,
+                                           @RequestParam @NotEmpty String category,
+                                           @RequestParam @NotEmpty MultipartFile[] files) throws IOException {
         for (MultipartFile multipartFile : files) {
             if (!dataService.isImageFile(multipartFile)) {
                 return ResponseEntity.badRequest().build();
             }
         }
 
-        if(isTestData) {
-            projectName += "/test";
-        }
-        String path = dataService.generatePath(principal.getName(), projectName, className);
+        String path = dataService.generatePath(principal.getName(), projectName, category, className);
         for(MultipartFile file : files) {
-            dataService.uploadFileToStorage(path, file, isTestData);
+            dataService.uploadFileToStorage(path, file);
         }
 
         return ResponseEntity.ok().body(path);

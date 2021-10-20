@@ -32,7 +32,7 @@ class DataControllerTest extends ControllerTest {
         String projectName = "prj1";
         String path = account.getUserId() + "/" + projectName + "/";
         List<DataDto> allData = List.of(new DataDto("dto", new URL("http://localhost:8080")));
-        given(dataService.getAllDataByPath(path)).willReturn(allData);
+        given(dataService.getData(path)).willReturn(allData);
 
         mockMvc.perform(get("/data")
                         .header("Authorization", "Bearer " + accessToken)
@@ -49,8 +49,9 @@ class DataControllerTest extends ControllerTest {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String projectName = "test";
+        String category = "train";
         String className = "dog";
-        String path = account.getUserId() + "/" + projectName + "/" + className + "/";
+        String path = account.getUserId() + "/" + projectName + "/" + category + "/" + className + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
@@ -61,6 +62,7 @@ class DataControllerTest extends ControllerTest {
                         .file(mockFile2)
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", projectName)
+                        .param("category", category)
                         .param("className", className))
                 .andExpect(status().isOk())
                 .andExpect(content().string(path))
@@ -74,31 +76,8 @@ class DataControllerTest extends ControllerTest {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String projectName = "hello";
-        String path = account.getUserId() + "/" + projectName + "/";
-        String filename1 = "test_file.jpg";
-        MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
-        String filename2 = "test_file.png";
-        MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
-
-        mockMvc.perform(multipart("/data/upload")
-                        .file(mockFile1)
-                        .file(mockFile2)
-                        .header("Authorization", "Bearer " + accessToken)
-                        .param("projectName", projectName))
-                .andExpect(status().isOk())
-                .andExpect(content().string(path))
-                .andDo(print());
-    }
-
-    @DisplayName("데이터(이미지) 업로드 - 모델 테스트용 데이터인 경우")
-    @Test
-    void fileUploadForModelTest() throws Exception {
-        // given
-        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
-        String projectName = "world";
-        String className = "c1";
-        String path = account.getUserId() + "/" + projectName + "/" + "test" + "/" + className + "/";
+        String category = "test";
+        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
@@ -109,8 +88,7 @@ class DataControllerTest extends ControllerTest {
                         .file(mockFile2)
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", projectName)
-                        .param("className", className)
-                        .param("isTestData", "true"))
+                        .param("category", category))
                 .andExpect(status().isOk())
                 .andExpect(content().string(path))
                 .andDo(print());
@@ -129,6 +107,7 @@ class DataControllerTest extends ControllerTest {
                         .file(mockFile)
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", "test")
+                        .param("category", "train")
                         .param("className", "dog"))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
@@ -136,7 +115,7 @@ class DataControllerTest extends ControllerTest {
 
     @DisplayName("데이터(이미지) 업로드 실패 - 업로드 할 데이터가 없는 경우")
     @Test
-    void fileUploadFail_NoFiles() throws Exception {
+    void fileUploadFail_noFiles() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
@@ -144,12 +123,13 @@ class DataControllerTest extends ControllerTest {
         mockMvc.perform(multipart("/data/upload")
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", "test")
+                        .param("category", "train")
                         .param("className", "dog"))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
-    @DisplayName("데이터(이미지) 업로드 실패 - 프로젝트 이름이 없는 경우")
+    @DisplayName("데이터(이미지) 업로드 실패 - 프로젝트 이름이 비어있는 경우")
     @Test
     void fileUploadFail_emptyProjectName() throws Exception {
         //given
@@ -162,9 +142,9 @@ class DataControllerTest extends ControllerTest {
                         .file(mockFile)
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", "")
+                        .param("category", "train")
                         .param("className", "dog"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("project name is empty"))
                 .andDo(print());
     }
 
@@ -181,6 +161,7 @@ class DataControllerTest extends ControllerTest {
                         .file(mockFile)
                         .header("Authorization", "Bearer " + accessToken.substring(1))
                         .param("projectName", "test")
+                        .param("category", "train")
                         .param("className", "dog"))
                 .andExpect(status().isForbidden())
                 .andDo(print());
