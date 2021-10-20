@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -30,7 +31,7 @@ public class DataController {
     public ResponseEntity<List<DataDto>> getData(Principal principal,
                                                  @RequestParam String projectName){
         String path = dataService.generatePath(principal.getName(), projectName);
-        List<DataDto> allData = dataService.getAllDataByPath(path);
+        List<DataDto> allData = dataService.getData(path);
         if(allData.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -65,6 +66,18 @@ public class DataController {
         }
 
         return ResponseEntity.ok().body(path);
+    }
+
+    @ResponseBody
+    @GetMapping(produces = "application/zip")
+    public void downloadDataAsZip(Principal principal,
+                                  HttpServletResponse response) throws IOException {
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename=download.zip");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        String path = dataService.generatePath(principal.getName());
+        dataService.zipFilesInPathAndWriteTo(path, response.getOutputStream());
     }
 
 }
