@@ -1,5 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
+import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
+
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -130,6 +132,7 @@ function AccountCircleIcon(props) {
 
 export default function Admin() {
   const classes = useStyles();
+  const [redirectPath, setRedirectPath] = React.useState(getCookie('access-token')!=undefined? '/admin/ai-choosing':'/login-page')
   const [open, setOpen] = React.useState(true);
   const [AIType, setAIType_Admin] = React.useState("");
   const [projectName, setProjectName_Admin] = React.useState("");
@@ -220,7 +223,7 @@ export default function Admin() {
             ></AIResult>} />
 
           <Route path="/admin/projects" exact component={Projects} />
-          <Redirect from="/admin" to="/admin/ai-choosing" />
+          <Redirect from="/admin" to={redirectPath} />
         </Switch>
         <Box pt={4}>
             <Copyright />
