@@ -68,7 +68,8 @@ export default function Components(props) {
             /*remove cookie*/
             removeCookie('access-token');
             removeCookie('user-name');
-
+            //remove local Storage refresh token
+            localStorage.removeItem("refresh-token");
             setUsername("")
           }}
           loginStatus={loginStatus}/>}
