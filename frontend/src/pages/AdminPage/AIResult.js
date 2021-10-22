@@ -8,6 +8,7 @@ import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import CustomButton from "components/CustomButtons/Button.js";
 
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -37,9 +38,6 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
         flexDirection: 'column',
     },
-    fixedHeight: {
-        height: 1000,
-    },
 }));
 
 export default function AIResult(props) {
@@ -48,7 +46,7 @@ export default function AIResult(props) {
     const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
 
     const classes = useStyles();
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const fixedHeightPaper = clsx(classes.paper);
     //const getParams = this.props.location.state.result_model;
     const downLoadAI = (e) => {
         axios({
@@ -89,9 +87,19 @@ export default function AIResult(props) {
                                 :
                                 <div>
                                     <h4>AI 종류 : {props.AIType}</h4>
-                                    <Button onClick={downLoadAI} style={{ color: "red" }}>AI 다운받기</Button>
-                                    <AccuracyHighCharts historyJson={props.AIHistory} />
-                                    <LossHighCharts historyJson={props.AIHistory} />
+                                    <CustomButton onClick={downLoadAI} color="info">AI 다운받기</CustomButton>
+                                    <Link to={"/admin/ai-tesing"} className={classes.link}>
+                                        <CustomButton style={{color:'white', backgroundColor:'#6F3637'}}>생성된 모델로 테스트 하러 가기</CustomButton>
+                                    </Link>
+                                    <hr style={{color:'gray'}}></hr>
+                                    <Grid container spacing={3}>
+                                    <Grid item xs={6}>
+                                        <AccuracyHighCharts historyJson={props.AIHistory} />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <LossHighCharts historyJson={props.AIHistory} />
+                                    </Grid>
+                                    </Grid>
                                 </div>
                             }</div>
                     </Paper>
@@ -162,7 +170,7 @@ class AccuracyHighCharts extends Component {
             responsive: {
                 rules: [{
                     condition: {
-                        maxWidth: 500
+                        maxWidth: 300
                     },
                     chartOptions: {
                         legend: {
@@ -232,7 +240,7 @@ class LossHighCharts extends Component {
             responsive: {
                 rules: [{
                     condition: {
-                        maxWidth: 500
+                        maxWidth: 300
                     },
                     chartOptions: {
                         legend: {

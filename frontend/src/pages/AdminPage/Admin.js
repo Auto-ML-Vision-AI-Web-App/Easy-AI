@@ -24,6 +24,7 @@ import AIChoose from './AIChoose';
 import AIResult from './AIResult';
 import Projects from './Projects';
 import AIGenerate from './AIGenerate';
+import AITest from './AITest';
 
 import { Redirect, Switch, Route } from "react-router-dom";
 
@@ -208,19 +209,31 @@ export default function Admin() {
             <DataUpload
               AIType={AIType}
               projectName={projectName}
-            ></DataUpload>} />
+            ></DataUpload>}
+          />
           <Route path="/admin/data-checking" exact component={DataCheck} />
+          
           <Route path="/admin/ai-making" exact 
             component={()=>
             <AIGenerate
               AIType={AIType}
               setAIHistory={setAIHistory}
-            ></AIGenerate>} />
+            ></AIGenerate>}
+          />
+          
           <Route path="/admin/ai-checking" exact component={()=>
             <AIResult
               AIType={AIType}
               AIHistory={AIHistory}
-            ></AIResult>} />
+            ></AIResult>}
+          />
+          
+          <Route path="/admin/ai-testing" exact component={()=>
+            <AITest
+              AIType={AIType}
+              AIHistory={AIHistory}
+            ></AITest>}
+          />
 
           <Route path="/admin/projects" exact component={Projects} />
           <Redirect from="/admin" to={redirectPath} />
