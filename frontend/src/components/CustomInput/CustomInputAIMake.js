@@ -20,7 +20,7 @@ export default function InputAIMake({label, defaultValue, helperText}) {
             <Grid container spacing={2}>
                 <Grid item xs={5}>
                 <TextField
-                    id="outlined-helperText"
+                    id={label}
                     label={label}
                     defaultValue={defaultValue}
                     variant="outlined"

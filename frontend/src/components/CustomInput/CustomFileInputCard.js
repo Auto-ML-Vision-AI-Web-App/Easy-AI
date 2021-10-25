@@ -1,5 +1,6 @@
 import React, { useState, Component } from 'react';
 import axios from 'axios';
+import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -52,6 +53,7 @@ export default function MediaCard(props) {
             </Grid>
               <Typography variant="body2" color="textSecondary" component="p">
                 <Basic
+                fileId={props.id}
                 projectName={props.projectName}
                 classLabelName={classLabelName}
                 isUploaded = {
@@ -74,6 +76,7 @@ class Basic extends Component {
   constructor() {
     super();
     this.onDrop = (files) => {
+      console.log(files)
       this.setState({ files })
     };
     this.state = {
@@ -88,21 +91,23 @@ class Basic extends Component {
       baseURL: 'http://localhost:8080'
     })
     const frm = new FormData();
-    var photoFile = document.getElementById("file");
+    var photoFile = document.getElementById(upload_this.props.fileId);
     if (photoFile.files[0] === undefined) {
       alert("데이터가 없습니다. 데이터를 입력해주세요.")
       return;
     }
     var idx = 0;
     for (idx = 0; idx < photoFile.files.length; idx++) {
+      console.log(idx);
       frm.append("files", photoFile.files[idx]);
     }
-    console.log("projectName : "+ upload_this.props.projectName)
-    frm.append("projectName", upload_this.props.projectName);
+    frm.append("projectName", "lastTest");
     frm.append("className", upload_this.props.classLabelName);
+    frm.append("category", "train");
 
     api.post('/data/upload', frm, {
       headers: {
+        'Authorization':"Bearer "+getCookie('access-token'),
         'Content-Type': 'multipart/form-data'
       }
     }).then(function (response) {
@@ -131,7 +136,7 @@ class Basic extends Component {
         {({ getRootProps, getInputProps }) => (
           <section >
             <div {...getRootProps({ className: 'dropzone' })}>
-              <input id="file" {...getInputProps()} />
+              <input id={this.props.fileId} {...getInputProps()} />
               <p><strong>이곳을 클릭하여 데이터들을 선택하세요</strong></p>
             </div>
             <aside>
