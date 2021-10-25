@@ -2,6 +2,7 @@ import React, { useState, Component } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
+import {refreshToken} from 'components/Token.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -104,6 +105,7 @@ export default function DataUpload(props) {
                   startIcon={<CloudUploadIcon />}
                 >Upload인데, 지금은 일단 작동x</Button>
               </Grid>
+              <Button onClick={refreshToken}>REFRESH TOKEN</Button>
             </Grid>
             
           </Paper>

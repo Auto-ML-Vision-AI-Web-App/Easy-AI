@@ -136,6 +136,7 @@ class Basic extends Component {
 
 
     return (
+      <>
       <Dropzone onDrop={this.onDrop}>
         {({ getRootProps, getInputProps }) => (
           <section >
@@ -151,6 +152,7 @@ class Basic extends Component {
           </section>
         )}
       </Dropzone>
+      </>
     );
   }
 }
