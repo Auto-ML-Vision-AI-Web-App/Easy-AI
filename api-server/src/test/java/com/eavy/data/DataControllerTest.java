@@ -15,8 +15,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class DataControllerTest extends ControllerTest {
 
@@ -30,15 +29,16 @@ class DataControllerTest extends ControllerTest {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String projectName = "prj1";
-        String path = account.getUserId() + "/" + projectName + "/";
+        String category = "train";
+        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
         List<DataDto> allData = List.of(new DataDto("dto", new URL("http://localhost:8080")));
         given(dataService.getData(path)).willReturn(allData);
 
         mockMvc.perform(get("/data")
                         .header("Authorization", "Bearer " + accessToken)
-                        .param("projectName", projectName))
+                        .param("projectName", projectName)
+                        .param("category", category))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"name\":\"dto\",\"signUrl\":\"http://localhost:8080\"}]"))
                 .andDo(print());
     }
 
@@ -56,6 +56,7 @@ class DataControllerTest extends ControllerTest {
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
         MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/jpeg", getClass().getResourceAsStream("/images/test-image.png"));
+        final int FILE_SIZE = 2;
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
@@ -65,7 +66,9 @@ class DataControllerTest extends ControllerTest {
                         .param("category", category)
                         .param("className", className))
                 .andExpect(status().isOk())
-                .andExpect(content().string(path))
+                .andExpect(jsonPath("$.path").value(path))
+                .andExpect(jsonPath("$.className").value(className))
+                .andExpect(jsonPath("$.size").value(FILE_SIZE))
                 .andDo(print());
     }
 
@@ -82,6 +85,7 @@ class DataControllerTest extends ControllerTest {
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
         MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
+        final int FILE_SIZE = 2;
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
@@ -90,7 +94,8 @@ class DataControllerTest extends ControllerTest {
                         .param("projectName", projectName)
                         .param("category", category))
                 .andExpect(status().isOk())
-                .andExpect(content().string(path))
+                .andExpect(jsonPath("$.path").value(path))
+                .andExpect(jsonPath("$.size").value(FILE_SIZE))
                 .andDo(print());
     }
 
