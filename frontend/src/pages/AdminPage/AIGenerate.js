@@ -3,6 +3,9 @@ import { Link, withRouter, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+
+import InputAIMake from 'components/CustomInput/CustomInputAIMake.js';
+
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -50,14 +53,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 500,
+    height: 900,
   },
 }));
 
 function AIGenerate(props) {
   const history = useHistory();
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeightPaper = clsx(classes.paper);
   const [loadingStatus, setLoadingStatus] = React.useState(false)
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(false)
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false)
@@ -133,28 +136,45 @@ function AIGenerate(props) {
                 <div>
                   <h4>생성할 AI 종류 : {props.AIType}</h4>
                   <p>데이터 수 : {dataValue}</p>
-                  <Button
-                    //onClick={() => { aiMaking(props.AIType) }}
-                    onClick={handleClickOpen}
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    className={classes.button}
-                    startIcon={<BuildIcon />}
-                  >지금 바로 생성하기</Button>
-                  <Button
-                    //onClick={() => { aiMaking(props.AIType) }}
-                    onClick={aiServerTest}
-                    variant="contained"
-                    color="info"
-                    size="large"
-                  >AI 서버에게 파라미터 전하기 (Test용)<br></br>
+                  <hr></hr>
+                  <br></br><br></br>
+
+                  <Grid container spacing={3}>
+                  <Grid item xs={8}>
+                    <Paper elevation={3}>
+                      <form>
+                        <InputAIMake label="Test Size" defaultValue="0.2" helperText="자신이 넣은 데이터셋에서 학습에 제외시킬 데이터 비율입니다. 제외된 데이터는 AI를 성능을 평가하는 데에 사용됩니다."></InputAIMake>
+                        <InputAIMake label="Max Trial" defaultValue="1" helperText="생성을 시도하는 AI의 수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 선택 가능한 AI의 선택지가 늘어납니다."></InputAIMake>
+                        <InputAIMake label="Epochs" defaultValue="" helperText="제일 성능이 좋은 AI가 데이터를 가지고 학습하는 횟수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 성능은 올라갈 수 있습니다."></InputAIMake>
+                      </form>
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={4}>
+                    <Button
+                      //onClick={() => { aiMaking(props.AIType) }}
+                      onClick={handleClickOpen}
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      className={classes.button}
+                      startIcon={<BuildIcon />}
+                    >지금 바로 생성하기</Button>
+                    <Button
+                      //onClick={() => { aiMaking(props.AIType) }}
+                      onClick={aiServerTest}
+                      variant="contained"
+                      color="info"
+                      size="large"
+                    >AI 서버에게 파라미터 전하기 (Test용)<br></br>
                   username: 'user1',<br></br>
                   projectname: 'project1',<br></br>
                   test_size: 0.3,<br></br>
                   max_trials: 1,<br></br>
                   epochs: 10<br></br>
-                  </Button>
+                    </Button>
+                  </Grid>
+                  </Grid>
                   {loadingStatus ?
                     <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
                     : <LinearProgress id="loadingProgress" style={{ display: 'none' }} />}
