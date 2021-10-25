@@ -1,6 +1,7 @@
 package com.eavy.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -69,7 +70,12 @@ public class DataController {
             dataService.uploadFileToStorage(path, file);
         }
 
-        return ResponseEntity.ok().body(path);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("path", path);
+        jsonObject.addProperty("className", className);
+        jsonObject.addProperty("size", files.length);
+
+        return ResponseEntity.ok().body(jsonObject.toString());
     }
 
 }
