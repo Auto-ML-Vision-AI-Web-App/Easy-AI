@@ -74,7 +74,9 @@ public class DataController {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("path", path);
-        jsonObject.addProperty("className", className);
+        if(className != null) {
+            jsonObject.addProperty("className", className);
+        }
         jsonObject.addProperty("size", files.length);
 
         return ResponseEntity.ok().body(jsonObject.toString());
