@@ -9,7 +9,7 @@ import InputAIMake from 'components/CustomInput/CustomInputAIMake.js';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
+import Button from "components/CustomButtons/Button.js";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -17,7 +17,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
+import IconButton from '@material-ui/core/IconButton';
 import BuildIcon from '@material-ui/icons/Build';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -38,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
       boxShadow:
         "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
     },
+  },
+  button:{
+    color: "red",
+    height: 100
   },
   root: {
     display: 'flex',
@@ -61,12 +67,21 @@ function AIGenerate(props) {
   const history = useHistory();
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper);
-  const [loadingStatus, setLoadingStatus] = React.useState(false)
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(false)
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(false)
-  const [dataValue, setDataValue] = useState(0)
-
+  const [loadingStatus, setLoadingStatus] = React.useState(false);
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(false);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
+  const [dataValue, setDataValue] = useState(0);
   const [open, setOpen] = React.useState(false);
+  const [testSize, setTestSize] = useState();
+  const [maxTrial, setMaxTrial] = useState();
+  const [epochs, setEpochs] = useState();
+
+  const handleFormChange = (e) =>{
+    const id = e.target.getAttribute('id');
+    if(id=="Test Size") setTestSize(e.target.value);
+    else if(id=="Max Trial") setMaxTrial(e.target.value);
+    else if(id=="Test Size") setEpochs(e.target.value);
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -104,11 +119,11 @@ function AIGenerate(props) {
     })
     api.post('/training', {
       params: {
-        username: 'user1',
+        username: 'h01010',
         projectname: 'project1',
-        test_size: 0.3,
-        max_trials: 1,
-        epochs: 10
+        test_size: testSize,
+        max_trials: maxTrial,
+        epochs: epochs
       }
     }).then(function (response) {
       props.setAIHistory(response.data);
@@ -142,25 +157,30 @@ function AIGenerate(props) {
                   <Grid container spacing={3}>
                   <Grid item xs={8}>
                     <Paper elevation={3}>
-                      <form>
+                      <form onChange={handleFormChange}>
                         <InputAIMake label="Test Size" defaultValue="0.2" helperText="자신이 넣은 데이터셋에서 학습에 제외시킬 데이터 비율입니다. 제외된 데이터는 AI를 성능을 평가하는 데에 사용됩니다."></InputAIMake>
                         <InputAIMake label="Max Trial" defaultValue="1" helperText="생성을 시도하는 AI의 수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 선택 가능한 AI의 선택지가 늘어납니다."></InputAIMake>
-                        <InputAIMake label="Epochs" defaultValue="" helperText="제일 성능이 좋은 AI가 데이터를 가지고 학습하는 횟수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 성능은 올라갈 수 있습니다."></InputAIMake>
+                        <InputAIMake label="Epochs" defaultValue="1" helperText="제일 성능이 좋은 AI가 데이터를 가지고 학습하는 횟수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 성능은 올라갈 수 있습니다."></InputAIMake>
                       </form>
                     </Paper>
                   </Grid>
 
                   <Grid item xs={4}>
-                    <Button
+                  <IconButton aria-label="ai make"
+                  onClick={aiServerTest} className={classes.button}>
+                    
+                    <PlayCircleFilledIcon fontSize="large"/>
+                    {/*<Button
                       //onClick={() => { aiMaking(props.AIType) }}
-                      onClick={handleClickOpen}
+                      
                       variant="contained"
-                      color="primary"
+                      color="info"
                       size="large"
                       className={classes.button}
                       startIcon={<BuildIcon />}
-                    >지금 바로 생성하기</Button>
-                    <Button
+                    >지금 바로 생성하기</Button>*/}
+                  </IconButton>
+                    {/*<Button
                       //onClick={() => { aiMaking(props.AIType) }}
                       onClick={aiServerTest}
                       variant="contained"
@@ -172,7 +192,7 @@ function AIGenerate(props) {
                   test_size: 0.3,<br></br>
                   max_trials: 1,<br></br>
                   epochs: 10<br></br>
-                    </Button>
+                    </Button>*/}
                   </Grid>
                   </Grid>
                   {loadingStatus ?
