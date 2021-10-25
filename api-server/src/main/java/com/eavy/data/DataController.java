@@ -39,6 +39,19 @@ public class DataController {
         return ResponseEntity.ok(allData);
     }
 
+    @ResponseBody
+    @GetMapping(produces = "application/zip")
+    public void getDataAsZip(Principal principal,
+                             @RequestParam String projectName,
+                             HttpServletResponse response) throws IOException {
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment;filename=download.zip");
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        String path = dataService.generatePath(principal.getName(), projectName);
+        dataService.zipFilesInPathAndWriteTo(path, response.getOutputStream());
+    }
+
     @PostMapping("/upload")
     public ResponseEntity uploadImageFiles(Principal principal,
                                            @RequestParam @NotEmpty String projectName,
@@ -57,18 +70,6 @@ public class DataController {
         }
 
         return ResponseEntity.ok().body(path);
-    }
-
-    @ResponseBody
-    @GetMapping(produces = "application/zip")
-    public void downloadDataAsZip(Principal principal,
-                                  HttpServletResponse response) throws IOException {
-        response.setContentType("application/zip");
-        response.setHeader("Content-Disposition", "attachment;filename=download.zip");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        String path = dataService.generatePath(principal.getName());
-        dataService.zipFilesInPathAndWriteTo(path, response.getOutputStream());
     }
 
 }
