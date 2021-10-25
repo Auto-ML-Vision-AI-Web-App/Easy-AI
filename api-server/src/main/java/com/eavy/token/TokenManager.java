@@ -28,20 +28,15 @@ public class TokenManager {
     private static Algorithm algorithm;
     private static JWTVerifier verifier;
 
-    public static String generateAccessToken(String username, List<String> authorities) {
+    public static String generateAccessToken(String username) {
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-                .withClaim("roles", authorities)
                 .sign(algorithm);
     }
 
     public static String generateAccessToken(User user) {
-        return generateAccessToken(user.getUsername(), user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-    }
-
-    public static String generateAccessToken(String username) {
-        return generateAccessToken(username, List.of());
+        return generateAccessToken(user.getUsername());
     }
 
     public static String generateRefreshToken(String username) {

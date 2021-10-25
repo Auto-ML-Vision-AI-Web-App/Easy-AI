@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -39,6 +40,24 @@ class TokenControllerTest {
 
         mockMvc.perform(get("/token/check")
                         .header("Authorization", "Bearer " + "FAKE-ACCESS-TOKEN"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("토큰 재발급")
+    @Test
+    void refreshToken() throws Exception {
+        String refreshToken = TokenManager.generateRefreshToken(new User("qwer", "1234", List.of(new SimpleGrantedAuthority("TEST"))));
+
+        mockMvc.perform(get("/token/refresh")
+                        .header("Authorization", "Bearer " + refreshToken))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("access-token").exists())
+                .andExpect(jsonPath("refresh-token").exists());
+
+        mockMvc.perform(get("/token/refresh")
+                        .header("Authorization", "Bearer " + "FAKE-REFRESH-TOKEN"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
