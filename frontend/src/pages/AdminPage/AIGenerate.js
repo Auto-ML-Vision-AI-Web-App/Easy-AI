@@ -72,13 +72,16 @@ function AIGenerate(props) {
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
   const [dataValue, setDataValue] = useState(0);
   const [open, setOpen] = React.useState(false);
-  const [testSize, setTestSize] = useState();
-  const [maxTrial, setMaxTrial] = useState();
-  const [epochs, setEpochs] = useState();
+  const [testSize, setTestSize] = useState(0.2);
+  const [maxTrial, setMaxTrial] = useState(1);
+  const [epochs, setEpochs] = useState(1);
 
   const handleFormChange = (e) =>{
     const id = e.target.getAttribute('id');
-    if(id=="Test Size") setTestSize(e.target.value);
+    if(id=="Test Size") {
+      setTestSize(e.target.value);
+      console.log(e.target.value)
+    }
     else if(id=="Max Trial") setMaxTrial(e.target.value);
     else if(id=="Test Size") setEpochs(e.target.value);
   }
@@ -112,6 +115,7 @@ function AIGenerate(props) {
     });
   }
 
+  //here
   const aiServerTest = (e) => {
     console.log("starting ai server test - sending parameter")
     const api = axios.create({
