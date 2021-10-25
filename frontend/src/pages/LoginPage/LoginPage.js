@@ -51,6 +51,7 @@ export default function LoginPage(props) {
         password: userPw
       }
     }).then(function (response) {
+      console.log(response)
       console.log(response.data);
       localStorage.setItem('refresh-token',response.data['refresh-token']);
       setCookie('access-token',response.data['access-token']);
@@ -60,7 +61,6 @@ export default function LoginPage(props) {
       props.history.push({
         pathname: '/'
       })
-
     }).catch(function (error) {
       document.getElementById("login_error_alert").style.display="block";
       console.log(error);

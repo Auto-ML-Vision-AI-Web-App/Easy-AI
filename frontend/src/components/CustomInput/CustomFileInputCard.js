@@ -1,6 +1,7 @@
 import React, { useState, Component } from 'react';
 import axios from 'axios';
 import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
+import {refreshToken} from 'components/Token.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -117,8 +118,11 @@ class Basic extends Component {
       );*/
       console.log(response);
     }).catch(function (error) {
-      alert("데이터 형식이 잘못되었습니다. 이미지 형식을 넣어주세요.");
-      console.log(error);
+      console.log(error.response.status)
+      if(error.response.status == '403') {
+        var flag = refreshToken();
+        if(flag===1) imgUpload();
+      }
     });
 
   }
