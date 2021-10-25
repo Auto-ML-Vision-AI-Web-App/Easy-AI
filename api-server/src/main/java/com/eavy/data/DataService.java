@@ -30,14 +30,21 @@ public class DataService {
     }
 
     public List<DataDto> getData(String path) {
-        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         List<DataDto> allData = new ArrayList<>();
+        getDataRecursively(path, allData);
+        return allData;
+    }
+
+    private void getDataRecursively(String path, List<DataDto> allData) {
+        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         list.iterateAll().forEach(b -> {
-            if (!b.isDirectory()) {
+            if (b.isDirectory()) {
+                getDataRecursively(b.getName(), allData);
+            }
+            else {
                 allData.add(convertBlobToDataDto(b));
             }
         });
-        return allData;
     }
 
     public void zipFilesInPathAndWriteTo(String path, OutputStream destOutputStream) throws IOException {

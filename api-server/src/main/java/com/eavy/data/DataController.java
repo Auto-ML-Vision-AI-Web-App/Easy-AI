@@ -31,8 +31,9 @@ public class DataController {
 
     @GetMapping
     public ResponseEntity<List<DataDto>> getData(Principal principal,
-                                                 @RequestParam String projectName){
-        String path = dataService.generatePath(principal.getName(), projectName);
+                                                 @RequestParam String projectName,
+                                                 @RequestParam String category){
+        String path = dataService.generatePath(principal.getName(), projectName, category);
         List<DataDto> allData = dataService.getData(path);
         if(allData.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -42,14 +43,15 @@ public class DataController {
 
     @ResponseBody
     @GetMapping(produces = "application/zip")
-    public void getDataAsZip(Principal principal,
+    public void downloadDataAsZip(Principal principal,
                              @RequestParam String projectName,
+                             @RequestParam String category,
                              HttpServletResponse response) throws IOException {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment;filename=download.zip");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        String path = dataService.generatePath(principal.getName(), projectName);
+        String path = dataService.generatePath(principal.getName(), projectName, category);
         dataService.zipFilesInPathAndWriteTo(path, response.getOutputStream());
     }
 
