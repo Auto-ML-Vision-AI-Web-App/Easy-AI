@@ -80,7 +80,6 @@ export default function DataUpload(props) {
                 <div>
                   {/*showData(props.location.state.projectId)*/}
                   <h4><strong>생성 AI 종류 : {props.AIType}</strong></h4>
-                  <p>데이터 수 : XX</p>
                 </div>
               }</div>
 

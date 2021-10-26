@@ -6,7 +6,7 @@ export const refreshToken = () =>{
     const api = axios.create({
       baseURL: 'http://localhost:8080'
     })
-    api.post('/token/refresh', {
+    api.get('/token/refresh', {
         headers: {
           'Authorization':"Bearer "+localStorage.getItem('refresh-token'),
         }
