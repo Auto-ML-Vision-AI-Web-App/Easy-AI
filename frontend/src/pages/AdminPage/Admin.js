@@ -19,9 +19,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
 import { homeListItems, mainListItems, secondaryListItems } from './listItems';
-import DataUpload from './DataUpload';
-import DataCheck from './DataCheck';
 import AIChoose from './AIChoose';
+import DataUpload from './DataUpload';
 import AIResult from './AIResult';
 import Projects from './Projects';
 import AIGenerate from './AIGenerate';
@@ -212,7 +211,6 @@ export default function Admin() {
               projectName={projectName}
             ></DataUpload>}
           />
-          <Route path="/admin/data-checking" exact component={DataCheck} />
           
           <Route path="/admin/ai-making" exact 
             component={()=>

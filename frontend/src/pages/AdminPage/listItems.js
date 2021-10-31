@@ -40,12 +40,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="데이터 업로드하기" />
     </ListItem>
-    <ListItem button component={Link} to="/admin/data-checking">
-      <ListItemIcon>
-        <PermMediaIcon />
-      </ListItemIcon>
-      <ListItemText primary="데이터 확인하기" />
-    </ListItem>
     <ListItem button component={Link} to="/admin/ai-making">
       <ListItemIcon>
         <BuildIcon />
