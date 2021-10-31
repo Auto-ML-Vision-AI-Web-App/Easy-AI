@@ -71,7 +71,6 @@ export default function DataCheck(props) {
           count++;
           pos = foundPos + 1;
         }
-        //console.log(count)
         setDataValue(count)
       }).catch(function (error) {
         alert("데이터 요청을 실패하였습니다. 업로드한 데이터를 다시 확인해주세요.");

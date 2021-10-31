@@ -27,13 +27,19 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard(props) {
+export default function CustomFileInputCard(props) {
   const [classLabelName, setClassLabelName] = useState('');
   const classes = useStyles();
 
   const classChange = (e) => {
     props.onChange(e.target.name, e.target.value);
     setClassLabelName(e.target.value);
+  };
+
+  const setDate = (_className, _path, _size) => {
+    console.log("setData in MediaCard");
+    console.log(_className, _path, _size);
+    props.setNewDate(_className, _path, _size);
   };
 
   return (
@@ -57,12 +63,7 @@ export default function MediaCard(props) {
                 fileId={props.id}
                 projectName={props.projectName}
                 classLabelName={classLabelName}
-                isUploaded = {
-                        function(_isData, _projectID){
-                          setNextBtnDisabled(false)
-                          setProjectId(_projectID)
-                          console.log(_projectID)
-                }.bind(this)}/>
+                isUploaded = {setDate}/>
               </Typography>
           </Grid>
         </CardContent>
@@ -77,7 +78,7 @@ class Basic extends Component {
   constructor() {
     super();
     this.onDrop = (files) => {
-      console.log(files)
+      //console.log(files)
       this.setState({ files })
     };
     this.state = {
@@ -86,8 +87,8 @@ class Basic extends Component {
   }
 
   imgUpload(e) {
-    e.preventDefault();
     var upload_this = this;
+    e.preventDefault();
     const api = axios.create({
       baseURL: 'http://localhost:8080'
     })
@@ -102,7 +103,7 @@ class Basic extends Component {
       console.log(idx);
       frm.append("files", photoFile.files[idx]);
     }
-    frm.append("projectName", "lastTest");
+    frm.append("projectName", "asfghg");
     frm.append("className", upload_this.props.classLabelName);
     frm.append("category", "train");
 
@@ -111,17 +112,17 @@ class Basic extends Component {
         'Authorization':"Bearer "+getCookie('access-token'),
         'Content-Type': 'multipart/form-data'
       }
-    }).then(function (response) {
-      alert("데이터가 업로드되었습니다.")
-      /*upload_this.props.isUploaded(
-        true, response.data
-      );*/
-      console.log(response);
+    }).then(function (res) {
+      var result = confirm("데이터가 업로드되었습니다.");
+      const data = res.data;
+      //console.log(data.className, data.path, data.size);
+      upload_this.props.isUploaded(data.className, data.path, data.size);
     }).catch(function (error) {
-      console.log(error.response.status)
-      if(error.response.status == '403') {
-        var flag = refreshToken();
-        if(flag===1) imgUpload();
+      if(error.response) {
+        if(error.response.status == '403'){
+          var flag = refreshToken();
+          if(flag===1) imgUpload();
+        }
       }
     });
 

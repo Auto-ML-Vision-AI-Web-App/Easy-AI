@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Switch, Route, Link, withRouter, useHistory } from "react-router-dom";
 import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 import {refreshToken} from 'components/Token.js';
 
@@ -14,9 +14,8 @@ import clsx from 'clsx';
 
 import CustomFileInputCard from "components/CustomInput/CustomFileInputCard.js";
 
-//file-upload-drop-zone
-import Dropzone from 'react-dropzone';
 import '../../assets/css/dataupload.css'
+import SampleDataCheck from './SampleDataCheck';
 
 const useStyles = makeStyles((theme) => ({
   stepButton: {
@@ -52,20 +51,34 @@ export default function DataUpload(props) {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [class1Name, setClass1Name] = useState("");
   const [class2Name, setClass2Name] = useState("");
+  const [dataset, setDataset] = useState([]);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
   const [projectId, setProjectId] = useState(null);
 
   const changeClassName = (_name, _className) => {
-    console.log(_name + " + " + _className);
+    console.log("changeClassName in DataUpload")
     if (_name === "Class 1") setClass1Name(_className);
     if (_name === "Class 2") setClass2Name(_className);
   };
 
+  const addNewData = (_className, _path, _size) => {
+    console.log("_setData in DataUpload")
+    var data = new Object();
+    
+    data.className = _className;
+    data.path = _path;
+    data.size = _size;
 
-
+    setDataset(dataset.concat(data));
+  };
+  
   return (
     <>
+    {dataset.map((data, idx) => (
+                  <h1>{data.className + " : " + data.path + " : " + data.size}</h1>
+                ))}
+
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper className={fixedHeightPaper}>
@@ -89,10 +102,12 @@ export default function DataUpload(props) {
               </Grid>
 
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={props.projectName} dataClass="Class 1" id="class1File" onChange={changeClassName}></CustomFileInputCard>
+                <CustomFileInputCard projectName={props.projectName} dataClass="Class 1" id="class1File"
+                onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={props.projectName} dataClass="Class 2" id="class2File" onChange={changeClassName}></CustomFileInputCard>
+                <CustomFileInputCard projectName={props.projectName} dataClass="Class 2" id="class2File"
+                onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
 
               <Grid item xs={12}>
@@ -106,7 +121,16 @@ export default function DataUpload(props) {
               </Grid>
               <Button onClick={refreshToken}>REFRESH TOKEN</Button>
             </Grid>
-            
+
+          <hr style={{background:'red'}}></hr>
+
+          <Switch>
+          <Route path="admin/data-uploading/charts" exact component={()=>
+            <SampleDataCheck></SampleDataCheck>}
+          >
+          </Route>
+          </Switch>
+
           </Paper>
           <center>
             <Button component={Link} to="/admin/ai-choosing"
@@ -115,7 +139,7 @@ export default function DataUpload(props) {
               이전
                     </Button>
             <Link to={{
-              pathname: "/admin/data-checking",
+              pathname: "/admin/ai-making",
               state: {
                 projectId: projectId,
               }

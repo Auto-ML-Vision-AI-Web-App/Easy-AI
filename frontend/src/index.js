@@ -13,7 +13,6 @@ import LoginPage from "pages/LoginPage/LoginPage.js";
 
 // pages h01010
 import Admin from "pages/AdminPage/Admin.js";
-
 var hist = createBrowserHistory();
 
 ReactDOM.render(

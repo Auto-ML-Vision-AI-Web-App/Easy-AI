@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import '../../styles/css/index.css'
 import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 
 import { makeStyles } from '@material-ui/core/styles';

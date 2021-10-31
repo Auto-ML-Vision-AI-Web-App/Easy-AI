@@ -2,6 +2,8 @@ import React from "react";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import '../styles/css/index.css'
+
 import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 
 // @material-ui/core components

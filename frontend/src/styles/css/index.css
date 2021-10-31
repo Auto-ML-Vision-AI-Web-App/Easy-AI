@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Gmarket-M';
+    src: url('../fonts/GmarketSansMedium.otf') format('truetype');
+}
+
+body {
+	font-family: 'Gmarket-M';
+    color: red;
+}
