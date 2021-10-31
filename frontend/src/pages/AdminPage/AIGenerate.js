@@ -42,8 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button:{
-    color: "red",
-    height: 100
+    color: "#C40027",
   },
   root: {
     display: 'flex',
@@ -158,7 +157,7 @@ function AIGenerate(props) {
                   <hr></hr>
                   <br></br><br></br>
 
-                  <Grid container spacing={3}>
+                  <Grid container  alignItems="center" justifyContent="center" spacing={3}>
                   <Grid item xs={8}>
                     <Paper elevation={3}>
                       <form onChange={handleFormChange}>
@@ -169,34 +168,12 @@ function AIGenerate(props) {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={4}>
+                  <Grid item xs={2}>
                   <IconButton aria-label="ai make"
                   onClick={aiServerTest} className={classes.button}>
-                    
-                    <PlayCircleFilledIcon fontSize="large"/>
-                    {/*<Button
-                      //onClick={() => { aiMaking(props.AIType) }}
-                      
-                      variant="contained"
-                      color="info"
-                      size="large"
-                      className={classes.button}
-                      startIcon={<BuildIcon />}
-                    >지금 바로 생성하기</Button>*/}
+                    <PlayCircleFilledIcon style={{ fontSize: 130 }}/>
+                    Make Your Own AI
                   </IconButton>
-                    {/*<Button
-                      //onClick={() => { aiMaking(props.AIType) }}
-                      onClick={aiServerTest}
-                      variant="contained"
-                      color="info"
-                      size="large"
-                    >AI 서버에게 파라미터 전하기 (Test용)<br></br>
-                  username: 'user1',<br></br>
-                  projectname: 'project1',<br></br>
-                  test_size: 0.3,<br></br>
-                  max_trials: 1,<br></br>
-                  epochs: 10<br></br>
-                    </Button>*/}
                   </Grid>
                   </Grid>
                   {loadingStatus ?
