@@ -1,8 +1,9 @@
-import React, { useState, Component } from 'react';
+import React, { useState, Component, Fragment } from 'react';
 import axios from 'axios';
 import { Switch, Route, Link, withRouter, useHistory } from "react-router-dom";
-import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
-import {refreshToken} from 'components/Token.js';
+import { setCookie, getCookie, removeCookie } from 'components/Cookie.js';
+import { refreshToken } from 'components/Token.js';
+import CustomFileInputCard from "components/CustomInput/CustomFileInputCard.js";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -12,10 +13,10 @@ import Button from "components/CustomButtons/Button.js";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import clsx from 'clsx';
 
-import CustomFileInputCard from "components/CustomInput/CustomFileInputCard.js";
+import Highcharts from "highcharts";
+import PieChart from "highcharts-react-official";
 
 import '../../assets/css/dataupload.css'
-import SampleDataCheck from './SampleDataCheck';
 
 const useStyles = makeStyles((theme) => ({
   stepButton: {
@@ -41,9 +42,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
-  fixedHeight: {
-    height: 700,
-  },
 }));
 
 export default function DataUpload(props) {
@@ -65,19 +63,19 @@ export default function DataUpload(props) {
   const addNewData = (_className, _path, _size) => {
     console.log("_setData in DataUpload")
     var data = new Object();
-    
+
     data.className = _className;
     data.path = _path;
     data.size = _size;
 
     setDataset(dataset.concat(data));
   };
-  
+
   return (
     <>
-    {dataset.map((data, idx) => (
-                  <h1>{data.className + " : " + data.path + " : " + data.size}</h1>
-                ))}
+      {/*dataset.map((data, idx) => (
+        <h1>{data.className + " : " + data.path + " : " + data.size}</h1>
+      ))*/}
 
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -103,11 +101,11 @@ export default function DataUpload(props) {
 
               <Grid item xs={6}>
                 <CustomFileInputCard projectName={props.projectName} dataClass="Class 1" id="class1File"
-                onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
+                  onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
               <Grid item xs={6}>
                 <CustomFileInputCard projectName={props.projectName} dataClass="Class 2" id="class2File"
-                onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
+                  onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
 
               <Grid item xs={12}>
@@ -122,16 +120,15 @@ export default function DataUpload(props) {
               <Button onClick={refreshToken}>REFRESH TOKEN</Button>
             </Grid>
 
-          <hr style={{background:'red'}}></hr>
+            <hr style={{ background: 'red' }}></hr>
 
-          <Switch>
-          <Route path="admin/data-uploading/charts" exact component={()=>
-            <SampleDataCheck></SampleDataCheck>}
-          >
-          </Route>
-          </Switch>
+            {dataset.length != 2 ?
+              <></> :
+              <DataResultChart dataset={dataset}></DataResultChart>
+            }
 
           </Paper>
+
           <center>
             <Button component={Link} to="/admin/ai-choosing"
               disabled={prevBtnDisabled}
@@ -155,4 +152,81 @@ export default function DataUpload(props) {
       </Grid>
     </>
   );
+}
+
+
+/*React Chart*/
+class DataResultChart extends Component {
+
+  render() {
+    const jsonfile = this.props.dataset;
+    let total = 0;
+    jsonfile.map((data, idx) => (
+      total = total + data.size
+    ));
+
+    const options = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: '데이터 업로드 결과'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.size}개</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b> : {point.percentage:.1f} %'
+          }
+        }
+      },
+
+      series: [{
+        name: '데이터 수',
+        colorByPoint: true,
+        data: [{
+          name: jsonfile[0].className,
+          size: jsonfile[0].size,
+          y: jsonfile[0].size/total*100,
+          color : '#08AAC1',
+          sliced: true,
+          selected: true
+        }, {
+          name: jsonfile[1].className,
+          size: jsonfile[1].size,
+          y: jsonfile[1].size/total*100,
+          color : '#5C5C5C'
+        }]
+      }],
+
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 300
+          },
+          chartOptions: {
+            legend: {
+              layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom'
+            }
+          }
+        }]
+      }
+
+    }
+    return (
+      <Fragment>
+        <PieChart highcharts={Highcharts} options={options} />
+      </Fragment>
+    );
+  }
 }
