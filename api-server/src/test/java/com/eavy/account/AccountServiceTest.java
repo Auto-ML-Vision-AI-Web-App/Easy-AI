@@ -1,5 +1,6 @@
 package com.eavy.account;
 
+import com.eavy.token.TokenManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,17 @@ class AccountServiceTest {
         assertThrows(UsernameNotFoundException.class, () -> {
             UserDetails userDetails = userDetailsService.loadUserByUsername("USERID");
         });
+    }
+
+    @Test
+    void logout() {
+        String username = "test-user";
+        String refreshToken = "test-refresh-token";
+        TokenManager.save(username, refreshToken);
+
+        accountService.logout(username);
+
+        assertThat(TokenManager.contains(refreshToken)).isFalse();
     }
 
 }

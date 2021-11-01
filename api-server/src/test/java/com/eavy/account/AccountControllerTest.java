@@ -53,6 +53,14 @@ class AccountControllerTest extends ControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @DisplayName("로그아웃")
+    @Test
+    void logout() throws Exception {
+        mockMvc.perform(get("/logout"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("회원가입")
     @Test
     void signUpSuccess() throws Exception {
