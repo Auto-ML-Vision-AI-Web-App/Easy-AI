@@ -5,17 +5,17 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
 @Component
 public class TokenManager {
+
+    private static final HashMap<String, String> usernameToRefreshToken = new HashMap<>();
 
     @Value("${JWT_HMAC_KEY}")
     public void init(String key) {
@@ -52,6 +52,18 @@ public class TokenManager {
 
     public static DecodedJWT verifyToken(String token) {
         return verifier.verify(token);
+    }
+
+    public static String save(String username, String refreshToken) {
+        return usernameToRefreshToken.put(username, refreshToken);
+    }
+
+    public static boolean contains(String refreshToken) {
+        return usernameToRefreshToken.containsValue(refreshToken);
+    }
+
+    public static String remove(String username) {
+        return usernameToRefreshToken.remove(username);
     }
 
 }
