@@ -28,16 +28,21 @@ public class TokenController {
         return ResponseEntity.ok(null);
     }
 
-    // TODO Test
     @GetMapping("/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refreshToken = authorizationHeader.substring("Bearer ".length());
+                if(!TokenManager.contains(refreshToken)) {
+                    throw new RuntimeException("It is logout user's refresh token");
+                }
+
                 DecodedJWT decodedJWT = TokenManager.verifyToken(refreshToken);
+
                 String username = decodedJWT.getSubject();
                 String accessToken = TokenManager.generateAccessToken(username);
+
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access-token", accessToken);
                 tokens.put("refresh-token", refreshToken);

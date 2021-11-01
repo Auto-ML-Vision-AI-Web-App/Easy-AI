@@ -40,6 +40,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User) authResult.getPrincipal();
         String accessToken = TokenManager.generateAccessToken(user);
         String refreshToken = TokenManager.generateRefreshToken(user);
+        TokenManager.save(user.getUsername(), refreshToken);
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access-token", accessToken);
