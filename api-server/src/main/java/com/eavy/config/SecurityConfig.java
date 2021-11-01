@@ -1,5 +1,6 @@
 package com.eavy.config;
 
+import com.eavy.account.CustomLogoutHandler;
 import com.eavy.filter.CustomAuthenticationFilter;
 import com.eavy.filter.CustomAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final CustomLogoutHandler logoutHandler;
 
-    public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, CustomLogoutHandler logoutHandler) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.logoutHandler = logoutHandler;
     }
 
     @Bean
@@ -41,15 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/signin");
-        http.cors();
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/signup", "/token/refresh", "/h2-console/**").permitAll();
-        http.headers().frameOptions().disable(); // for h2-console
-//        http.authorizeRequests().antMatchers(HttpMethod.GET, "/**").permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.cors().and()
+            .csrf().disable()
+            .logout().addLogoutHandler(logoutHandler).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .headers().frameOptions().disable().and() // for h2-console
+            .authorizeRequests().antMatchers("/signup", "/token/refresh", "/h2-console/**").permitAll().and()
+            .authorizeRequests().anyRequest().authenticated().and()
+            .addFilter(customAuthenticationFilter)
+            .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

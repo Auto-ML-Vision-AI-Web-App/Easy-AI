@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,10 +56,11 @@ class AccountControllerTest extends ControllerTest {
 
     @DisplayName("로그아웃")
     @Test
+    @WithMockUser
     void logout() throws Exception {
         mockMvc.perform(get("/logout"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
     }
 
     @DisplayName("회원가입")

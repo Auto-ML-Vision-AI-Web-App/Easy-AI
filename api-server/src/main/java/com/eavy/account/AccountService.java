@@ -1,5 +1,6 @@
 package com.eavy.account;
 
+import com.eavy.token.TokenManager;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,13 +23,8 @@ public class AccountService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AccountDto signIn(Account account) {
-        Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
-        if(byUsername.isPresent()) {
-            Account found = byUsername.get();
-            return new AccountDto(found.getUserId(), 1);
-        }
-        return null;
+    public void logout(String username) {
+        TokenManager.remove(username);
     }
 
     public Account signUp(Account account) {
