@@ -47,7 +47,9 @@ class TokenControllerTest {
     @DisplayName("토큰 재발급")
     @Test
     void refreshToken() throws Exception {
-        String refreshToken = TokenManager.generateRefreshToken(new User("qwer", "1234", List.of(new SimpleGrantedAuthority("TEST"))));
+        String username = "test-user";
+        String refreshToken = TokenManager.generateRefreshToken(new User(username, "1234", List.of(new SimpleGrantedAuthority("TEST"))));
+        TokenManager.save(username, refreshToken);
 
         mockMvc.perform(get("/token/refresh")
                         .header("Authorization", "Bearer " + refreshToken))
@@ -56,10 +58,33 @@ class TokenControllerTest {
                 .andExpect(jsonPath("access-token").exists())
                 .andExpect(jsonPath("refresh-token").exists());
 
+        TokenManager.remove(username);
+    }
+
+    @DisplayName("토큰 재발급 실패 - 로그아웃한 사용자의 토큰인 경우")
+    @Test
+    void refreshTokenFail_logoutUser() throws Exception {
+        String refreshToken = TokenManager.generateRefreshToken(new User("qwer", "1234", List.of(new SimpleGrantedAuthority("TEST"))));
+
         mockMvc.perform(get("/token/refresh")
-                        .header("Authorization", "Bearer " + "FAKE-REFRESH-TOKEN"))
+                        .header("Authorization", "Bearer " + refreshToken))
                 .andDo(print())
                 .andExpect(status().isForbidden());
+    }
+
+    @DisplayName("토큰 재발급 실패 - 토큰값이 유효하지 않은 경우")
+    @Test
+    void refreshTokenFail_notValidToken() throws Exception {
+        String username = "test-user";
+        String notValidRefreshToken = "NOT-VALID-REFRESH-TOKEN";
+        TokenManager.save(username, notValidRefreshToken);
+
+        mockMvc.perform(get("/token/refresh")
+                        .header("Authorization", "Bearer " + notValidRefreshToken))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        TokenManager.remove(username);
     }
 
 }

@@ -2,11 +2,14 @@ package com.eavy.account;
 
 import com.eavy.common.ControllerTest;
 import com.eavy.token.TokenManager;
+import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -24,13 +27,20 @@ class AccountControllerTest extends ControllerTest {
         Account account = new Account(TEST_ID, TEST_PASSWORD);
         accountService.signUp(account);
 
-        mockMvc.perform(post("/signin")
-            .param("userId", TEST_ID)
-            .param("password", TEST_PASSWORD))
+        MvcResult mvcResult = mockMvc.perform(post("/signin")
+                        .param("userId", TEST_ID)
+                        .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("access-token").exists())
-                .andExpect(jsonPath("refresh-token").exists());
+                .andExpect(jsonPath("refresh-token").exists())
+                .andReturn();
+
+        String responseBody = mvcResult.getResponse().getContentAsString();
+        JSONObject jsonObject = new JSONObject(responseBody);
+        String refreshToken = jsonObject.get("refresh-token").toString();
+
+        assertThat(TokenManager.contains(refreshToken)).isTrue();
     }
 
     @DisplayName("로그인 실패")
