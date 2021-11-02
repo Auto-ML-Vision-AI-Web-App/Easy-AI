@@ -12,6 +12,7 @@ import TouchAppIcon from '@material-ui/icons/TouchApp';
 //need to update
 
 import { Link } from "react-router-dom";
+import './test.css';
 
 export const homeListItems = (
   <div>
@@ -31,25 +32,25 @@ export const mainListItems = (
       <ListItemIcon>
         <TouchAppIcon />
       </ListItemIcon>
-      <ListItemText primary="AI 선택하기" />
+      <ListItemText style={{fontFamily: 'Nanum Myeongjo'}} className="listItemText" primary="AI 선택하기" />
     </ListItem>
     <ListItem button component={Link} to="/admin/data-uploading">
       <ListItemIcon>
         <PublishIcon />
       </ListItemIcon>
-      <ListItemText primary="데이터 업로드하기" />
+      <ListItemText className="listItemText" primary="데이터 업로드하기" />
     </ListItem>
     <ListItem button component={Link} to="/admin/ai-making">
       <ListItemIcon>
         <BuildIcon />
       </ListItemIcon>
-      <ListItemText primary="AI 만들기" />
+      <ListItemText className="listItemText"  primary="AI 만들기" />
     </ListItem>
     <ListItem button component={Link} to="/admin/ai-checking">
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
-      <ListItemText primary="AI 결과 확인하기" />
+      <ListItemText className="listItemText" primary="AI 결과 확인하기" />
     </ListItem>
   </div>
 );
@@ -61,7 +62,7 @@ export const secondaryListItems = (
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="프로젝트 관리하기" />
+      <ListItemText className="listItemText" primary="프로젝트 관리하기" />
     </ListItem>
   </div>
 );
