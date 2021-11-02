@@ -27,3 +27,13 @@
 @import "plugins/plugin-nouislider";
 @import "plugins/plugin-react-datetime";
 @import "plugins/plugin-react-slick";
+
+@font-face {
+    font-family: 'Gmarket-M';
+    src: url('../fonts/GmarketSansMedium.otf') format('truetype');
+}
+
+#root {
+	font-family: 'Gmarket-M';
+    color: red;
+}
