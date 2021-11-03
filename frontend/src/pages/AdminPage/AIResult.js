@@ -1,5 +1,6 @@
 import React, { useState, Component, Fragment } from 'react';
 import { Link } from "react-router-dom";
+import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -72,6 +73,27 @@ export default function AIResult(props) {
                 console.log(error);
             });
     }
+
+    const downLoadTestResult = (e) => {
+        const api = axios.create({
+            baseURL: 'http://localhost:8080'
+        })
+        const frm = new FormData();
+        frm.append("projectName", "project2");
+        frm.append("category", "test");
+        
+        api.get('/data', frm, {
+            headers: {
+                'Authorization': "Bearer " + getCookie('access-token'),
+                'Accept': 'application/zip'
+            }
+        }).then(function (res) {
+            console.log(res);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
     return (
         <>
             <Grid container spacing={3}>
@@ -83,6 +105,7 @@ export default function AIResult(props) {
                                 <div>
                                     <h3>현재 AI를 생성하지 않았습니다.</h3>
                                     <h4>AI 만들기 눌러 AI를 생성해주세요.</h4>
+                                    <Button color="secondary" onClick={downLoadTestResult}>download test</Button>
                                 </div>
                                 :
                                 <div>

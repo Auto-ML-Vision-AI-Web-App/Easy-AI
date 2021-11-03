@@ -82,7 +82,7 @@ function AIGenerate(props) {
       console.log(e.target.value)
     }
     else if(id=="Max Trial") setMaxTrial(e.target.value);
-    else if(id=="Test Size") setEpochs(e.target.value);
+    else if(id=="Epochs") setEpochs(e.target.value);
   }
   const handleClickOpen = () => {
     setOpen(true);
