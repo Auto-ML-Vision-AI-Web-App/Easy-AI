@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export default function DataUpload(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [projectName, setProjectName] = useState(localStorage.getItem("projectName")==undefined?"":localStorage.getItem("projectName"));
+  const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
   const [class1Name, setClass1Name] = useState("");
   const [class2Name, setClass2Name] = useState("");
   const [dataset, setDataset] = useState([]);
@@ -68,7 +68,7 @@ export default function DataUpload(props) {
     data.className = _className;
     data.path = _path;
     data.size = _size;
-
+    console.log(data);
     setDataset(dataset.concat(data));
   };
 
@@ -117,34 +117,25 @@ export default function DataUpload(props) {
               <Button onClick={refreshToken}>REFRESH TOKEN</Button>
             </Grid>
 
-            <hr style={{ background: 'red' }}></hr>
+            <hr style={{ background: 'gray' }}></hr>
 
             {dataset.length != 2 ?
               <></> :
-              <DataResultChart dataset={dataset}></DataResultChart>
+              <Grid container justifyContent="center" spacing={2}>
+                <Grid item xs={12}>
+                  <DataResultChart dataset={dataset}></DataResultChart>
+                </Grid>
+                <Grid item xs={12}>
+                  <center>
+                  <Link to="/admin/ai-making/" className={classes.link}>
+                    <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>생성된 모델로 테스트 하러 가기</Button>
+                  </Link>
+                  </center>
+                </Grid>
+              </Grid>
             }
 
           </Paper>
-
-          <center>
-            <Button component={Link} to="/admin/ai-choosing"
-              disabled={prevBtnDisabled}
-              className={classes.stepButton}>
-              이전
-                    </Button>
-            <Link to={{
-              pathname: "/admin/ai-making",
-              state: {
-                projectId: projectId,
-              }
-            }}
-            ><Button
-              disabled={nextBtnDisabled}
-              className={classes.stepButton}>
-                다음
-                    </Button>
-            </Link>
-          </center>
         </Grid>
       </Grid>
     </>
@@ -192,15 +183,15 @@ class DataResultChart extends Component {
         data: [{
           name: jsonfile[0].className,
           size: jsonfile[0].size,
-          y: jsonfile[0].size/total*100,
-          color : '#08AAC1',
+          y: jsonfile[0].size / total * 100,
+          color: '#08AAC1',
           sliced: true,
           selected: true
         }, {
           name: jsonfile[1].className,
           size: jsonfile[1].size,
-          y: jsonfile[1].size/total*100,
-          color : '#5C5C5C'
+          y: jsonfile[1].size / total * 100,
+          color: '#5C5C5C'
         }]
       }],
 

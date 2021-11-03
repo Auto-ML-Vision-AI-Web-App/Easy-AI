@@ -70,7 +70,6 @@ function AIGenerate(props) {
   const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(false);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
-  const [dataValue, setDataValue] = useState(0);
   const [open, setOpen] = React.useState(false);
   const [testSize, setTestSize] = useState(0.2);
   const [maxTrial, setMaxTrial] = useState(1);
@@ -154,7 +153,6 @@ function AIGenerate(props) {
                 :
                 <div>
                   <h4>생성할 AI 종류 : {props.AIType}</h4>
-                  <p>데이터 수 : {dataValue}</p>
                   <hr></hr>
                   <br></br><br></br>
 
@@ -183,18 +181,6 @@ function AIGenerate(props) {
                 </div>
               }</div>
           </Paper>
-          <center>
-            <Button component={Link} to="/admin/data-checking"
-              disabled={prevBtnDisabled}
-              className={classes.stepButton}>
-              이전
-                    </Button>
-            <Button component={Link} to="/admin/ai-making"
-              disabled={nextBtnDisabled}
-              className={classes.stepButton}>
-              다음
-                    </Button>
-          </center>
         </Grid>
       </Grid>
 

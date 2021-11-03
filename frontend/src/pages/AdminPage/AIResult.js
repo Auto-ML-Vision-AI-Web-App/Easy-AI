@@ -103,18 +103,6 @@ export default function AIResult(props) {
                                 </div>
                             }</div>
                     </Paper>
-                    <center>
-                        <Button component={Link} to="/admin/ai-making"
-                            disabled={prevBtnDisabled}
-                            className={classes.stepButton}>
-                            이전
-                    </Button>
-                        <Button component={Link} to="/admin/dashboard"
-                            disabled={nextBtnDisabled}
-                            className={classes.stepButton}>
-                            다음
-                    </Button>
-                    </center>
                 </Grid>
             </Grid>
         </>

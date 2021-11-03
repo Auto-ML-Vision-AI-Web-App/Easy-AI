@@ -104,17 +104,6 @@ export default function AIChoose(props) {
                                 </Grid>
                             </div>
                         </Grid>
-                        {/*<Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                    >
-                        <Button size="large" variant="contained" color="primary" href="#contained-buttons">
-                            나만의 AI 만들기
-                        </Button>
-                    </Grid>*/}
                     </Paper>
                 </Grid>
             </Grid>

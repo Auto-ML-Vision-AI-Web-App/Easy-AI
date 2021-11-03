@@ -113,8 +113,9 @@ class DropdownInput extends Component {
       }
     }).then(function (res) {
       var result = confirm("데이터가 업로드되었습니다.");
+      console.log(res.data);
       const data = res.data;
-      upload_this.props.isUploaded(data.className, data.path, data.size);
+      upload_this.props.isUploaded(data.className, "", data.successList.length);
     }).catch(function (error) {
       if(error.response) {
         if(error.response.status == '403'){
