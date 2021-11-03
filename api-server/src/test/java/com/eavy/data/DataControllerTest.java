@@ -3,44 +3,70 @@ package com.eavy.data;
 import com.eavy.account.Account;
 import com.eavy.common.ControllerTest;
 import com.eavy.token.TokenManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.net.URL;
-import java.util.List;
+import java.io.OutputStream;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class DataControllerTest extends ControllerTest {
 
     @SpyBean(name = "dataService")
     DataService dataService;
 
-    @DisplayName("데이터(이미지) 조회")
+    @DisplayName("클래스별 이미지 개수 조회")
     @Test
-    void getData() throws Exception {
+    void getDataInfo() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String projectName = "prj1";
         String category = "train";
         String path = account.getUserId() + "/" + projectName + "/" + category + "/";
-        List<DataDto> allData = List.of(new DataDto("dto", new URL("http://localhost:8080")));
-        given(dataService.getData(path)).willReturn(allData);
+        ObjectMapper objectMapper = new ObjectMapper();
+        ClassDto classDto = new ClassDto();
+        classDto.setAll(25);
+        classDto.getClassNameToSize().put("dog", 10);
+        classDto.getClassNameToSize().put("cat", 15);
+        given(dataService.getDataInfo(path)).willReturn(classDto);
 
-        mockMvc.perform(get("/data")
+        mockMvc.perform(get("/data/info")
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", projectName)
                         .param("category", category))
                 .andExpect(status().isOk())
+                .andExpect(content().string("{\"all\":25,\"classNameToSize\":{\"cat\":15,\"dog\":10}}"))
                 .andDo(print());
+    }
+
+    @DisplayName("데이터 zip으로 다운로드")
+    @Test
+    void fileDownloadAsZip() throws Exception {
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String projectName = "prj2";
+        String category = "test";
+        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        // method argument type 맞추지 않으면 UnfinishedStubbingException
+        doNothing().when(dataService).zipFilesInPathAndWriteTo(anyString(), any(OutputStream.class));
+
+        mockMvc.perform(get("/data")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .header("Accept", "application/zip")
+                        .param("projectName", projectName)
+                        .param("category", category))
+                .andExpect(status().isOk());
     }
 
     @DisplayName("데이터(이미지) 업로드")
