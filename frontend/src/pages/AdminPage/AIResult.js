@@ -1,6 +1,6 @@
 import React, { useState, Component, Fragment } from 'react';
 import { Link } from "react-router-dom";
-import {setCookie, getCookie, removeCookie} from 'components/Cookie.js';
+import { setCookie, getCookie, removeCookie } from 'components/Cookie.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -75,23 +75,31 @@ export default function AIResult(props) {
     }
 
     const downLoadTestResult = (e) => {
-        const api = axios.create({
-            baseURL: 'http://localhost:8080'
-        })
-        const frm = new FormData();
-        frm.append("projectName", "project2");
-        frm.append("category", "test");
-        
-        api.get('/data', frm, {
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/data',
+            params: { projectName: "prj2", category: "test" },
+            responseType: 'arraybuffer',
             headers: {
                 'Authorization': "Bearer " + getCookie('access-token'),
+                'Content-Type': 'multipart/form-data',
                 'Accept': 'application/zip'
             }
-        }).then(function (res) {
-            console.log(res);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        })
+            .then(function (res) {
+                //console.log(response.data);
+                const disposition = res.attachment_filename;
+                let blob = new Blob([res.data], { type: 'application/zip' })
+
+                const downloadUrl = URL.createObjectURL(blob)
+                let a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = 'test-result.zip'
+                document.body.appendChild(a);
+                a.click();
+            }).catch(function (error) {
+                console.log(error);
+            });
     }
 
     return (
