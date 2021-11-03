@@ -29,6 +29,25 @@ public class DataService {
         this.tika = new Tika();
     }
 
+    // TODO 더 깔끔한 방법이 없을까
+    public ClassDto getClassInfo(String path) {
+        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
+        ClassDto classDto = new ClassDto();
+        list.iterateAll().forEach(b -> {
+            if(b.isDirectory()) { // class
+                int count = 0;
+                Page<Blob> classFiles = storage.list(bucketName, Storage.BlobListOption.prefix(b.getName()), Storage.BlobListOption.currentDirectory());
+                for (Blob blob : classFiles.iterateAll()) {
+                    count++;
+                }
+                String folderName = b.getName();
+                int classNameIndex = folderName.contains("train") ? folderName.indexOf("train") + "train".length()+1 : folderName.indexOf("test") + "test".length()+1;
+                classDto.getClassNameToSize().put(folderName.substring(classNameIndex, folderName.lastIndexOf('/')), count);
+            }
+        });
+        return classDto;
+    }
+
     public List<DataDto> getData(String path) {
         List<DataDto> allData = new ArrayList<>();
         getDataRecursively(path, allData);
