@@ -25,12 +25,9 @@ public class AccountController {
         this.objectMapper = objectMapper;
     }
 
+    // TODO 왜 삭제하면 안되는지 확인할 것
     @PostMapping("/signin")
-    public ResponseEntity<AccountDto> signIn(Account account) {
-        AccountDto accountDto = accountService.signIn(account);
-        if(accountDto == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(accountDto);
+    public void signIn(Account account) {
     }
 
     @PostMapping("/signup")
