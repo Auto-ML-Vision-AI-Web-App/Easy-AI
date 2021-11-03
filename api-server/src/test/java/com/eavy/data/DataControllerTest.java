@@ -15,7 +15,8 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DataControllerTest extends ControllerTest {
 
@@ -66,9 +67,12 @@ class DataControllerTest extends ControllerTest {
                         .param("category", category)
                         .param("className", className))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.path").value(path))
                 .andExpect(jsonPath("$.className").value(className))
-                .andExpect(jsonPath("$.size").value(FILE_SIZE))
+                .andExpect(jsonPath("$.all").value(FILE_SIZE))
+                .andExpect(jsonPath("$.numOfSuccess").value(FILE_SIZE))
+                .andExpect(jsonPath("$.successList").isNotEmpty())
+                .andExpect(jsonPath("$.numOfFail").value(0))
+                .andExpect(jsonPath("$.failList").isEmpty())
                 .andDo(print());
     }
 
@@ -85,7 +89,7 @@ class DataControllerTest extends ControllerTest {
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
         MockMultipartFile mockFile2 = new MockMultipartFile("files", filename2, "image/png", getClass().getResourceAsStream("/images/test-image.png"));
-        final int FILE_SIZE = 2;
+        int numOfFiles = 2;
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile1)
@@ -94,12 +98,15 @@ class DataControllerTest extends ControllerTest {
                         .param("projectName", projectName)
                         .param("category", category))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.path").value(path))
-                .andExpect(jsonPath("$.size").value(FILE_SIZE))
+                .andExpect(jsonPath("$.all").value(numOfFiles))
+                .andExpect(jsonPath("$.numOfSuccess").value(numOfFiles))
+                .andExpect(jsonPath("$.successList").isNotEmpty())
+                .andExpect(jsonPath("$.numOfFail").value(0))
+                .andExpect(jsonPath("$.failList").exists())
                 .andDo(print());
     }
 
-    @DisplayName("데이터(이미지) 업로드 실패 - 이미지가 아닌 파일")
+    @DisplayName("데이터(이미지) 업로드 - 이미지가 아닌 파일")
     @Test
     void fileUploadFail_NotImage() throws Exception {
         //given
@@ -107,14 +114,22 @@ class DataControllerTest extends ControllerTest {
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String filename = "test-text.txt";
         MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
+        String className = "dog";
+        int numOfFiles = 1;
 
         mockMvc.perform(multipart("/data/upload")
                         .file(mockFile)
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", "test")
                         .param("category", "train")
-                        .param("className", "dog"))
-                .andExpect(status().isBadRequest())
+                        .param("className", className))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.className").value(className))
+                .andExpect(jsonPath("$.all").value(numOfFiles))
+                .andExpect(jsonPath("$.numOfSuccess").value(0))
+                .andExpect(jsonPath("$.successList").exists())
+                .andExpect(jsonPath("$.numOfFail").value(numOfFiles))
+                .andExpect(jsonPath("$.failList").isNotEmpty())
                 .andDo(print());
     }
 

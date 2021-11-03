@@ -1,7 +1,6 @@
 package com.eavy.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -57,29 +57,39 @@ public class DataController {
 
     @PostMapping("/upload")
     public ResponseEntity uploadImageFiles(Principal principal,
-                                           @RequestParam @NotEmpty String projectName,
-                                           @RequestParam(required = false) @NotEmpty String className,
-                                           @RequestParam @NotEmpty String category,
-                                           @RequestParam @NotEmpty MultipartFile[] files) throws IOException {
-        for (MultipartFile multipartFile : files) {
-            if (!dataService.isImageFile(multipartFile)) {
-                return ResponseEntity.badRequest().build();
-            }
+                                                            @RequestParam String projectName,
+                                                            @RequestParam(required = false) String className,
+                                                            @RequestParam String category,
+                                                            @NotEmpty @RequestParam MultipartFile[] files) throws IOException {
+        // TODO projectName, className, category 모두 클래스로 분리하고 이에 대한 validation
+        if(projectName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Project name should not be empty");
+        }
+        if(className != null && className.isEmpty()) {
+            return ResponseEntity.badRequest().body("Class name should not be empty");
+        }
+        if(category.isEmpty()) {
+            return ResponseEntity.badRequest().body("Category should not be empty");
         }
 
         String path = dataService.generatePath(principal.getName(), projectName, category, className);
-        for(MultipartFile file : files) {
-            dataService.uploadFileToStorage(path, file);
+
+        List<String> successList = new ArrayList<>();
+        List<String> failList = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String filename = file.getOriginalFilename();
+            if (dataService.isImageFile(file)) {
+                dataService.uploadFileToStorage(path, file);
+                successList.add(filename);
+            } else {
+                failList.add(filename);
+            }
         }
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("path", path);
-        if(className != null) {
-            jsonObject.addProperty("className", className);
-        }
-        jsonObject.addProperty("size", files.length);
+        UploadResultDto result = new UploadResultDto(className, files.length,
+                successList.size(), successList, failList.size(), failList);
 
-        return ResponseEntity.ok().body(jsonObject.toString());
+        return ResponseEntity.ok().body(result);
     }
 
 }
