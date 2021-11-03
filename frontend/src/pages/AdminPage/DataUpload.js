@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export default function DataUpload(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [projectName, setProjectName] = useState(localStorage.getItem("projectName")==undefined?"":localStorage.getItem("projectName"));
   const [class1Name, setClass1Name] = useState("");
   const [class2Name, setClass2Name] = useState("");
   const [dataset, setDataset] = useState([]);
@@ -73,10 +74,6 @@ export default function DataUpload(props) {
 
   return (
     <>
-      {/*dataset.map((data, idx) => (
-        <h1>{data.className + " : " + data.path + " : " + data.size}</h1>
-      ))*/}
-
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper className={fixedHeightPaper}>
@@ -100,15 +97,15 @@ export default function DataUpload(props) {
               </Grid>
 
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={props.projectName} dataClass="Class 1" id="class1File"
+                <CustomFileInputCard projectName={projectName} dataClass="Class 1" id="class1File"
                   onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={props.projectName} dataClass="Class 2" id="class2File"
+                <CustomFileInputCard projectName={projectName} dataClass="Class 2" id="class2File"
                   onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
               </Grid>
 
-              <Grid item xs={12}>
+              {/*<Grid item xs={12}>
 
                 <Button
                   variant="contained"
@@ -116,7 +113,7 @@ export default function DataUpload(props) {
                   className={classes.button}
                   startIcon={<CloudUploadIcon />}
                 >Upload인데, 지금은 일단 작동x</Button>
-              </Grid>
+            </Grid>*/}
               <Button onClick={refreshToken}>REFRESH TOKEN</Button>
             </Grid>
 

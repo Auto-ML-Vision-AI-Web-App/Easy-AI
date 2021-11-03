@@ -146,7 +146,7 @@ export default function Admin() {
   };
 
   const setProjectName = (_projectName) =>{
-    console.log("Admin projectName : "+ _projectName)
+    localStorage.setItem('projectName', _projectName)
     setProjectName_Admin(_projectName);
   }
 
@@ -222,12 +222,13 @@ export default function Admin() {
           
           <Route path="/admin/ai-checking" exact component={()=>
             <AIResult
+              projectName={projectName}
               AIType={AIType}
               AIHistory={AIHistory}
             ></AIResult>}
           />
           
-          <Route path="/admin/ai-testing" exact component={()=>
+          <Route path="/admin/ai-testing:projectName" exact component={()=>
             <AITest
               AIType={AIType}
               AIHistory={AIHistory}

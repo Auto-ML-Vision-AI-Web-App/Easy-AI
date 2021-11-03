@@ -88,17 +88,17 @@ export default function AIResult(props) {
                                 <div>
                                     <h4>AI 종류 : {props.AIType}</h4>
                                     <CustomButton onClick={downLoadAI} color="info">AI 다운받기</CustomButton>
-                                    <Link to={"/admin/ai-tesing"} className={classes.link}>
-                                        <CustomButton style={{color:'white', backgroundColor:'#6F3637'}}>생성된 모델로 테스트 하러 가기</CustomButton>
+                                    <Link to={`/admin/ai-testing/${props.projectName}`} className={classes.link}>
+                                        <CustomButton style={{ color: 'white', backgroundColor: '#6F3637' }}>생성된 모델로 테스트 하러 가기</CustomButton>
                                     </Link>
-                                    <hr style={{color:'gray'}}></hr>
+                                    <hr style={{ color: 'gray' }}></hr>
                                     <Grid container spacing={3}>
-                                    <Grid item xs={6}>
-                                        <AccuracyHighCharts historyJson={props.AIHistory} />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <LossHighCharts historyJson={props.AIHistory} />
-                                    </Grid>
+                                        <Grid item xs={6}>
+                                            <AccuracyHighCharts historyJson={props.AIHistory} />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <LossHighCharts historyJson={props.AIHistory} />
+                                        </Grid>
                                     </Grid>
                                 </div>
                             }</div>

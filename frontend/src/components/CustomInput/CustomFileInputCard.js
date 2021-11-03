@@ -37,8 +37,6 @@ export default function CustomFileInputCard(props) {
   };
 
   const setDate = (_className, _path, _size) => {
-    console.log("setData in MediaCard");
-    console.log(_className, _path, _size);
     props.setNewDate(_className, _path, _size);
   };
 
@@ -59,7 +57,7 @@ export default function CustomFileInputCard(props) {
               </Typography>
             </Grid>
               <Typography variant="body2" color="textSecondary" component="p">
-                <Basic
+                <DropdownInput
                 fileId={props.id}
                 projectName={props.projectName}
                 classLabelName={classLabelName}
@@ -74,7 +72,7 @@ export default function CustomFileInputCard(props) {
 
 
 {/* dropzone basic */ }
-class Basic extends Component {
+class DropdownInput extends Component {
   constructor() {
     super();
     this.onDrop = (files) => {
@@ -88,6 +86,7 @@ class Basic extends Component {
 
   imgUpload(e) {
     var upload_this = this;
+    console.log(upload_this.props.projectName);
     e.preventDefault();
     const api = axios.create({
       baseURL: 'http://localhost:8080'
@@ -103,7 +102,7 @@ class Basic extends Component {
       console.log(idx);
       frm.append("files", photoFile.files[idx]);
     }
-    frm.append("projectName", "asfghg");
+    frm.append("projectName", upload_this.props.projectName);
     frm.append("className", upload_this.props.classLabelName);
     frm.append("category", "train");
 
@@ -115,7 +114,6 @@ class Basic extends Component {
     }).then(function (res) {
       var result = confirm("데이터가 업로드되었습니다.");
       const data = res.data;
-      //console.log(data.className, data.path, data.size);
       upload_this.props.isUploaded(data.className, data.path, data.size);
     }).catch(function (error) {
       if(error.response) {

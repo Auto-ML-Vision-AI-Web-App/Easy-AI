@@ -134,15 +134,12 @@ function ImgMediaCard(props) {
     const history = useHistory();
 
     function aiMaking(card_value) {
-        const test_name = "test_project_0";
+        const randomProjectName = Math.random().toString(36).substr(2,11);
         console.log("AI model choosing");
         history.push({
             pathname: '/admin/data-uploading',
-            /*state: {
-                selectedType: card_value
-            }*/
         })
-        props.setAIProject(card_value, test_name);
+        props.setAIProject(card_value, randomProjectName);
     }
 
     return (

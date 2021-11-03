@@ -9,6 +9,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
+import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 //need to update
 
 import { Link } from "react-router-dom";
@@ -52,6 +53,12 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText className="listItemText" primary="AI 결과 확인하기" />
     </ListItem>
+    {/*<ListItem button component={Link} to="/admin/ai-testing">
+      <ListItemIcon>
+        <ImageSearchIcon />
+      </ListItemIcon>
+      <ListItemText className="listItemText" primary="AI 테스트하기" />
+</ListItem>*/}
   </div>
 );
 

@@ -66,6 +66,7 @@ function AIGenerate(props) {
   const history = useHistory();
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper);
+  const [projectName, setProjectName] = useState(localStorage.getItem("projectName")==undefined?"":localStorage.getItem("projectName"));
   const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(false);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
@@ -123,7 +124,7 @@ function AIGenerate(props) {
     api.post('/training', {
       params: {
         username: 'h01010',
-        projectname: 'project1',
+        projectname: projectName,
         test_size: testSize,
         max_trials: maxTrial,
         epochs: epochs

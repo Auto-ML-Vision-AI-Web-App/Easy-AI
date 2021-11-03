@@ -44,16 +44,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AIResult(props) {
-
+    const [projectName, setProjectName] = useState(props.match == undefined ? "" : props.match.params.postId);
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    
+
     return (
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={fixedHeightPaper}>
                         <h2><strong>AI 테스트하기</strong></h2>
+                        {projectName === "" ?
+                            <div>
+                                <h3>현재 AI를 생성하지 않았습니다.</h3>
+                                <h4>AI 만들기 눌러 AI를 생성해주세요.</h4>
+                            </div> :
+                            <div>
+                                <h4>Project : {projectName}</h4>
+                                <hr style={{ color: 'gray' }}></hr>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={6}>
+                                        
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        }
                     </Paper>
                 </Grid>
             </Grid>
