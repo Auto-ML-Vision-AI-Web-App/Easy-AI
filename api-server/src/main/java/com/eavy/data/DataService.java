@@ -10,9 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -68,24 +66,6 @@ public class DataService {
         });
     }
 
-    public List<DataDto> getData(String path) {
-        List<DataDto> allData = new ArrayList<>();
-        getDataRecursively(path, allData);
-        return allData;
-    }
-
-    private void getDataRecursively(String path, List<DataDto> allData) {
-        Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
-        list.iterateAll().forEach(b -> {
-            if (b.isDirectory()) {
-                getDataRecursively(b.getName(), allData);
-            }
-            else {
-                allData.add(convertBlobToDataDto(b));
-            }
-        });
-    }
-
     public void zipFilesInPathAndWriteTo(String path, OutputStream destOutputStream) throws IOException {
         ZipOutputStream zipOutputStream = new ZipOutputStream(destOutputStream);
         zipFilesInPathAndWriteToRecursively(path, zipOutputStream);
@@ -106,13 +86,6 @@ public class DataService {
                 b.downloadTo(zipOutputStream);
             }
         }
-    }
-
-    private DataDto convertBlobToDataDto(Blob b) {
-        DataDto dataDto = new DataDto();
-        dataDto.setName(b.getName());
-        dataDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
-        return dataDto;
     }
 
     public void uploadFileToStorage(String path, MultipartFile file) throws IOException {
