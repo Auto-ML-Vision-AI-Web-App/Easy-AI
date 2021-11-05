@@ -9,8 +9,6 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BuildIcon from '@material-ui/icons/Build';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
-import ImageSearchIcon from '@material-ui/icons/ImageSearch';
-//need to update
 
 import { Link } from "react-router-dom";
 import './test.css';
@@ -29,25 +27,25 @@ export const homeListItems = (
 export const mainListItems = (
   <div>
     <ListSubheader inset>Make AI</ListSubheader>
-    <ListItem button component={Link} to="/admin/ai-choosing">
+    <ListItem className="listItemBtn" button component={Link} to="/admin/ai-choosing">
       <ListItemIcon>
         <TouchAppIcon />
       </ListItemIcon>
-      <ListItemText style={{fontFamily: 'Nanum Myeongjo'}} className="listItemText" primary="AI 선택하기" />
+      <ListItemText className="listItemText" primary="AI 선택하기" />
     </ListItem>
-    <ListItem button component={Link} to="/admin/data-uploading">
+    <ListItem className="listItemBtn" button component={Link} to="/admin/data-uploading">
       <ListItemIcon>
         <PublishIcon />
       </ListItemIcon>
       <ListItemText className="listItemText" primary="데이터 업로드하기" />
     </ListItem>
-    <ListItem button component={Link} to="/admin/ai-making">
+    <ListItem className="listItemBtn" button component={Link} to="/admin/ai-making">
       <ListItemIcon>
         <BuildIcon />
       </ListItemIcon>
       <ListItemText className="listItemText"  primary="AI 만들기" />
     </ListItem>
-    <ListItem button component={Link} to="/admin/ai-checking">
+    <ListItem className="listItemBtn" button component={Link} to="/admin/ai-checking">
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>

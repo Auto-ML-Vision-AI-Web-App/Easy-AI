@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button:{
-    color: "#C40027",
+    color: "#6F3637",
   },
   root: {
     display: 'flex',
