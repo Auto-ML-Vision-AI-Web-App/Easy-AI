@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -30,7 +31,7 @@ public class DataService {
     }
 
     // TODO 더 깔끔한 방법이 없을까
-    public ClassDto getClassInfo(String path) {
+    public ClassDto getDataInfo(String path) {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         ClassDto classDto = new ClassDto();
         list.iterateAll().forEach(b -> {
@@ -48,20 +49,19 @@ public class DataService {
         return classDto;
     }
 
-    public List<DataDto> getData(String path) {
-        List<DataDto> allData = new ArrayList<>();
-        getDataRecursively(path, allData);
-        return allData;
+    public Map<String, String> getFilenameAndUrl(String path) {
+        File file = new File(path);
+        HashMap<String, String> filenameToUrl = new HashMap<>();
+        getFilenameAndUrlRecursively(path, filenameToUrl);
+        return filenameToUrl;
     }
 
-    private void getDataRecursively(String path, List<DataDto> allData) {
+    private void getFilenameAndUrlRecursively(String path, Map<String, String> filenames) {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         list.iterateAll().forEach(b -> {
+            filenames.put(b.getName(), b.signUrl(15L, TimeUnit.MINUTES).toString());
             if (b.isDirectory()) {
-                getDataRecursively(b.getName(), allData);
-            }
-            else {
-                allData.add(convertBlobToDataDto(b));
+                getFilenameAndUrlRecursively(b.getName(), filenames);
             }
         });
     }
@@ -86,13 +86,6 @@ public class DataService {
                 b.downloadTo(zipOutputStream);
             }
         }
-    }
-
-    private DataDto convertBlobToDataDto(Blob b) {
-        DataDto dataDto = new DataDto();
-        dataDto.setName(b.getName());
-        dataDto.setSignUrl(b.signUrl(15L, TimeUnit.MINUTES));
-        return dataDto;
     }
 
     public void uploadFileToStorage(String path, MultipartFile file) throws IOException {

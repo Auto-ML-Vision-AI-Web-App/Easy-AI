@@ -31,7 +31,7 @@ public class TokenManager {
     public static String generateAccessToken(String username) {
         return JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .sign(algorithm);
     }
 
@@ -42,7 +42,7 @@ public class TokenManager {
     public static String generateRefreshToken(String username) {
         return JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 6 * 60 * 60 * 1000))
                 .sign(algorithm);
     }
 

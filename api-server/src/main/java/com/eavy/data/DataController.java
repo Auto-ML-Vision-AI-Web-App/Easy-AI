@@ -29,24 +29,12 @@ public class DataController {
         this.objectMapper = objectMapper;
     }
 
-    /*@GetMapping
-    public ResponseEntity<List<DataDto>> getData(Principal principal,
-                                                 @RequestParam String projectName,
-                                                 @RequestParam String category){
-        String path = dataService.generatePath(principal.getName(), projectName, category);
-        List<DataDto> allData = dataService.getData(path);
-        if(allData.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(allData);
-    }*/
-
     @GetMapping("/size")
     public ResponseEntity getClassificationResult(Principal principal,
                                                   @RequestParam String projectName,
                                                   @RequestParam String category){
         String path = dataService.generatePath(principal.getName(), projectName, category);
-        ClassDto classificationResult = dataService.getClassInfo(path);
+        ClassDto classificationResult = dataService.getDataInfo(path);
         return ResponseEntity.ok(classificationResult);
     }
 
