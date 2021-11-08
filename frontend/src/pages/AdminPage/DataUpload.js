@@ -67,8 +67,8 @@ function DataUpload(props) {
     data.className = _className;
     data.path = _path;
     data.size = _size;
-    console.log(data);
     setDataset(dataset.concat(data));
+    console.log(dataset);
   };
 
   return (
@@ -78,13 +78,14 @@ function DataUpload(props) {
           <Paper className={fixedHeightPaper}>
             <div>
               <h2><strong>데이터 업로드하기</strong></h2>
-              {props.AIType === "" ?
+              {projectName === "" ?
                 <div>
                   <p>현재 AI가 선택되지 않았습니다.<br />
                   메뉴에서 [AI 선택하기]를 눌러 데이터를 입력해주세요.</p>
                 </div>
                 :
                 <div>
+                  <h6><strong>Project 이름 : {projectName}</strong></h6>
                   <h4><strong>생성 AI 종류 : {props.AIType}</strong></h4>
 
                   <Grid container justifyContent="center" alignItems="center" spacing={2}>
@@ -105,6 +106,7 @@ function DataUpload(props) {
                       <hr style={{ background: 'gray' }}></hr>
                     </Grid>
 
+                    {dataset.length!=0?
                     <Grid style={{maring: 'auto'}} item xs={12}>
                       <center>
                       <Link to={{
@@ -117,6 +119,7 @@ function DataUpload(props) {
                       </Link>
                       </center>
                     </Grid>
+                    :<></>}
 
                     {/*<Grid item xs={12}>
 
