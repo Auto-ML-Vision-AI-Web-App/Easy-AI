@@ -42,7 +42,7 @@ function DataCheck({ location }) {
                 <Grid item xs={12}>
                   <Paper>
                   <center>
-                        <CustomListDown></CustomListDown>
+                        <CustomListDown dataset={location.state.dataset}></CustomListDown>
                     </center>
                   </Paper>
                 </Grid>
@@ -66,7 +66,7 @@ class DataResultChart extends Component {
       const jsonfile = this.props.dataset;
       let total = 0;
       jsonfile.map((data, idx) => (
-        total = total + data.size
+        total = total + data.successSize
       ));
   
       const options = {
@@ -98,15 +98,15 @@ class DataResultChart extends Component {
           colorByPoint: true,
           data: [{
             name: jsonfile[0].className,
-            size: jsonfile[0].size,
-            y: jsonfile[0].size / total * 100,
+            size: jsonfile[0].successSize,
+            y: jsonfile[0].successSize / total * 100,
             color: '#08AAC1',
             sliced: true,
             selected: true
           }, {
             name: jsonfile[1].className,
-            size: jsonfile[1].size,
-            y: jsonfile[1].size / total * 100,
+            size: jsonfile[1].successSize,
+            y: jsonfile[1].successSize / total * 100,
             color: '#5C5C5C'
           }]
         }],

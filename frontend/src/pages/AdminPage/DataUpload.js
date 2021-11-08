@@ -50,7 +50,6 @@ function DataUpload(props) {
   const [class1Name, setClass1Name] = useState("");
   const [class2Name, setClass2Name] = useState("");
   const [dataset, setDataset] = useState([]);
-  
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
   const [projectId, setProjectId] = useState(null);
@@ -61,13 +60,14 @@ function DataUpload(props) {
     if (_name === "Class 2") setClass2Name(_className);
   };
 
-  const addNewData = (_className, _path, _size) => {
+  const addNewData = (_className, _failList, _successList, _successSize) => {
     console.log("_setData in DataUpload")
     var data = new Object();
 
     data.className = _className;
-    data.path = _path;
-    data.size = _size;
+    data.failList = _failList;
+    data.successList = _successList;
+    data.successSize = _successSize;
     setDataset(dataset.concat(data));
     console.log(dataset);
   };

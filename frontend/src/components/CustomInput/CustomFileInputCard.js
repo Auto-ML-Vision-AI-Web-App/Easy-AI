@@ -36,8 +36,8 @@ export function TrainDataUpload(props) {
     setClassLabelName(e.target.value);
   };
 
-  const setDate = (_className, _path, _size) => {
-    props.setNewDate(_className, _path, _size);
+  const setDate = (_className, _failList, _successList, _successSize) => {
+    props.setNewDate(_className, _failList, _successList, _successSize);
   };
 
   return (
@@ -75,8 +75,8 @@ export function TestDataUpload(props) {
   const [classLabelName, setClassLabelName] = useState('');
   const classes = useStyles();
 
-  const setDate = (_className, _path, _size) => {
-    props.setNewDate(_className, _path, _size);
+  const setDate = (_className, _failList, _successList, _successSize) => {
+    props.setNewDate(_className, _failList, _successList, _successSize);
   };
 
   return (
@@ -136,8 +136,6 @@ class DropdownInput extends Component {
     if(upload_this.props.category==="train") frm.append("className", upload_this.props.classLabelName);
     frm.append("category", upload_this.props.category);
 
-    console.log(upload_this.props.projectName);
-
     api.post('/data/upload', frm, {
       headers: {
         'Authorization':"Bearer "+getCookie('access-token'),
@@ -148,7 +146,7 @@ class DropdownInput extends Component {
       upload_this.setState({loadingStatus: false});
       const data = res.data;
       console.log(data);
-      upload_this.props.isUploaded(data.className, "", data.numOfSuccess);
+      upload_this.props.isUploaded(data.className, data.failList, data.successList, data.numOfSuccess);
     }).catch(function (error) {
       if(error.response) {
         if(error.response.status == '403'){
