@@ -78,6 +78,7 @@ export default function AIChoose(props) {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ImgMediaCard
+                                        setAIProject={setAIProject_AIChoose}
                                         card_value="object-detection"
                                         card_title="물체 탐지하기"
                                         card_content="물체 탐지하기란 사진에 여러 물체가 있을 때 각각의 물체 주변에 네모 상자를 두르고 물체명을 붙이는 작업입니다.    "
@@ -88,6 +89,7 @@ export default function AIChoose(props) {
                             <div className={classes.card_box}>
                                 <Grid item xs={6}>
                                     <ImgMediaCard
+                                        setAIProject={setAIProject_AIChoose}
                                         card_value="colorization"
                                         card_title="이미지 색입히기"
                                         card_content="이미지 색 입히기란 흑백 이미지를 칼라 이미지로 바꿔주는 작업입니다."
@@ -96,6 +98,7 @@ export default function AIChoose(props) {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ImgMediaCard
+                                        setAIProject={setAIProject_AIChoose}
                                         card_value="style-transfer"
                                         card_title="스타일 트랜스퍼"
                                         card_content="스타일 트랜스퍼란 사진의 스타일을 다른 사진에 적용하여 새 이미지를 만드는 작업입니다."

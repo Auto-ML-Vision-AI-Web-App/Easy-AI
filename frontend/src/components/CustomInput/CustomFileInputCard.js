@@ -13,8 +13,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-import EditIcon from '@material-ui/icons/Edit';
 
 //file-upload-drop-zone
 import Dropzone from 'react-dropzone';
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomFileInputCard(props) {
+export function TrainDataUpload(props) {
   const [classLabelName, setClassLabelName] = useState('');
   const classes = useStyles();
 
@@ -58,9 +58,37 @@ export default function CustomFileInputCard(props) {
             </Grid>
               <Typography variant="body2" color="textSecondary" component="p">
                 <DropdownInput
+                category="train"
                 fileId={props.id}
                 projectName={props.projectName}
                 classLabelName={classLabelName}
+                isUploaded = {setDate}/>
+              </Typography>
+          </Grid>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
+
+export function TestDataUpload(props) {
+  const [classLabelName, setClassLabelName] = useState('');
+  const classes = useStyles();
+
+  const setDate = (_className, _path, _size) => {
+    props.setNewDate(_className, _path, _size);
+  };
+
+  return (
+    <Card className={classes.root}>
+      <CardActionArea>
+        <CardContent>
+          <Grid container justifyContent="center" alignItems="center">
+              <Typography variant="body2" color="textSecondary" component="p">
+                <DropdownInput
+                category="test"
+                fileId={props.id}
+                projectName={props.projectName}
                 isUploaded = {setDate}/>
               </Typography>
           </Grid>
@@ -80,13 +108,15 @@ class DropdownInput extends Component {
       this.setState({ files })
     };
     this.state = {
-      files: []
+      files: [],
+      startUpload : false,
+      loadingStatus : false,
     };
   }
 
   imgUpload(e) {
+    this.setState({startUpload: true, loadingStatus: true});
     var upload_this = this;
-    console.log(upload_this.props.projectName);
     e.preventDefault();
     const api = axios.create({
       baseURL: 'http://localhost:8080'
@@ -103,8 +133,10 @@ class DropdownInput extends Component {
       frm.append("files", photoFile.files[idx]);
     }
     frm.append("projectName", upload_this.props.projectName);
-    frm.append("className", upload_this.props.classLabelName);
-    frm.append("category", "train");
+    if(upload_this.props.category==="train") frm.append("className", upload_this.props.classLabelName);
+    frm.append("category", upload_this.props.category);
+
+    console.log(upload_this.props.projectName);
 
     api.post('/data/upload', frm, {
       headers: {
@@ -112,8 +144,8 @@ class DropdownInput extends Component {
         'Content-Type': 'multipart/form-data'
       }
     }).then(function (res) {
-      var result = confirm("데이터가 업로드되었습니다.");
-      console.log(res.data);
+      alert("데이터가 업로드되었습니다.");
+      upload_this.setState({loadingStatus: false});
       const data = res.data;
       upload_this.props.isUploaded(data.className, "", data.successList.length);
     }).catch(function (error) {
@@ -133,8 +165,6 @@ class DropdownInput extends Component {
         {file.name} - {file.size} bytes
       </li>
     ));
-
-
     return (
       <>
       <Dropzone onDrop={this.onDrop}>
@@ -149,10 +179,28 @@ class DropdownInput extends Component {
               <ul>{files}</ul>
             </aside>
             <center><Button style={{ backgroundColor: "#04ABC1", color: "white" }} onClick={this.imgUpload.bind(this)} variant="contained">업로드하기</Button></center>
+            <br></br>
+            {this.state.startUpload?
+            <LoadingProgressOrResult loading={this.state.loadingStatus}></LoadingProgressOrResult>
+              : <></>
+            }
           </section>
         )}
+        
       </Dropzone>
       </>
     );
   }
+}
+
+function LoadingProgressOrResult(props) {
+  return (
+      <>
+      {console.log("loading : " + props.loading)}
+      {props.loading ?
+                    <LinearProgress id="loadingProgress"/>
+                    : <p>데이터 업로드를 완료하였습니다.</p>}
+          
+      </>
+  );
 }

@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button:{
-    color: "#C40027",
+    color: "#6F3637",
   },
   root: {
     display: 'flex',
@@ -58,14 +58,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 900,
+    height: 300,
   },
 }));
 
 function AIGenerate(props) {
   const history = useHistory();
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper);
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [projectName, setProjectName] = useState(localStorage.getItem("projectName")==undefined?"":localStorage.getItem("projectName"));
   const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(false);
@@ -97,7 +97,7 @@ function AIGenerate(props) {
     console.log("AI model making start");
     handleClose();
     const api = axios.create({
-      baseURL: 'http://168.188.125.50:20017'
+      baseURL: 'http://168.188.125.50:20015'
     })
     api.post('/ai-making', {
       params: {
@@ -118,7 +118,7 @@ function AIGenerate(props) {
   const aiServerTest = (e) => {
     console.log("starting ai server test - sending parameter")
     const api = axios.create({
-      baseURL: 'http://168.188.125.50:20017'
+      baseURL: 'http://168.188.125.50:20015'
     })
     api.post('/training', {
       params: {
@@ -143,12 +143,12 @@ function AIGenerate(props) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper className={fixedHeightPaper}>
-            <h2><strong>생성 예정 AI 확인하기</strong></h2>
+            <h2><strong>AI 생성하기</strong></h2>
             <div>
               {props.AIType == "" ?
                 <div>
-                  <h3>현재 AI가 선택되지 않았습니다.</h3>
-                  <h4>AI 선택하기를 눌러 생성할 AI를 선택해주세요.</h4>
+                  <p>현재 AI가 선택되지 않았습니다.<br/>
+                  AI 선택하기를 눌러 생성할 AI를 선택해주세요.</p>
                 </div>
                 :
                 <div>

@@ -5,3 +5,7 @@
     font-family: 'Nanum Myeongjo', serif;
     color: #068696;
 }
+
+.listItemBtn:active {
+    color: #A4A4A4;
+}
