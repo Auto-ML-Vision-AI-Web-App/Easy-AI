@@ -73,7 +73,7 @@ function DataUpload(props) {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container justifyContent="center" alignItems="center" spacing={2}>
         <Grid item xs={12}>
           <Paper className={fixedHeightPaper}>
             <div>
@@ -87,7 +87,7 @@ function DataUpload(props) {
                 <div>
                   <h4><strong>생성 AI 종류 : {props.AIType}</strong></h4>
 
-                  <Grid container spacing={2}>
+                  <Grid container justifyContent="center" alignItems="center" spacing={2}>
                     <Grid item xs={12}>
                       <p>각 버튼을 눌러, 해당 데이터를 업로드해주세요.</p>
                     </Grid>
@@ -101,9 +101,12 @@ function DataUpload(props) {
                         onChange={changeClassName} setNewDate={addNewData} />
                     </Grid>
 
-                    <hr style={{ background: 'gray' }}></hr>
-
                     <Grid item xs={12}>
+                      <hr style={{ background: 'gray' }}></hr>
+                    </Grid>
+
+                    <Grid style={{maring: 'auto'}} item xs={12}>
+                      <center>
                       <Link to={{
                         pathname: '/admin/data-checking',
                         state: {
@@ -112,6 +115,7 @@ function DataUpload(props) {
                       }}>
                         <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>데이터 확인하기</Button>
                       </Link>
+                      </center>
                     </Grid>
 
                     {/*<Grid item xs={12}>
@@ -122,8 +126,11 @@ function DataUpload(props) {
                   className={classes.button}
                   startIcon={<CloudUploadIcon />}
                 >Upload인데, 지금은 일단 작동x</Button>
-            </Grid>*/}
-                    <Button onClick={refreshToken}>REFRESH TOKEN</Button>
+                </Grid>*/}
+                    <Grid item xs={12}>
+                      <Button onClick={refreshToken}>REFRESH TOKEN</Button>
+
+                    </Grid>
                   </Grid>
 
                 </div>
