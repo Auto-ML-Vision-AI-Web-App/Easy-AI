@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Switch, Route, Link, withRouter, useHistory } from "react-router-dom";
 import { setCookie, getCookie, removeCookie } from 'components/Cookie.js';
 import { refreshToken } from 'components/Token.js';
-import CustomFileInputCard from "components/CustomInput/CustomFileInputCard.js";
+import * as FileInput from "components/CustomInput/CustomFileInputCard.js";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -97,12 +97,12 @@ export default function DataUpload(props) {
               </Grid>
 
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={projectName} dataClass="Class 1" id="class1File"
-                  onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
+                <FileInput.TrainDataUpload projectName={projectName} dataClass="Class 1" id="class1File"
+                  onChange={changeClassName} setNewDate={addNewData}/>
               </Grid>
               <Grid item xs={6}>
-                <CustomFileInputCard projectName={projectName} dataClass="Class 2" id="class2File"
-                  onChange={changeClassName} setNewDate={addNewData}></CustomFileInputCard>
+                <FileInput.TrainDataUpload projectName={projectName} dataClass="Class 2" id="class2File"
+                  onChange={changeClassName} setNewDate={addNewData}/>
               </Grid>
 
               {/*<Grid item xs={12}>

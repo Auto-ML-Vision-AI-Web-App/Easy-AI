@@ -97,7 +97,7 @@ function AIGenerate(props) {
     console.log("AI model making start");
     handleClose();
     const api = axios.create({
-      baseURL: 'http://168.188.125.50:20017'
+      baseURL: 'http://168.188.125.50:20015'
     })
     api.post('/ai-making', {
       params: {
@@ -118,7 +118,7 @@ function AIGenerate(props) {
   const aiServerTest = (e) => {
     console.log("starting ai server test - sending parameter")
     const api = axios.create({
-      baseURL: 'http://168.188.125.50:20017'
+      baseURL: 'http://168.188.125.50:20015'
     })
     api.post('/training', {
       params: {

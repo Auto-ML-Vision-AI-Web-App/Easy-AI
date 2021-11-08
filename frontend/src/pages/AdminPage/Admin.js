@@ -228,7 +228,7 @@ export default function Admin() {
             ></AIResult>}
           />
           
-          <Route path="/admin/ai-testing:projectName" exact component={()=>
+          <Route path="/admin/ai-testing" exact component={()=>
             <AITest
               AIType={AIType}
               AIHistory={AIHistory}
