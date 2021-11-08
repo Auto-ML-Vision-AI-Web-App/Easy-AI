@@ -66,7 +66,7 @@ export default function AIResult(props) {
     const startTest = (e) => {
         console.log("starting ai testing")
         const aiAPI = axios.create({
-            baseURL: 'http://168.188.125.50:20015'
+            baseURL: 'http://168.188.125.50:20017'
         })
         api.post('/ai-testing', {
             params: {

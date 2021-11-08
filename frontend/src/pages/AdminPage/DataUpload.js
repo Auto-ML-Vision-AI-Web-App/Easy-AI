@@ -10,11 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from "components/CustomButtons/Button.js";
 
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import clsx from 'clsx';
-
-import Highcharts from "highcharts";
-import PieChart from "highcharts-react-official";
 
 import '../../assets/css/dataupload.css'
 
@@ -45,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DataUpload(props) {
+export default withRouter(DataUpload);
+
+function DataUpload(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper);
   const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
@@ -103,6 +101,19 @@ export default function DataUpload(props) {
                         onChange={changeClassName} setNewDate={addNewData} />
                     </Grid>
 
+                    <hr style={{ background: 'gray' }}></hr>
+
+                    <Grid item xs={12}>
+                      <Link to={{
+                        pathname: '/admin/data-checking',
+                        state: {
+                          dataset: dataset
+                        }
+                      }}>
+                        <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>데이터 확인하기</Button>
+                      </Link>
+                    </Grid>
+
                     {/*<Grid item xs={12}>
 
                 <Button
@@ -115,24 +126,6 @@ export default function DataUpload(props) {
                     <Button onClick={refreshToken}>REFRESH TOKEN</Button>
                   </Grid>
 
-                  <hr style={{ background: 'gray' }}></hr>
-
-                  {dataset.length != 2 ?
-                    <></> :
-                    <Grid container justifyContent="center" spacing={2}>
-                      <Grid item xs={12}>
-                        <DataResultChart dataset={dataset}></DataResultChart>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <center>
-                          <Link to="/admin/ai-making/" className={classes.link}>
-                            <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>생성된 모델로 테스트 하러 가기</Button>
-                          </Link>
-                        </center>
-                      </Grid>
-                    </Grid>
-
-                  }
                 </div>
               }
             </div>
@@ -141,81 +134,4 @@ export default function DataUpload(props) {
       </Grid>
     </>
   );
-}
-
-
-/*React Chart*/
-class DataResultChart extends Component {
-
-  render() {
-    const jsonfile = this.props.dataset;
-    let total = 0;
-    jsonfile.map((data, idx) => (
-      total = total + data.size
-    ));
-
-    const options = {
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-      },
-      title: {
-        text: '데이터 업로드 결과'
-      },
-      tooltip: {
-        pointFormat: '{series.name}: <b>{point.size}개</b>'
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b> : {point.percentage:.1f} %'
-          }
-        }
-      },
-
-      series: [{
-        name: '데이터 수',
-        colorByPoint: true,
-        data: [{
-          name: jsonfile[0].className,
-          size: jsonfile[0].size,
-          y: jsonfile[0].size / total * 100,
-          color: '#08AAC1',
-          sliced: true,
-          selected: true
-        }, {
-          name: jsonfile[1].className,
-          size: jsonfile[1].size,
-          y: jsonfile[1].size / total * 100,
-          color: '#5C5C5C'
-        }]
-      }],
-
-      responsive: {
-        rules: [{
-          condition: {
-            maxWidth: 300
-          },
-          chartOptions: {
-            legend: {
-              layout: 'horizontal',
-              align: 'center',
-              verticalAlign: 'bottom'
-            }
-          }
-        }]
-      }
-
-    }
-    return (
-      <Fragment>
-        <PieChart highcharts={Highcharts} options={options} />
-      </Fragment>
-    );
-  }
 }

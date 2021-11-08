@@ -21,6 +21,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import { homeListItems, mainListItems, secondaryListItems } from './listItems';
 import AIChoose from './AIChoose';
 import DataUpload from './DataUpload';
+import DataCheck from './DataCheck';
 import AIResult from './AIResult';
 import Projects from './Projects';
 import AIGenerate from './AIGenerate';
@@ -205,11 +206,17 @@ export default function Admin() {
               }}
               setProjectName={setProjectName}
             ></AIChoose>} />
+          
           <Route path="/admin/data-uploading" exact component={()=>
             <DataUpload
               AIType={AIType}
               projectName={projectName}
             ></DataUpload>}
+          />
+
+          <Route path="/admin/data-checking" exact component={()=>
+            <DataCheck
+            ></DataCheck>}
           />
           
           <Route path="/admin/ai-making" exact 
