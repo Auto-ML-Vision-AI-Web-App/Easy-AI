@@ -68,9 +68,6 @@ export default function AIResult(props) {
         const aiAPI = axios.create({
             baseURL: 'http://168.188.125.50:20015'
         })
-        const springAPI = axios.create({
-            baseURL: 'http://168.188.125.50:20015'
-        })
         api.post('/ai-testing', {
             params: {
                 username: 'h01010',
@@ -88,7 +85,7 @@ export default function AIResult(props) {
         axios({
             method: 'get',
             url: 'http://localhost:8080/data',
-            params: { projectName: "prj2", category: "test" },
+            params: { projectName: projectName, category: "test" },
             responseType: 'arraybuffer',
             headers: {
                 'Authorization': "Bearer " + getCookie('access-token'),
