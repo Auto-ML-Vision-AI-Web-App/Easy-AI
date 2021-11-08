@@ -41,7 +41,7 @@ export default function CustomListDown(props) {
             subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
                     업로드된 데이터 정보
-        </ListSubheader>
+                </ListSubheader>
             }
             className={classes.root}
         >
@@ -55,7 +55,7 @@ function CollapseList(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [icon, setIcon] = React.useState(props.id === "success" ? <CheckCircleOutlineIcon></CheckCircleOutlineIcon> : <HighlightOffIcon></HighlightOffIcon>)
-    const [subTitle, setSubTitle] = React.useState(props.id === "success" ? "업로드에 성공한 데이터" : "업로드에 성공한 데이터");
+    const [subTitle, setSubTitle] = React.useState(props.id === "success" ? "업로드에 성공한 데이터" : "업로드에 실패한 데이터");
     const [dataset, setDataset] = React.useState(props.dataset);
 
     const handleClick = () => {
