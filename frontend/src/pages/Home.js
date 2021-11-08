@@ -100,9 +100,9 @@ export default function Components(props) {
                   </Button>
                 </Link>
                 <br></br>
-                <Button onClick={aiServerTest}>
+                {/*<Button onClick={aiServerTest}>
                     <h4><strong>AI 서버 테스트</strong></h4>
-                </Button>
+                </Button>*/}
               </div>
             </GridItem>
           </GridContainer>

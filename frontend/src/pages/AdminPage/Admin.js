@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
+  footer: {
+  },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
@@ -124,14 +126,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AccountCircleIcon(props) {
-  return (
-    <SvgIcon {...props}>
-      <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2.75c1.24 0 2.25 1.01 2.25 2.25S10.24 8.25 9 8.25 6.75 7.24 6.75 6 7.76 3.75 9 3.75zM9 14.5c-1.86 0-3.49-.92-4.49-2.33C4.62 10.72 7.53 10 9 10c1.47 0 4.38.72 4.49 2.17-1 1.41-2.63 2.33-4.49 2.33z" />
-    </SvgIcon>
-  );
-}
-
 export default function Admin() {
   const classes = useStyles();
   const [redirectPath, setRedirectPath] = React.useState(getCookie('access-token')!=undefined? '/admin/ai-choosing':'/login-page')
@@ -170,9 +164,6 @@ export default function Admin() {
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           </Typography>
-          <IconButton>
-              <AccountCircleIcon style={{ color: 'white', fontSize: 40 }}/>
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -245,9 +236,12 @@ export default function Admin() {
           <Route path="/admin/projects" exact component={Projects} />
           <Redirect from="/admin" to={redirectPath} />
         </Switch>
-        <Box pt={4}>
+
+        <center>
+        <Box className={classes.footer} pt={4}>
             <Copyright />
         </Box>
+        </center>
         </Container>
       </main>
     </div>

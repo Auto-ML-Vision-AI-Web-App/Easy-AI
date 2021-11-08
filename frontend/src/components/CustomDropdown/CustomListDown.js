@@ -72,7 +72,7 @@ function CollapseList(props) {
 
     return (
         <>
-            <ListItem style={{background:'#E8E8DE'}} button onClick={handleClick}>
+            <ListItem style={{background:'#EDEDED'}} button onClick={handleClick}>
                 <ListItemIcon>
                     {icon}
                 </ListItemIcon>

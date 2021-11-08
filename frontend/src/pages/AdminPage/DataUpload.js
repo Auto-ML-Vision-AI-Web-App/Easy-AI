@@ -130,11 +130,11 @@ function DataUpload(props) {
                   className={classes.button}
                   startIcon={<CloudUploadIcon />}
                 >Upload인데, 지금은 일단 작동x</Button>
-                </Grid>*/}
+                </Grid>
                     <Grid item xs={12}>
                       <Button onClick={refreshToken}>REFRESH TOKEN</Button>
 
-                    </Grid>
+                    </Grid>*/}
                   </Grid>
 
                 </div>
