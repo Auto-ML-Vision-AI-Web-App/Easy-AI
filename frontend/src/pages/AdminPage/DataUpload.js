@@ -81,8 +81,8 @@ export default function DataUpload(props) {
               <h2><strong>데이터 업로드하기</strong></h2>
               {props.AIType === "" ?
                 <div>
-                  <h3>현재 데이터가 업로드 되지 않았습니다.</h3>
-                  <h4>데이터 업로드하기를 눌러 데이터를 입력해주세요.</h4>
+                  <h5>현재 AI가 선택되지 않았습니다.<br/>
+                  메뉴에서 [AI 선택하기]를 눌러 데이터를 입력해주세요.</h5>
                 </div>
                 :
                 <div>
