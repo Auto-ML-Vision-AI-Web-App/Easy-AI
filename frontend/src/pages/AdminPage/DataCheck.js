@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Highcharts from "highcharts";
 import PieChart from "highcharts-react-official";
 
+import CustomListDown from "components/CustomDropdown/CustomListDown.js";
+
 export default withRouter(DataCheck);
 
 const useStyles = makeStyles((theme) => ({
@@ -38,9 +40,11 @@ function DataCheck({ location }) {
                 
                 <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Paper className={fixedHeightPaper}>
-                        {/**/}
-                    </Paper>
+                  <Paper>
+                  <center>
+                        <CustomListDown></CustomListDown>
+                    </center>
+                  </Paper>
                 </Grid>
                 </Grid>
             </Grid>

@@ -147,7 +147,8 @@ class DropdownInput extends Component {
       alert("데이터가 업로드되었습니다.");
       upload_this.setState({loadingStatus: false});
       const data = res.data;
-      upload_this.props.isUploaded(data.className, "", data.successList.length);
+      console.log(data);
+      upload_this.props.isUploaded(data.className, "", data.numOfSuccess);
     }).catch(function (error) {
       if(error.response) {
         if(error.response.status == '403'){

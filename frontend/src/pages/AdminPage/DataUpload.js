@@ -50,6 +50,7 @@ function DataUpload(props) {
   const [class1Name, setClass1Name] = useState("");
   const [class2Name, setClass2Name] = useState("");
   const [dataset, setDataset] = useState([]);
+  
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
   const [projectId, setProjectId] = useState(null);
