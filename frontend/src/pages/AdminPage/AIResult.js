@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AIResult(props) {
     const [isSetAI, setAI] = useState();
+    const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
     const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
     const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
 
@@ -50,9 +51,14 @@ export default function AIResult(props) {
     const fixedHeightPaper = clsx(classes.paper);
     //const getParams = this.props.location.state.result_model;
     const downLoadAI = (e) => {
-        axios({
-            method: 'get',
-            url: 'http://168.188.125.50:20017/ai-downloading',
+        const api = axios.create({
+            baseURL: 'http://168.188.125.50:20017'
+          })
+          api.get('/ai-downloading', {
+            params: {
+              username: 'h01010',
+              projectname: projectName,
+            },
             responseType: 'arraybuffer',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -78,7 +84,7 @@ export default function AIResult(props) {
         axios({
             method: 'get',
             url: 'http://localhost:8080/data',
-            params: { projectName: "prj2", category: "test" },
+            params: { projectName: projectName, category: "test" },
             responseType: 'arraybuffer',
             headers: {
                 'Authorization': "Bearer " + getCookie('access-token'),

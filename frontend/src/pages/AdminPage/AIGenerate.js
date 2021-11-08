@@ -115,12 +115,32 @@ function AIGenerate(props) {
   }
 
   //here
-  const aiServerTest = (e) => {
+  const aiTrainingInfo = (e) =>{
     console.log("starting ai server test - sending parameter")
     const api = axios.create({
       baseURL: 'http://168.188.125.50:20017'
     })
-    api.post('/training', {
+    api.post('/ai-training/info', {
+      params: {
+        username: 'h01010',
+        projectname: projectName,
+        test_size: testSize,
+        max_trials: maxTrial,
+        epochs: epochs
+      }
+    }).then(function (response) {
+      console.log(response);
+      aiTrainingMaking();
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+  const aiTrainingMaking = (e) => {
+    console.log("starting ai server test - sending parameter")
+    const api = axios.create({
+      baseURL: 'http://168.188.125.50:20017'
+    })
+    api.post('/ai-training/making', {
       params: {
         username: 'h01010',
         projectname: projectName,
@@ -170,7 +190,7 @@ function AIGenerate(props) {
                     <Grid item xs={4}>
                     <center>
                       <IconButton aria-label="ai make"
-                        onClick={aiServerTest} className={classes.button}>
+                        onClick={aiTrainingMaking} className={classes.button}>
                         <PlayCircleFilledIcon style={{ fontSize: 130 }} />
                       </IconButton>
                       </center>
