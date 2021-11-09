@@ -25,7 +25,7 @@ public class AccountController {
         this.objectMapper = objectMapper;
     }
 
-    // TODO 왜 삭제하면 안되는지 확인할 것
+    // for CORS
     @PostMapping("/signin")
     public void signIn(Account account) {
     }
