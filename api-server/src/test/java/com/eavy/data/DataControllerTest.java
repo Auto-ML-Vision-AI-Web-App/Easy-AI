@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,28 +27,25 @@ class DataControllerTest extends ControllerTest {
     @SpyBean(name = "dataService")
     DataService dataService;
 
-    @DisplayName("클래스별 이미지 개수 조회")
+    @DisplayName("프로젝트 속 모든 데이터가 저장된 URL 조회")
     @Test
-    void getDataInfo() throws Exception {
+    void getDataUrl() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
         String accessToken = TokenManager.generateAccessToken(account.getUserId());
         String projectName = "prj1";
         String category = "train";
         String path = account.getUserId() + "/" + projectName + "/" + category + "/";
-        ObjectMapper objectMapper = new ObjectMapper();
-        ClassDto classDto = new ClassDto();
-        classDto.setAll(25);
-        classDto.getClassNameToSize().put("dog", 10);
-        classDto.getClassNameToSize().put("cat", 15);
-        given(dataService.getDataInfo(path)).willReturn(classDto);
+        Map<String, String> filenameToUrl = new HashMap<>();
+        filenameToUrl.put("filename1", "signUrl1");
+        filenameToUrl.put("filename2", "signUrl2");
+        given(dataService.getFilenameAndUrl(path)).willReturn(filenameToUrl);
 
-        mockMvc.perform(get("/data/info")
+        mockMvc.perform(get("/data/url")
                         .header("Authorization", "Bearer " + accessToken)
                         .param("projectName", projectName)
                         .param("category", category))
-                .andExpect(status().isOk())
-                .andExpect(content().string("{\"all\":25,\"classNameToSize\":{\"cat\":15,\"dog\":10}}"))
+                .andExpect(content().string("{\"filename2\":\"signUrl2\",\"filename1\":\"signUrl1\"}"))
                 .andDo(print());
     }
 
