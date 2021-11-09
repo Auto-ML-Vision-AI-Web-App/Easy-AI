@@ -3,7 +3,6 @@ package com.eavy.data;
 import com.eavy.account.Account;
 import com.eavy.common.ControllerTest;
 import com.eavy.token.TokenManager;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -27,7 +26,7 @@ class DataControllerTest extends ControllerTest {
     @SpyBean(name = "dataService")
     DataService dataService;
 
-    @DisplayName("프로젝트 속 모든 데이터가 저장된 URL 조회")
+    @DisplayName("프로젝트의 모든 데이터 URL 조회")
     @Test
     void getDataUrl() throws Exception {
         //given
@@ -46,6 +45,25 @@ class DataControllerTest extends ControllerTest {
                         .param("projectName", projectName)
                         .param("category", category))
                 .andExpect(content().string("{\"filename2\":\"signUrl2\",\"filename1\":\"signUrl1\"}"))
+                .andDo(print());
+    }
+
+    @DisplayName("프로젝트의 모든 데이터 URL 조회 실패 - 해당 프로젝트가 없거나 파일이 없는 경우")
+    @Test
+    void getDataUrlFail_noContent() throws Exception {
+        //given
+        Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String projectName = "prj1";
+        String category = "train";
+        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        given(dataService.getFilenameAndUrl(path)).willReturn(Map.of());
+
+        mockMvc.perform(get("/data/url")
+                        .header("Authorization", "Bearer " + accessToken)
+                        .param("projectName", projectName)
+                        .param("category", category))
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
