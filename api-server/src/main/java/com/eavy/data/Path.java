@@ -1,9 +1,14 @@
 package com.eavy.data;
 
+import javax.validation.constraints.NotBlank;
+
 public class Path {
     String userId;
+    @NotBlank
     String projectName;
+    @NotBlank
     String category;
+    @NotBlank
     String className;
 
     public Path() {

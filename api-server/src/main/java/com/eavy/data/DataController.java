@@ -1,17 +1,21 @@
 package com.eavy.data;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RequestMapping("/data")
@@ -26,7 +30,12 @@ public class DataController {
 
     @GetMapping("/url")
     public ResponseEntity getClassificationResult(Principal principal,
-                                                  Path path){
+                                                  @Valid Path path,
+                                                  BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream().map(e -> e.getCodes() != null ? e.getCodes()[0] : null).collect(Collectors.toCollection(ArrayList::new)));
+        }
+
         path.setUserId(principal.getName());
         Map<String, String> filenameToUrl = dataService.getFilenameAndUrl(path.toString());
         if(filenameToUrl.isEmpty()) {
@@ -38,8 +47,15 @@ public class DataController {
     @ResponseBody
     @GetMapping(produces = "application/zip")
     public void downloadDataAsZip(Principal principal,
-                                  Path path,
+                                  @Valid Path path,
+                                  BindingResult bindingResult,
                                   HttpServletResponse response) throws IOException {
+        if(bindingResult.hasErrors()) {
+            response.getOutputStream().println(bindingResult.getAllErrors().stream().map(e -> e.getCodes() != null ? e.getCodes()[0] : null).collect(Collectors.toCollection(ArrayList::new)).toString());
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            return;
+        }
+
         path.setUserId(principal.getName());
 
         response.setContentType("application/zip");
@@ -51,21 +67,14 @@ public class DataController {
 
     @PostMapping("/upload")
     public ResponseEntity uploadImageFiles(Principal principal,
-                                           Path path,
+                                           @Valid Path path,
+                                           BindingResult bindingResult,
                                            @NotEmpty @RequestParam MultipartFile[] files) throws IOException {
+        if(bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream().map(e -> e.getCodes() != null ? e.getCodes()[0] : null).collect(Collectors.toCollection(ArrayList::new)));
+        }
 
         path.setUserId(principal.getName());
-
-        // TODO projectName, className, category 모두 클래스로 분리하고 이에 대한 validation
-        if(path.getProjectName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Project name should not be empty");
-        }
-        if(path.getClassName() != null && path.getClassName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Class name should not be empty");
-        }
-        if(path.getCategory().isEmpty()) {
-            return ResponseEntity.badRequest().body("Category should not be empty");
-        }
 
         List<String> successList = new ArrayList<>();
         List<String> failList = new ArrayList<>();
