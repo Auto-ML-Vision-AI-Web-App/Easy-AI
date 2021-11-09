@@ -97,41 +97,4 @@ public class DataService {
         });
     }
 
-    public void deleteUser(String userId) {
-        deleteByPath(generatePath(userId));
-    }
-
-    public void deleteProject(String userId, String projectName) {
-        deleteByPath(generatePath(userId, projectName));
-    }
-
-    public String generatePath(String userId, String projectName, String category, String className) {
-        String path = "";
-        if (userId != null && !userId.isEmpty()) {
-            path += userId + "/";
-            if (projectName != null && !projectName.isEmpty()) {
-                path += projectName + "/";
-                if (category != null && !category.isEmpty()) {
-                    path += category + "/";
-                    if (className != null && !className.isEmpty()) {
-                        path += className + "/";
-                    }
-                }
-            }
-        }
-        return path;
-    }
-
-    public String generatePath(String userId, String projectName, String category) {
-        return generatePath(userId, projectName, category, null);
-    }
-
-    public String generatePath(String userId, String projectName) {
-        return generatePath(userId, projectName, null, null);
-    }
-
-    public String generatePath(String userId) {
-        return generatePath(userId, null, null, null);
-    }
-
 }

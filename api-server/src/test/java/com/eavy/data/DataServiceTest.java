@@ -14,24 +14,6 @@ class DataServiceTest {
 
     DataService dataService = new DataService(Mockito.mock(Storage.class));
 
-    @DisplayName("경로 생성")
-    @Test
-    void generatePath() {
-        String userId = "user1";
-        String projectName = "prj1";
-        String category = "train";
-        String className = "class1";
-
-        String path1 = dataService.generatePath(userId);
-        String path2 = dataService.generatePath(userId, projectName);
-        String path3 = dataService.generatePath(userId, projectName, category);
-        String path4 = dataService.generatePath(userId, projectName, category, className);
-        assertThat(path1).isEqualTo("user1/");
-        assertThat(path2).isEqualTo("user1/prj1/");
-        assertThat(path3).isEqualTo("user1/prj1/train/");
-        assertThat(path4).isEqualTo("user1/prj1/train/class1/");
-    }
-
     @DisplayName("이미지 파일 검사")
     @Test
     void isImageFile() throws IOException {

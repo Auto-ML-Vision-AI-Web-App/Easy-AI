@@ -6,6 +6,9 @@ public class Path {
     String category;
     String className;
 
+    public Path() {
+    }
+
     public Path(String userId, String projectName, String category, String className) {
         this.userId = userId;
         this.projectName = projectName;
