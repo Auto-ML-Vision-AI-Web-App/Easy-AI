@@ -8,7 +8,6 @@ public class Path {
     String projectName;
     @NotBlank
     String category;
-    @NotBlank
     String className;
 
     public Path() {
