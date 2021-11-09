@@ -30,6 +30,9 @@ public class DataController {
                                                   @RequestParam String category){
         String path = dataService.generatePath(principal.getName(), projectName, category);
         Map<String, String> filenameToUrl = dataService.getFilenameAndUrl(path);
+        if(filenameToUrl.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(filenameToUrl);
     }
 
