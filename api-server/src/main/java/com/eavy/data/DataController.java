@@ -1,7 +1,5 @@
 package com.eavy.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +11,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RequestMapping("/data")
@@ -20,22 +19,18 @@ import java.util.List;
 public class DataController {
 
     private final DataService dataService;
-    private final ResourceLoader resourceLoader;
-    private final ObjectMapper objectMapper;
 
-    public DataController(ResourceLoader resourceLoader, DataService dataService, ObjectMapper objectMapper) {
-        this.resourceLoader = resourceLoader;
+    public DataController(DataService dataService) {
         this.dataService = dataService;
-        this.objectMapper = objectMapper;
     }
 
-    @GetMapping("/size")
+    @GetMapping("/url")
     public ResponseEntity getClassificationResult(Principal principal,
                                                   @RequestParam String projectName,
                                                   @RequestParam String category){
         String path = dataService.generatePath(principal.getName(), projectName, category);
-        ClassDto classificationResult = dataService.getDataInfo(path);
-        return ResponseEntity.ok(classificationResult);
+        Map<String, String> filenameToUrl = dataService.getFilenameAndUrl(path);
+        return ResponseEntity.ok(filenameToUrl);
     }
 
     @ResponseBody
