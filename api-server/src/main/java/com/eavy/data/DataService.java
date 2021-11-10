@@ -56,13 +56,15 @@ public class DataService {
     private void zipFilesInPathAndWriteToRecursively(String path, ZipOutputStream zipOutputStream) throws IOException {
         Page<Blob> list = storage.list(bucketName, Storage.BlobListOption.prefix(path), Storage.BlobListOption.currentDirectory());
         for (Blob b : list.iterateAll()) {
-            if(b.getName().equals(path)) continue;
+            String name = b.getName();
+            if(name.equals(path)) continue;
+            String nameWithoutUserId = name.substring(name.indexOf('/') + 1);
             if (b.isDirectory()) {
-                zipOutputStream.putNextEntry(new ZipEntry(b.getName()));
+                zipOutputStream.putNextEntry(new ZipEntry(nameWithoutUserId));
                 zipOutputStream.closeEntry();
-                zipFilesInPathAndWriteToRecursively(b.getName(), zipOutputStream);
+                zipFilesInPathAndWriteToRecursively(name, zipOutputStream);
             } else {
-                ZipEntry zipEntry = new ZipEntry(b.getName());
+                ZipEntry zipEntry = new ZipEntry(nameWithoutUserId);
                 zipOutputStream.putNextEntry(zipEntry);
                 b.downloadTo(zipOutputStream);
             }
