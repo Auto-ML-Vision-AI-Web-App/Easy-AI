@@ -54,7 +54,7 @@ export default function AIResult(props) {
         const api = axios.create({
             baseURL: 'http://168.188.125.50:20017'
           })
-          api.get('/ai-downloading', {
+          api.post('/ai-downloading', {
             params: {
               username: 'h01010',
               projectname: projectName,
