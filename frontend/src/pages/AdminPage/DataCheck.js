@@ -30,19 +30,20 @@ const useStyles = makeStyles((theme) => ({
 function DataCheck({ location }) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const [dataset, setDataset] = useState(location.state!=undefined? location.state.dataset:props.dataset);
 
     return (
         <>
             <Grid item xs={12}>
-                {console.log(location.state.dataset)}
-                <DataResultChart dataset={location.state.dataset}></DataResultChart>
+                {console.log(dataset)}
+                <DataResultChart dataset={dataset}></DataResultChart>
                 <hr style={{ background: 'gray' }}></hr>
                 
                 <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Paper>
                   <center>
-                        <CustomListDown dataset={location.state.dataset}></CustomListDown>
+                        <CustomListDown dataset={dataset}></CustomListDown>
                     </center>
                   </Paper>
                 </Grid>
