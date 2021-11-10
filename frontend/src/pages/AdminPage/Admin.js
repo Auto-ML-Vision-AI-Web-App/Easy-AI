@@ -37,7 +37,7 @@ function Copyright() {
     <Typography variant="body2" color="textPrimary" align="center">
       {'Copyright © '}
       <a style={{color:"gray"}} href="seoyeonju1198@gmail.com/" >
-        h01010, 1031nice, yuki_iii
+        h01010
       </a>{' '}
       {new Date().getFullYear()}
       {'.'}
