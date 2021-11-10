@@ -130,9 +130,9 @@ function AIGenerate(props) {
       params: {
         username: 'h01010',
         projectname: projectName,
-        test_size: testSize,
-        max_trials: maxTrial,
-        epochs: epochs
+        test_size: checked?testSize:-1,
+        max_trials: checked?maxTrial:-1,
+        epochs: checked?epochs:-1
       }
     }).then(function (response) {
       props.setAIHistory(response.data);
