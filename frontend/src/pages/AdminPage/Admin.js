@@ -27,14 +27,17 @@ import Projects from './Projects';
 import AIGenerate from './AIGenerate';
 import AITest from './AITest';
 
+import '../../styles/css/Admin.css'
+
 import { Redirect, Switch, Route } from "react-router-dom";
+import { color } from 'highcharts';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textPrimary" align="center">
       {'Copyright © '}
       <a style={{color:"gray"}} href="seoyeonju1198@gmail.com/" >
-        h01010
+        h01010, 1031nice, yuki_iii
       </a>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -47,6 +50,10 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    //backgroundImage: 'radial-gradient(circle, #49cee0, #81d9e3, #aae3e8, #cfedee, #f1f6f6)',
+    //backgroundImage: 'linear-gradient(to bottom, #08aac1, #57bbc0, #84cbc3, #abdbca, #cfead8, #cfead8, #cfead8, #cfead8, #abdbca, #84cbc3, #57bbc0, #08aac1)'
+    //backgroundImage: 'linear-gradient(to right bottom, #08aac1, #57bbc0, #84cbc3, #abdbca, #cfead8, #cfead8, #cfead8, #cfead8, #abdbca, #84cbc3, #57bbc0, #08aac1)',
+    backgroundImage: 'radial-gradient(circle, #68d9e9, #92e1ed, #b5e9f1, #d4f1f6, #f2f9fa)',
   },
   footer: {
   },
@@ -66,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: '#04ABC1'
+    background: '#007688'
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -93,6 +100,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    background: '#007688',
+    color: 'white',
   },
   drawerPaperClose: {
     overflowX: 'hidden',

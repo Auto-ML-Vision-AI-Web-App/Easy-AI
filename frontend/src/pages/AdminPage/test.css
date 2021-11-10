@@ -1,11 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap');
 
 
-.listItemText {
-    font-family: 'Nanum Myeongjo', serif;
-    color: #068696;
+.listItemBtn:hover{
+    color: #A4A4A4;
 }
-
 .listItemBtn:active {
     color: #A4A4A4;
 }

@@ -51,7 +51,7 @@ function DataCheck({ location }) {
             <Grid item xs={12}>
                 <center>
                     <Link to="/admin/ai-making/">
-                        <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>생성된 모델로 테스트 하러 가기</Button>
+                        <Button style={{ color: 'white', backgroundColor: '#6F3637' }}>업로드한 데이터로 AI 생성하러 가기</Button>
                     </Link>
                 </center>
             </Grid>

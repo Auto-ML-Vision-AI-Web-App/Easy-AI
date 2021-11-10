@@ -20,6 +20,7 @@ import Slide from '@material-ui/core/Slide';
 import IconButton from '@material-ui/core/IconButton';
 import BuildIcon from '@material-ui/icons/Build';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -68,8 +69,7 @@ function AIGenerate(props) {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
   const [loadingStatus, setLoadingStatus] = React.useState(false);
-  const [prevBtnDisabled, setPrevBtnDisabled] = useState(false);
-  const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
+  const [traingTime, setTrainingTime] = useState("");
   const [open, setOpen] = React.useState(false);
   const [testSize, setTestSize] = useState(0.2);
   const [maxTrial, setMaxTrial] = useState(1);
@@ -92,31 +92,10 @@ function AIGenerate(props) {
     setOpen(false);
   };
 
-  function aiMaking(card_value) {
-    setLoadingStatus(true);
-    console.log("AI model making start");
-    handleClose();
-    const api = axios.create({
-      baseURL: 'http://168.188.125.50:20017'
-    })
-    api.post('/ai-making', {
-      params: {
-        modelName: card_value
-      }
-    }).then(function (response) {
-      props.setAIHistory(response.data);
-      setLoadingStatus(false);
-      history.push({
-        pathname: '/admin/ai-checking',
-      })
-    }).catch(function (error) {
-      console.log(error);
-    });
-  }
-
   //here
   const aiTrainingInfo = (e) =>{
-    console.log("starting ai server test - sending parameter")
+    setLoadingStatus(true);
+    console.log("request AI making time");
     const api = axios.create({
       baseURL: 'http://168.188.125.50:20017'
     })
@@ -129,14 +108,20 @@ function AIGenerate(props) {
         epochs: epochs
       }
     }).then(function (response) {
-      console.log(response);
+      console.log(response.data);
+      var seconds = response.data;
+      var hour = parseInt(seconds/3600);
+      var min = parseInt((seconds%3600)/60);
+      var sec = seconds%60;
+      const timeInfo = hour+"시간 "+min+"분 " + sec+"초 정도의 시간이 걸릴 예정입니다.....";
+      setTrainingTime(timeInfo)
       aiTrainingMaking();
     }).catch(function (error) {
       console.log(error);
     });
   }
   const aiTrainingMaking = (e) => {
-    console.log("starting ai server test - sending parameter")
+    console.log("request AI training");
     const api = axios.create({
       baseURL: 'http://168.188.125.50:20017'
     })
@@ -172,7 +157,8 @@ function AIGenerate(props) {
                 </div>
                 :
                 <div>
-                  <h4>생성할 AI 종류 : {props.AIType}</h4>
+                  <p>프로젝트 이름 : {projectName}</p>
+                  <p>생성할 AI 종류 : {props.AIType}</p>
                   <hr></hr>
                   <br></br><br></br>
 
@@ -190,16 +176,24 @@ function AIGenerate(props) {
                     <Grid item xs={4}>
                     <center>
                       <IconButton aria-label="ai make"
-                        onClick={aiTrainingMaking} className={classes.button}>
+                        onClick={aiTrainingInfo} className={classes.button}>
                         <PlayCircleFilledIcon style={{ fontSize: 130 }} />
                       </IconButton>
                       </center>
                       <center><p style={{ fontSize: 20 }}>AI 생성하기</p></center>
                     </Grid>
                   </Grid>
-                  {loadingStatus ?
-                    <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
-                    : <LinearProgress id="loadingProgress" style={{ display: 'none' }} />}
+                  <br></br>
+                  
+                  {!loadingStatus ?
+                    <LinearProgress id="loadingProgress" style={{ display: 'none' }} />
+                    : <Grid item xs={12}>
+                      <center>
+                        <LinearProgress id="loadingProgress" style={{ display: 'block' }} />
+                        <p>총 학습 시간을 예상하고 있습니다....</p>
+                        <p>{traingTime}</p>
+                      </center>
+                      </Grid>}
                 </div>
               }</div>
           </Paper>
