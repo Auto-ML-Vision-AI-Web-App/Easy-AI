@@ -154,9 +154,6 @@ function ImgMediaCard(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button size="small" color="primary">
-                    검색해보기
-        </Button>
             </CardActions>
         </Card>
     );

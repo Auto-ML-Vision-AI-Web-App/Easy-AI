@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap');
 
-
 .listItemBtn:hover{
-    color: #A4A4A4;
+    background-color: red;
 }
 .listItemBtn:active {
-    color: #A4A4A4;
+    color: white;
+}
+
+.listItemText{
+    color: white;
 }

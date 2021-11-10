@@ -18,9 +18,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
 import IconButton from '@material-ui/core/IconButton';
-import BuildIcon from '@material-ui/icons/Build';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
-import zIndex from '@material-ui/core/styles/zIndex';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -59,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 600,
+    minHeight: 700,
   },
 }));
 

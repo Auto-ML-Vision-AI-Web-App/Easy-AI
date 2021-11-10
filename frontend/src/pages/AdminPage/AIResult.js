@@ -65,7 +65,7 @@ export default function AIResult(props) {
             }
         })
             .then(function (res) {
-                //console.log(response.data);
+                console.log(res);
                 const disposition = res.attachment_filename;
                 let blob = new Blob([res.data], { type: 'application/zip' })
 

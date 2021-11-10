@@ -15,7 +15,7 @@ import './test.css';
 
 export const homeListItems = (
   <div>
-    <ListItem button component={Link} to="/">
+    <ListItem className="listItemBtn" button component={Link} to="/">
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
@@ -63,7 +63,7 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>My Projects</ListSubheader>
-    <ListItem button component={Link} to="/admin/projects">
+    <ListItem className="listItemBtn" button component={Link} to="/admin/projects">
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
