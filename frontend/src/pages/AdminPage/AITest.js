@@ -59,6 +59,7 @@ export default function AIResult(props) {
     const [dataset, setDataset] = useState([]);
     const [downloadFlag, setDownloadFlag] = useState(false);
     const [loadingStatus, setLoadingStatus] = React.useState(false);
+    const [testResult, setTestResult] = useState([]);
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -182,7 +183,7 @@ export default function AIResult(props) {
                                         </center>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        {/*<DataCheck dataset={result}></DataCheck>*/}
+                                        <DataCheck dataset={result}></DataCheck>
                                     </Grid>
                                 </Grid>:<></>}
                             </div>

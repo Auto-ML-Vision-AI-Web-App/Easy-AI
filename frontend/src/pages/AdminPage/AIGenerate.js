@@ -9,13 +9,17 @@ import InputAIMake from 'components/CustomInput/CustomInputAIMake.js';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from "components/CustomButtons/Button.js";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import BuildIcon from '@material-ui/icons/Build';
+
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -68,10 +72,16 @@ function AIGenerate(props) {
   const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
   const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [traingTime, setTrainingTime] = useState("");
-  const [open, setOpen] = React.useState(false);
   const [testSize, setTestSize] = useState(0.2);
   const [maxTrial, setMaxTrial] = useState(1);
   const [epochs, setEpochs] = useState(1);
+  const [checked, setChecked] = useState(false);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   const handleFormChange = (e) => {
     const id = e.target.getAttribute('id');
@@ -82,16 +92,9 @@ function AIGenerate(props) {
     else if (id == "Max Trial") setMaxTrial(e.target.value);
     else if (id == "Epochs") setEpochs(e.target.value);
   }
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   //here
-  const aiTrainingInfo = (e) =>{
+  const aiTrainingInfo = (e) => {
     setLoadingStatus(true);
     console.log("request AI making time");
     const api = axios.create({
@@ -101,17 +104,17 @@ function AIGenerate(props) {
       params: {
         username: 'h01010',
         projectname: projectName,
-        test_size: testSize,
-        max_trials: maxTrial,
-        epochs: epochs
+        test_size: checked?testSize:-1,
+        max_trials: checked?maxTrial:-1,
+        epochs: checked?epochs:-1
       }
     }).then(function (response) {
       console.log(response.data);
       var seconds = response.data;
-      var hour = parseInt(seconds/3600);
-      var min = parseInt((seconds%3600)/60);
-      var sec = seconds%60;
-      const timeInfo = hour+"시간 "+min+"분 " + sec+"초 정도의 시간이 걸릴 예정입니다.....";
+      var hour = parseInt(seconds / 3600);
+      var min = parseInt((seconds % 3600) / 60);
+      var sec = seconds % 60;
+      const timeInfo = hour + "시간 " + min + "분 " + sec + "초 정도의 시간이 걸릴 예정입니다.....";
       setTrainingTime(timeInfo)
       aiTrainingMaking();
     }).catch(function (error) {
@@ -141,6 +144,9 @@ function AIGenerate(props) {
       console.log(error);
     });
   }
+  const handleChange = (e) =>{
+    setChecked(!checked);
+  }
   return (
     <>
       <Grid container spacing={3}>
@@ -161,28 +167,43 @@ function AIGenerate(props) {
                   <br></br><br></br>
 
                   <Grid container alignItems="center" justifyContent="center" spacing={3}>
-                    <Grid item xs={8}>
-                      <Paper elevation={3}>
-                        <form onChange={handleFormChange}>
-                          <InputAIMake label="Test Size" defaultValue="0.2" helperText="자신이 넣은 데이터셋에서 학습에 제외시킬 데이터 비율입니다. 제외된 데이터는 AI를 성능을 평가하는 데에 사용됩니다."></InputAIMake>
-                          <InputAIMake label="Max Trial" defaultValue="1" helperText="생성을 시도하는 AI의 수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 선택 가능한 AI의 선택지가 늘어납니다."></InputAIMake>
-                          <InputAIMake label="Epochs" defaultValue="1" helperText="제일 성능이 좋은 AI가 데이터를 가지고 학습하는 횟수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 성능은 올라갈 수 있습니다."></InputAIMake>
-                        </form>
-                      </Paper>
+                    <Grid item xs={12}>
+                      <ListItem style={{ background: '#EDEDED' }} button onClick={handleClick}>
+                        <ListItemIcon>
+                          <BuildIcon></BuildIcon>
+                        </ListItemIcon>
+                        <ListItemText primary="AI 생성 세부설정" />
+                        {open ? <ExpandLess /> : <ExpandMore />}
+                      </ListItem>
+                      <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Paper elevation={3} style={{padding: '20px'}}>
+                        <FormControlLabel
+                        control={<Checkbox color="primary" onChange={handleChange} />}
+                        label="값 조정하기"
+                        />
+                          <br></br><br></br>
+                          <form onChange={handleFormChange}>
+                            <InputAIMake checked={!checked} label="Test Size" defaultValue="0.2" helperText="자신이 넣은 데이터셋에서 학습에 제외시킬 데이터 비율입니다. 제외된 데이터는 AI를 성능을 평가하는 데에 사용됩니다."></InputAIMake>
+                            <InputAIMake checked={!checked} label="Max Trial" defaultValue="1" helperText="생성을 시도하는 AI의 수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 선택 가능한 AI의 선택지가 늘어납니다."></InputAIMake>
+                            <InputAIMake checked={!checked} label="Epochs" defaultValue="1" helperText="제일 성능이 좋은 AI가 데이터를 가지고 학습하는 횟수입니다. 숫자가 클 수록 생성 시간이 길어지지만, 성능은 올라갈 수 있습니다."></InputAIMake>
+                          </form>
+                        </Paper>
+
+                      </Collapse>
                     </Grid>
 
-                    <Grid item xs={4}>
-                    <center>
-                      <IconButton aria-label="ai make"
-                        onClick={aiTrainingInfo} className={classes.button}>
-                        <PlayCircleFilledIcon style={{ fontSize: 130 }} />
-                      </IconButton>
+                    <Grid item xs={12}>
+                      <center>
+                        <IconButton aria-label="ai make"
+                          onClick={aiTrainingInfo} className={classes.button}>
+                          <PlayCircleFilledIcon style={{ fontSize: 130 }} />
+                        </IconButton>
                       </center>
                       <center><p style={{ fontSize: 20 }}>AI 생성하기</p></center>
                     </Grid>
                   </Grid>
                   <br></br>
-                  
+
                   {!loadingStatus ?
                     <LinearProgress id="loadingProgress" style={{ display: 'none' }} />
                     : <Grid item xs={12}>
@@ -191,38 +212,13 @@ function AIGenerate(props) {
                         <p>총 학습 시간을 예상하고 있습니다....</p>
                         <p>{traingTime}</p>
                       </center>
-                      </Grid>}
+                    </Grid>}
                 </div>
               }</div>
           </Paper>
         </Grid>
       </Grid>
 
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">{"정말 AI를 생성하시겠습니까?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            업로드한 데이터, 입력한 클래스를 기반으로 AI 생성과정을 시작할 것입니다.<br></br>
-            시작하기 전에 다시 한번 'AI 생성 관련 정보들'을 확인해주세요.
-            //시간 걸릴거라고 추가
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { aiMaking(props.AIType) }} color="primary">
-            생성하기
-          </Button>
-          <Button onClick={handleClose} color="secondary">
-            취소
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
