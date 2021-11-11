@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function DataCheck({ location }) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    const [dataset, setDataset] = useState(location.state!=undefined? location.state.dataset:props.dataset);
+    const [dataset, setDataset] = useState(location.state.dataset);
 
     return (
         <>

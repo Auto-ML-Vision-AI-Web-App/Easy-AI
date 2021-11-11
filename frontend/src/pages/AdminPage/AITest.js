@@ -14,12 +14,10 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import CustomButton from "components/CustomButtons/Button.js";
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import { setCookie, getCookie, removeCookie } from 'components/Cookie.js';
 
-import DataCheck from './DataCheck';
+import CustomListDown from "components/CustomDropdown/CustomListDown.js";
 
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import { fabClasses } from '@mui/material';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,23 +54,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AIResult(props) {
     const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
-    const [dataset, setDataset] = useState([]);
     const [downloadFlag, setDownloadFlag] = useState(false);
     const [loadingStatus, setLoadingStatus] = React.useState(false);
     const [testResult, setTestResult] = useState([]);
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    const addNewData = (_className, _path, _size) => {
-        console.log("_setData in AITest")
-        var data = new Object();
+    const addNewData = (_className, _dataSet, _dataSize) => {
+        console.log("dataUpload in AITest")
+      };
 
+    const addResultData = (_className, _dataSet, _dataSize) => {
+        console.log("_setData in DataUpload")
+        var data = new Object();
+    
         data.className = _className;
-        data.path = _path;
-        data.size = _size;
+        data.dataSet = _dataSet;
+        data.dataSize = _dataSize;
+        setTestResult(testResult.concat(data));
         console.log(data);
-        setDataset(dataset.concat(data));
-    };
+      };
 
     const startTest = (e) => {
         setLoadingStatus(true);
@@ -87,8 +88,13 @@ export default function AIResult(props) {
             }
         }).then(function (response) {
             console.log(response.data);
+            var result = response.data.result;
             setLoadingStatus(false);
             setDownloadFlag(true);
+            result.map((resultList, listIdx) => {
+                console.log(resultList);
+                addResultData(resultList.class, resultList.classifiedResult, resultList.classifiedResult.length);
+            });
         }).catch(function (error) {
             console.log(error);
         });
@@ -183,7 +189,7 @@ export default function AIResult(props) {
                                         </center>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <DataCheck dataset={result}></DataCheck>
+                                        <center><CustomListDown dataset={testResult}></CustomListDown></center>
                                     </Grid>
                                 </Grid>:<></>}
                             </div>
