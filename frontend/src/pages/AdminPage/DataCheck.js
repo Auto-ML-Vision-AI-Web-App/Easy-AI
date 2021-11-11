@@ -43,7 +43,7 @@ function DataCheck({ location }) {
                 <Grid item xs={12}>
                   <Paper>
                   <center>
-                        <CustomListDown dataset={dataset}></CustomListDown>
+                        <CustomListDown type="dataUpload"  dataset={dataset}></CustomListDown>
                     </center>
                   </Paper>
                 </Grid>

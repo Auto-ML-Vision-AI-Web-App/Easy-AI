@@ -189,7 +189,7 @@ export default function AIResult(props) {
                                         </center>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <center><CustomListDown dataset={testResult}></CustomListDown></center>
+                                        <center><CustomListDown type="aiTest" dataset={testResult}></CustomListDown></center>
                                     </Grid>
                                 </Grid>:<></>}
                             </div>

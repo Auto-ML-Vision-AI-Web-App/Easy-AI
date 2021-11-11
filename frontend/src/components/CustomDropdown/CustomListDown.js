@@ -64,6 +64,7 @@ function CollapseList(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [subTitle, setSubTitle] = React.useState(props.id === "success" ? "업로드에 성공한 데이터" : "업로드에 실패한 데이터");
+    const [icon, setIcon] = React.useState(props.id === "success" ? <CheckCircleOutlineIcon></CheckCircleOutlineIcon> : <HighlightOffIcon></HighlightOffIcon>)
     const [dataset, setDataset] = React.useState(props.dataset);
 
     const handleClick = () => {
