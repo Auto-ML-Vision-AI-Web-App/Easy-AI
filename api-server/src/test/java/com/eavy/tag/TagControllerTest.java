@@ -3,18 +3,16 @@ package com.eavy.tag;
 import com.eavy.common.ControllerTest;
 import com.eavy.project.Project;
 import com.eavy.project.ProjectRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WithMockUser
 class TagControllerTest extends ControllerTest {
@@ -54,15 +52,10 @@ class TagControllerTest extends ControllerTest {
         projectRepository.save(project1);
         projectRepository.save(project2);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String project1Json = objectMapper.writeValueAsString(project1);
-        String project2Json = objectMapper.writeValueAsString(project2);
-
-        mockMvc.perform(get("/tags")
-                        .param("tagName", "dog"))
+        mockMvc.perform(get("/tags/" + tag.getName()))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(project1Json)))
-                .andExpect(content().string(containsString(project2Json)))
+                .andExpect(jsonPath("$[*].name", hasItems(project1.getName(), project2.getName())))
+                .andExpect(jsonPath("$[*].name", hasSize(tag.getProjects().size())))
                 .andDo(print());
     }
 

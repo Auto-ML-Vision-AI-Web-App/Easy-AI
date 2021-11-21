@@ -1,12 +1,10 @@
 package com.eavy.tag;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -23,6 +21,15 @@ public class TagController {
     @GetMapping
     public List<String> getTags() {
         return tagRepository.findAll().stream().map(Tag::getName).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity getTag(@PathVariable String name) {
+        Optional<Tag> byName = tagRepository.findByName(name);
+        if(byName.isEmpty()) {
+            return ResponseEntity.badRequest().body("There is no project tagged as '" + name + "'");
+        }
+        return ResponseEntity.ok(byName.get().getProjects());
     }
 
 }
