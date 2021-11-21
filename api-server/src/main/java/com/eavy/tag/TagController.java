@@ -1,6 +1,7 @@
 package com.eavy.tag;
 
 import com.eavy.project.Project;
+import com.eavy.project.ProjectDto;
 import com.eavy.project.ProjectRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class TagController {
         if(byName.isEmpty()) {
             return ResponseEntity.badRequest().body("There is no project tagged as '" + name + "'");
         }
-        return ResponseEntity.ok(byName.get().getProjects());
+        return ResponseEntity.ok(byName.get().getProjects().stream().map(ProjectDto::new).collect(Collectors.toList()));
     }
 
     // 태그가 존재할 경우 기존 태그에 프로젝트 추가

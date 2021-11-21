@@ -1,5 +1,6 @@
 package com.eavy.tag;
 
+import com.eavy.account.Account;
 import com.eavy.common.ControllerTest;
 import com.eavy.project.Project;
 import com.eavy.project.ProjectRepository;
@@ -28,8 +29,8 @@ class TagControllerTest extends ControllerTest {
     @Test
     @DisplayName("모든 태그 조회")
     void getTags() throws Exception {
-        Tag tag1 = new Tag("dog");
-        Tag tag2 = new Tag("cat");
+        Tag tag1 = new Tag("t1");
+        Tag tag2 = new Tag("t2");
         tagRepository.save(tag1);
         tagRepository.save(tag2);
 
@@ -43,30 +44,34 @@ class TagControllerTest extends ControllerTest {
     @Test
     @DisplayName("특정 태그 조회")
     void getTag() throws Exception {
-        Project project1 = new Project("prj1");
-        Project project2 = new Project("prj2");
-        Tag tag = new Tag("dog");
+        Account account = new Account("u1", "cool-password");
+        Project project1 = new Project("p1");
+        Project project2 = new Project("p2");
+        Tag tag = new Tag("t1");
         project1.getTags().add(tag);
         project2.getTags().add(tag);
         tag.getProjects().add(project1);
         tag.getProjects().add(project2);
+        account.addProject(project1);
+        account.addProject(project2);
+        accountService.signUp(account);
         tagRepository.save(tag);
         projectRepository.save(project1);
         projectRepository.save(project2);
 
         mockMvc.perform(get("/tags/" + tag.getName()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].name", hasItems(project1.getName(), project2.getName())))
-                .andExpect(jsonPath("$[*].name", hasSize(tag.getProjects().size())))
+                .andExpect(jsonPath("$[*].projectName", hasItems(project1.getName(), project2.getName())))
+                .andExpect(jsonPath("$[*].projectName", hasSize(tag.getProjects().size())))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("태그 생성")
     void createTag() throws Exception {
-        Project project = new Project("prj1");
+        Project project = new Project("p1");
         projectRepository.save(project);
-        Tag tag = new Tag("dog");
+        Tag tag = new Tag("t1");
 
         mockMvc.perform(post("/tags")
                         .param("projectName", project.getName())
@@ -80,14 +85,14 @@ class TagControllerTest extends ControllerTest {
     @Test
     @DisplayName("기존 태그에 프로젝트 추가")
     void addProjectToExistingTag() throws Exception {
-        Tag tag = new Tag("dog");
+        Tag tag = new Tag("t1");
         tagRepository.save(tag);
-        Project project = new Project("prj1");
+        Project project = new Project("p1");
         projectRepository.save(project);
         tag.getProjects().add(project);
         project.getTags().add(tag);
 
-        Project newProject = new Project("prj2");
+        Project newProject = new Project("p2");
         projectRepository.save(newProject);
 
         mockMvc.perform(post("/tags")
