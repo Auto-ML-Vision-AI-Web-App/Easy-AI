@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -67,9 +65,8 @@ class TagControllerTest extends ControllerTest {
     @DisplayName("태그 생성")
     void createTag() throws Exception {
         Project project = new Project("prj1");
+        projectRepository.save(project);
         Tag tag = new Tag("dog");
-        project.getTags().add(tag);
-        tag.getProjects().add(project);
 
         mockMvc.perform(post("/tags")
                         .param("projectName", project.getName())
@@ -78,6 +75,29 @@ class TagControllerTest extends ControllerTest {
                 .andDo(print());
 
         assertThat(tagRepository.findByName(tag.getName())).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("기존 태그에 프로젝트 추가")
+    void addProjectToExistingTag() throws Exception {
+        Tag tag = new Tag("dog");
+        tagRepository.save(tag);
+        Project project = new Project("prj1");
+        projectRepository.save(project);
+        tag.getProjects().add(project);
+        project.getTags().add(tag);
+
+        Project newProject = new Project("prj2");
+        projectRepository.save(newProject);
+
+        mockMvc.perform(post("/tags")
+                        .param("projectName", newProject.getName())
+                        .param("tagName", tag.getName()))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        assertThat(tagRepository.findByName(tag.getName())).isNotEmpty();
+        assertThat(tag.getProjects().size()).isEqualTo(2);
     }
 
 }
