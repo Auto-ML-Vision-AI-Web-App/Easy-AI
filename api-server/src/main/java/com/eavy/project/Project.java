@@ -22,8 +22,15 @@ public class Project {
     @ManyToOne
     Account account;
     @ManyToMany
-    @JsonIgnore
     List<Tag> tags = new ArrayList<>();
+
+    public Project() {
+    }
+
+    public void addTag(Tag tag) {
+        this.getTags().add(tag);
+        tag.getProjects().add(this);
+    }
 
     @Override
     public String toString() {
@@ -31,11 +38,8 @@ public class Project {
                 "name='" + name + '\'' +
                 ", createTime=" + created +
                 ", lastModified=" + lastModified +
-                ", account=" + account +
+                ", account=" + account.getUserId() +
                 '}';
-    }
-
-    public Project() {
     }
 
     public Project(String name) {
