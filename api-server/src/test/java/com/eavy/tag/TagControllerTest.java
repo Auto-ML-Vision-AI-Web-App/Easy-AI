@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,6 +61,23 @@ class TagControllerTest extends ControllerTest {
                 .andExpect(jsonPath("$[*].name", hasItems(project1.getName(), project2.getName())))
                 .andExpect(jsonPath("$[*].name", hasSize(tag.getProjects().size())))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("태그 생성")
+    void createTag() throws Exception {
+        Project project = new Project("prj1");
+        Tag tag = new Tag("dog");
+        project.getTags().add(tag);
+        tag.getProjects().add(project);
+
+        mockMvc.perform(post("/tags")
+                        .param("projectName", project.getName())
+                        .param("tagName", tag.getName()))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        assertThat(tagRepository.findByName(tag.getName())).isNotEmpty();
     }
 
 }
