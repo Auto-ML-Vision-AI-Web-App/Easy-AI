@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 
+import DataTable from "components/Table.js";
+
 const styles = (theme) => ({
     root: {
         margin: 0,
@@ -53,11 +55,17 @@ const DialogActions = withStyles((theme) => ({
 
 export default function CustomizedDialogs(props) {
     const [open, setOpen] = React.useState(props.open);
+    const [modelList, setModelList] = React.useState();
 
     const handleClose = () => {
         props.handleClickClose();
         setOpen(false);
     };
+
+    const changeModelList = (modelArr) => {
+        setModelList(modelArr);
+        console.log(modelArr)
+    }
 
     return (
         <div>
@@ -68,9 +76,14 @@ export default function CustomizedDialogs(props) {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={3}>
-                        <ModelBtn></ModelBtn>
-                        <ModelBtn></ModelBtn>
-                        <ModelBtn></ModelBtn>
+                        <ModelBtn setModelList={changeModelList} label="label 1"></ModelBtn>
+                        <ModelBtn setModelList={changeModelList} label="label 2"></ModelBtn>
+                        <ModelBtn setModelList={changeModelList} label="label 3"></ModelBtn>
+                    </Grid>
+                    <br></br>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <DataTable rows={modelList}></DataTable>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
@@ -87,12 +100,21 @@ function ModelBtn(props) {
     const [modelBtn, setModelBtn] = React.useState(false);
 
     const chipClick = () =>{
+        const flag = !modelBtn;
+        console.log(flag);
+        const rows = [
+            { id: 1, model: 'Model 1', owner: 'h01010', accuracy: 0.8, loss: 0.1 },
+            { id: 2, model: 'Model 2', owner: 'dbdorud', accuracy: 0.7, loss: 0.2 },
+            { id: 3, model: 'Model 3', owner: 'donghun', accuracy: 0.99, loss: 0.13 },
+        ];
+        const rows2 = [];
+        flag? props.setModelList(rows): props.setModelList(rows2);
         setModelBtn(!modelBtn);
     };
 
     return (
         <Grid item>
-            <Chip clickable onClick={chipClick} color={modelBtn? "primary":""} label="model 1"/>
+            <Chip clickable onClick={chipClick} color={modelBtn? "primary":""} label={props.label}/>
         </Grid>
     );
 }
