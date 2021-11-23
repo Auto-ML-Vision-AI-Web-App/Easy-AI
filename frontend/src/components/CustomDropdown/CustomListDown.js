@@ -52,8 +52,9 @@ export default function CustomListDown(props) {
             </>
             :
             <>
-            <CollapseTestList id="class1" dataset={props.dataset}></CollapseTestList>
-            <CollapseTestList id="class2" dataset={props.dataset}></CollapseTestList>
+            {props.dataset.map((item, idx)=>
+                <CollapseTestList id={item.className} dataset={item.dataSet}></CollapseTestList>
+            )}
             </>
             }
         </List>
@@ -110,10 +111,10 @@ function CollapseList(props) {
 
 
 function CollapseTestList(props) {
+    console.log("CollapseTestList")
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [icon, setIcon] = React.useState(props.id === "class1" ? <DoneIcon></DoneIcon> : <DoneAllIcon></DoneAllIcon>)
-    const [subTitle, setSubTitle] = React.useState(props.id === "class1" ? "첫번째 클래스" : "두번째 클래스");
+    const [subTitle, setSubTitle] = React.useState(props.id);
     const [dataset, setDataset] = React.useState(props.dataset);
 
     const handleClick = () => {
@@ -122,6 +123,7 @@ function CollapseTestList(props) {
 
 
     useEffect(() => {
+        console.log("collapseTestList")
         console.log(props.dataset);
         return () => {
         };
@@ -132,25 +134,18 @@ function CollapseTestList(props) {
         <>
             <ListItem style={{background:'#EDEDED'}} button onClick={handleClick}>
                 <ListItemIcon>
-                    {icon}
+                    <DoneIcon></DoneIcon>
                 </ListItemIcon>
                 <ListItemText primary={subTitle} />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                        {/*dataset.map((item, idx) =>
-                            props.id==="success"?
-                            item.successList.map((img, imgIdx)=>
-                            <ListItem button className={classes.nested}>
-                                <ListItemText key={imgIdx} primary={item.className+": "+img}></ListItemText>
-                            </ListItem>)
-                            :
-                            item.failList.map((img, imgIdx)=>
-                            <ListItem button className={classes.nested}>
-                            <ListItemText key={imgIdx} primary={item.className+": "+img}></ListItemText>
-                            </ListItem>)
-                        )*/}
+                        {dataset.map((item, idx) =>
+                        <ListItem button className={classes.nested}>
+                            <ListItemText key={idx} primary={item}></ListItemText>
+                        </ListItem>
+                        )}
                 </List>
             </Collapse>
         </>

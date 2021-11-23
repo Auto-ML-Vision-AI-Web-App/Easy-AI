@@ -16,9 +16,10 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import { setCookie, getCookie, removeCookie } from 'components/Cookie.js';
 
+import Highcharts from "highcharts";
+import PieChart from "highcharts-react-official";
+
 import CustomListDown from "components/CustomDropdown/CustomListDown.js";
-
-
 
 const useStyles = makeStyles((theme) => ({
     stepButton: {
@@ -72,7 +73,7 @@ export default function AIResult(props) {
         data.dataSet = _dataSet;
         data.dataSize = _dataSize;
         setTestResult(testResult.concat(data));
-        console.log(data);
+        //console.log(data);
       };
 
     const startTest = (e) => {
@@ -189,6 +190,8 @@ export default function AIResult(props) {
                                         </center>
                                     </Grid>
                                     <Grid item xs={12}>
+                                        {/*<DataTestResultChart dataset={testResult}></DataTestResultChart>*/}
+                                        <hr style={{ background: 'gray' }}></hr>
                                         <center><CustomListDown type="aiTest" dataset={testResult}></CustomListDown></center>
                                     </Grid>
                                 </Grid>:<></>}
@@ -200,3 +203,80 @@ export default function AIResult(props) {
         </>
     );
 }
+
+
+/*React Chart*/
+class DataTestResultChart extends Component {
+
+    render() {
+      const jsonfile = this.props.dataset;
+      let total = 0;
+      jsonfile.map((data, idx) => (
+        total = total + data.dataSize
+      ));
+  
+      const options = {
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie'
+        },
+        title: {
+          text: '테스트 결과'
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.size}개</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b> : {point.percentage:.1f} %'
+            }
+          }
+        },
+  
+        series: [{
+          name: '데이터 수',
+          colorByPoint: true,
+          data: [{
+            name: jsonfile[0].className,
+            size: jsonfile[0].successSize,
+            y: jsonfile[0].successSize / total * 100,
+            color: '#08AAC1',
+            sliced: true,
+            selected: true
+          }, {
+            name: jsonfile[1].className,
+            size: jsonfile[1].successSize,
+            y: jsonfile[1].successSize / total * 100,
+            color: '#5C5C5C'
+          }]
+        }],
+  
+        responsive: {
+          rules: [{
+            condition: {
+              maxWidth: 300
+            },
+            chartOptions: {
+              legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom'
+              }
+            }
+          }]
+        }
+  
+      }
+      return (
+        <Fragment>
+          <PieChart highcharts={Highcharts} options={options} />
+        </Fragment>
+      );
+    }
+  }
