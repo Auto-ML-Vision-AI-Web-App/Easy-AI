@@ -64,9 +64,12 @@ export default function CustomizedDialogs(props) {
             <Dialog maxWidth='sm' fullWidth='true' onClose={handleClose} aria-labelledby="customized-dialog-title" open={props.open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                     사전 학습 모델 List
+                    <p>* 모델은 하나만 선택해주세요</p>
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={3}>
+                        <ModelBtn></ModelBtn>
+                        <ModelBtn></ModelBtn>
                         <ModelBtn></ModelBtn>
                     </Grid>
                 </DialogContent>
@@ -81,15 +84,15 @@ export default function CustomizedDialogs(props) {
 }
 
 function ModelBtn(props) {
-    const [modelBtn, setModelBtn] = React.useState("");
+    const [modelBtn, setModelBtn] = React.useState(false);
 
     const chipClick = () =>{
-        setModelBtn("primary");
+        setModelBtn(!modelBtn);
     };
 
     return (
         <Grid item>
-            <Chip clickable onClick={chipClick} color={modelBtn} label="model 1"/>
+            <Chip clickable onClick={chipClick} color={modelBtn? "primary":""} label="model 1"/>
         </Grid>
     );
 }
