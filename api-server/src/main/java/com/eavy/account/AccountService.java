@@ -28,9 +28,9 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account signUp(Account account) {
-        Optional<Account> byUsername = accountRepository.findByUserId(account.getUserId());
+        Optional<Account> byUsername = accountRepository.findByUsername(account.getUsername());
         if(byUsername.isPresent()) {
-            throw new RuntimeException("username '" + account.getUserId() + "' already exists");
+            throw new RuntimeException("username '" + account.getUsername() + "' already exists");
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
@@ -38,13 +38,13 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserId(userId)
+        Account account = accountRepository.findByUsername(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " not found in the database"));
-        return new User(account.userId, account.getPassword(), Collections.<SimpleGrantedAuthority>emptyList());
+        return new User(account.getUsername(), account.getPassword(), Collections.<SimpleGrantedAuthority>emptyList());
     }
 
     public Optional<Account> findByUserId(String userId) {
-        return this.accountRepository.findByUserId(userId);
+        return this.accountRepository.findByUsername(userId);
     }
 
 }

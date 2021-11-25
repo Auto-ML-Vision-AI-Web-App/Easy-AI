@@ -2,11 +2,9 @@ package com.eavy.project;
 
 import com.eavy.account.Account;
 import com.eavy.tag.Tag;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +14,17 @@ public class Project {
     @Id
     @GeneratedValue
     Integer id;
-    String name;
+    String projectName;
     LocalDate created = LocalDate.now();
     LocalDate lastModified = LocalDate.now();
     @ManyToOne
     Account account;
     @ManyToMany
     List<Tag> tags = new ArrayList<>();
+    @ElementCollection
+    List<String> classes = new ArrayList<>();
+    double accuracy;
+    double loss;
 
     public Project() {
     }
@@ -32,18 +34,8 @@ public class Project {
         tag.getProjects().add(this);
     }
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "name='" + name + '\'' +
-                ", createTime=" + created +
-                ", lastModified=" + lastModified +
-                ", account=" + account.getUserId() +
-                '}';
-    }
-
     public Project(String name) {
-        this.name = name;
+        this.projectName = name;
     }
 
     public LocalDate getCreated() {
@@ -78,12 +70,12 @@ public class Project {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectName(String name) {
+        this.projectName = name;
     }
 
     public Account getAccount() {
@@ -92,5 +84,29 @@ public class Project {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<String> classes) {
+        this.classes = classes;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public double getLoss() {
+        return loss;
+    }
+
+    public void setLoss(double loss) {
+        this.loss = loss;
     }
 }

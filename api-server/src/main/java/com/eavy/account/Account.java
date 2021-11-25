@@ -17,14 +17,14 @@ public class Account {
     @GeneratedValue
     Integer id;
     @NotEmpty
-    String userId;
+    String username;
     @NotEmpty
     String password;
     @OneToMany(mappedBy = "account")
     List<Project> projects = new ArrayList<>();
 
-    public Account(String userId, String password) {
-        this.userId = userId;
+    public Account(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -39,12 +39,12 @@ public class Account {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String username) {
-        this.userId = username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

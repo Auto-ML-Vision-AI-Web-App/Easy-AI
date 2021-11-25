@@ -31,10 +31,10 @@ class DataControllerTest extends ControllerTest {
     void getDataUrl() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String projectName = "prj1";
         String category = "train";
-        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        String path = account.getUsername() + "/" + projectName + "/" + category + "/";
         Map<String, String> filenameToUrl = new HashMap<>();
         filenameToUrl.put("filename1", "signUrl1");
         filenameToUrl.put("filename2", "signUrl2");
@@ -53,10 +53,10 @@ class DataControllerTest extends ControllerTest {
     void getDataUrlFail_noContent() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String projectName = "prj1";
         String category = "train";
-        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        String path = account.getUsername() + "/" + projectName + "/" + category + "/";
         given(dataService.getFilenameAndUrl(path)).willReturn(Map.of());
 
         mockMvc.perform(get("/data/url")
@@ -71,10 +71,10 @@ class DataControllerTest extends ControllerTest {
     @Test
     void fileDownloadAsZip() throws Exception {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String projectName = "prj2";
         String category = "test";
-        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        String path = account.getUsername() + "/" + projectName + "/" + category + "/";
         // method argument type 맞추지 않으면 UnfinishedStubbingException
         doNothing().when(dataService).zipFilesInPathAndWriteTo(anyString(), any(OutputStream.class));
 
@@ -91,11 +91,11 @@ class DataControllerTest extends ControllerTest {
     void fileUpload() throws Exception {
         // given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String projectName = "test";
         String category = "train";
         String className = "dog";
-        String path = account.getUserId() + "/" + projectName + "/" + category + "/" + className + "/";
+        String path = account.getUsername() + "/" + projectName + "/" + category + "/" + className + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
@@ -124,10 +124,10 @@ class DataControllerTest extends ControllerTest {
     void fileUploadWithoutClassName() throws Exception {
         // given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String projectName = "hello";
         String category = "test";
-        String path = account.getUserId() + "/" + projectName + "/" + category + "/";
+        String path = account.getUsername() + "/" + projectName + "/" + category + "/";
         String filename1 = "test_file.jpg";
         MockMultipartFile mockFile1 = new MockMultipartFile("files", filename1, "image/jpeg", getClass().getResourceAsStream("/images/test-image.jpg"));
         String filename2 = "test_file.png";
@@ -154,7 +154,7 @@ class DataControllerTest extends ControllerTest {
     void fileUploadFail_NotImage() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String filename = "test-text.txt";
         MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
         String className = "dog";
@@ -181,7 +181,7 @@ class DataControllerTest extends ControllerTest {
     void fileUploadFail_noFiles() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
 
         mockMvc.perform(multipart("/data/upload")
                         .header("Authorization", "Bearer " + accessToken)
@@ -197,7 +197,7 @@ class DataControllerTest extends ControllerTest {
     void fileUploadFail_emptyProjectName() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String filename = "test-text.txt";
         MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
 
@@ -216,7 +216,7 @@ class DataControllerTest extends ControllerTest {
     void fileUploadFail_NotValidToken() throws Exception {
         //given
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
         String filename = "test-text.txt";
         MockMultipartFile mockFile = new MockMultipartFile("files", filename, "text/plain", "hello world".getBytes());
 

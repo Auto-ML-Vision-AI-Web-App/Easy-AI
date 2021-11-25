@@ -1,7 +1,6 @@
 package com.eavy;
 
 import com.eavy.account.Account;
-import com.eavy.account.AccountRepository;
 import com.eavy.account.AccountService;
 import com.eavy.project.Project;
 import com.eavy.project.ProjectRepository;
@@ -9,22 +8,19 @@ import com.eavy.tag.Tag;
 import com.eavy.tag.TagRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class AppRunner implements ApplicationRunner {
 
-    private final ResourceLoader resourceLoader;
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
 
-    public AppRunner(ResourceLoader resourceLoader, AccountService accountService, AccountRepository accountRepository, TagRepository tagRepository, ProjectRepository projectRepository) {
-        this.resourceLoader = resourceLoader;
+    public AppRunner(AccountService accountService, TagRepository tagRepository, ProjectRepository projectRepository) {
         this.accountService = accountService;
-        this.accountRepository = accountRepository;
         this.tagRepository = tagRepository;
         this.projectRepository = projectRepository;
     }
@@ -38,24 +34,53 @@ public class AppRunner implements ApplicationRunner {
         accountService.signUp(account2);
         accountService.signUp(account3);
 
-        Project prj1 = new Project("dog_cat");
-        Project prj2 = new Project("cat_frog");
-        projectRepository.save(prj1);
-        projectRepository.save(prj2);
-        Tag tag1 = new Tag("dog");
-        Tag tag2 = new Tag("cat");
-        Tag tag3 = new Tag("frog");
-        tagRepository.save(tag1);
-        tagRepository.save(tag2);
-        tagRepository.save(tag3);
-        prj1.addTag(tag1);
-        prj1.addTag(tag2);
-        prj2.addTag(tag2);
-        prj2.addTag(tag3);
-        account2.addProject(prj1);
-        account2.addProject(prj2);
+        Project prj1 = new Project("pretrained_model_test");
+        prj1.setLoss(0.02);
+        prj1.setAccuracy(0.99);
+        prj1.setClasses(List.of("daisy", "sunflower"));
+
+        Project prj2 = new Project("flower_class");
+        prj2.setLoss(0.05);
+        prj2.setAccuracy(0.88);
+        prj2.setClasses(List.of("dandelion", "tulip"));
+
+        Project prj3 = new Project("rose_and_daisy");
+        prj3.setLoss(0.08);
+        prj3.setAccuracy(0.77);
+        prj3.setClasses(List.of("rose", "daisy"));
 
         projectRepository.save(prj1);
         projectRepository.save(prj2);
+        projectRepository.save(prj3);
+
+        Tag tag1 = new Tag("꽃");
+        Tag tag2 = new Tag("해바라기");
+        Tag tag3 = new Tag("꽃분류");
+        Tag tag4 = new Tag("장미");
+        Tag tag5 = new Tag("데이지");
+        tagRepository.save(tag1);
+        tagRepository.save(tag2);
+        tagRepository.save(tag3);
+        tagRepository.save(tag4);
+        tagRepository.save(tag5);
+
+        prj1.addTag(tag1);
+        prj1.addTag(tag2);
+        prj1.addTag(tag3);
+
+        prj2.addTag(tag1);
+        prj2.addTag(tag3);
+
+        prj3.addTag(tag1);
+        prj3.addTag(tag4);
+        prj3.addTag(tag5);
+
+        account1.addProject(prj1);
+        account2.addProject(prj2);
+        account3.addProject(prj3);
+
+        projectRepository.save(prj1);
+        projectRepository.save(prj2);
+        projectRepository.save(prj3);
     }
 }

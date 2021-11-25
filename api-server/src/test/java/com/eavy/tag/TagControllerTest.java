@@ -1,6 +1,7 @@
 package com.eavy.tag;
 
 import com.eavy.account.Account;
+import com.eavy.account.AccountRepository;
 import com.eavy.common.ControllerTest;
 import com.eavy.project.Project;
 import com.eavy.project.ProjectRepository;
@@ -25,6 +26,8 @@ class TagControllerTest extends ControllerTest {
     TagRepository tagRepository;
     @Autowired
     ProjectRepository projectRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Test
     @DisplayName("모든 태그 조회")
@@ -61,7 +64,7 @@ class TagControllerTest extends ControllerTest {
 
         mockMvc.perform(get("/tags/" + tag.getName()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].projectName", hasItems(project1.getName(), project2.getName())))
+                .andExpect(jsonPath("$[*].projectName", hasItems(project1.getProjectName(), project2.getProjectName())))
                 .andExpect(jsonPath("$[*].projectName", hasSize(tag.getProjects().size())))
                 .andDo(print());
     }
@@ -69,12 +72,14 @@ class TagControllerTest extends ControllerTest {
     @Test
     @DisplayName("태그 생성")
     void createTag() throws Exception {
+        Account account = accountService.signUp(new Account("user", "password"));
         Project project = new Project("p1");
         projectRepository.save(project);
+        account.addProject(project);
         Tag tag = new Tag("t1");
 
         mockMvc.perform(post("/tags")
-                        .param("projectName", project.getName())
+                        .param("projectName", project.getProjectName())
                         .param("tagName", tag.getName()))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -87,16 +92,20 @@ class TagControllerTest extends ControllerTest {
     void addProjectToExistingTag() throws Exception {
         Tag tag = new Tag("t1");
         tagRepository.save(tag);
+
+        Account account = accountService.signUp(new Account("user", "password"));
+
         Project project = new Project("p1");
         projectRepository.save(project);
-        tag.getProjects().add(project);
-        project.getTags().add(tag);
-
+        project.addTag(tag);
         Project newProject = new Project("p2");
         projectRepository.save(newProject);
 
+        account.addProject(project);
+        account.addProject(newProject);
+
         mockMvc.perform(post("/tags")
-                        .param("projectName", newProject.getName())
+                        .param("projectName", newProject.getProjectName())
                         .param("tagName", tag.getName()))
                 .andExpect(status().isOk())
                 .andDo(print());
