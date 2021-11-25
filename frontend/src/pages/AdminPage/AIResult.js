@@ -67,12 +67,12 @@ export default function AIResult(props) {
             .then(function (res) {
                 console.log(res);
                 const disposition = res.attachment_filename;
-                let blob = new Blob([res.data], { type: 'application/zip' })
+                let blob = new Blob([res.data], { type: 'application/x-hdf5' })
 
                 const downloadUrl = URL.createObjectURL(blob)
                 let a = document.createElement("a");
                 a.href = downloadUrl;
-                a.download = 'my-model.zip'
+                a.download = 'my-model.h5'
                 document.body.appendChild(a);
                 a.click();
             }).catch(function (error) {

@@ -102,6 +102,7 @@ function AIGenerate(props) {
     })
     api.post('/ai-training/info', {
       params: {
+        pretrained_flag: false,
         username: 'h01010',
         projectname: projectName,
         test_size: checked?testSize:-1,
@@ -128,6 +129,7 @@ function AIGenerate(props) {
     })
     api.post('/ai-training/making', {
       params: {
+        pretrained_flag: false,
         username: 'h01010',
         projectname: projectName,
         test_size: checked?testSize:-1,
@@ -135,7 +137,8 @@ function AIGenerate(props) {
         epochs: checked?epochs:-1
       }
     }).then(function (response) {
-      props.setAIHistory(response.data);
+      console.log(response.data);
+      props.setAIHistory(response.data.history[0]);
       setLoadingStatus(false);
       history.push({
         pathname: '/admin/ai-checking',
