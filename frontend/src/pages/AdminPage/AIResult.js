@@ -167,7 +167,7 @@ class AccuracyHighCharts extends Component {
         const jsonfile = this.props.historyJson;
         const options = {
             title: {
-                text: 'Model history - Accuracy'
+                text: '모델 성능 - 정확도'
             },
 
             yAxis: {
@@ -179,7 +179,7 @@ class AccuracyHighCharts extends Component {
 
             xAxis: {
                 title: {
-                    text: 'epoch'
+                    text: '학습수'
                 }
             },
 
@@ -199,10 +199,10 @@ class AccuracyHighCharts extends Component {
             },
 
             series: [{
-                name: 'accuracy',
+                name: '학습도',
                 data: jsonfile.accuracy
             }, {
-                name: 'val_accuracy',
+                name: '학습 수 별 정확도',
                 data: jsonfile.val_accuracy
             }],
 
@@ -237,7 +237,7 @@ class LossHighCharts extends Component {
         const jsonfile = this.props.historyJson;
         const options = {
             title: {
-                text: 'Model history - Loss'
+                text: '모델 성능 - 손실값'
             },
 
             yAxis: {
@@ -249,7 +249,7 @@ class LossHighCharts extends Component {
 
             xAxis: {
                 title: {
-                    text: 'epoch'
+                    text: '학습수'
                 }
             },
 
@@ -269,10 +269,10 @@ class LossHighCharts extends Component {
             },
 
             series: [{
-                name: 'loss',
+                name: '손실값',
                 data: jsonfile.loss
             }, {
-                name: 'val_loss',
+                name: '학습 수 별 손실값',
                 data: jsonfile.val_loss
             }],
 
