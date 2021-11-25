@@ -12,10 +12,11 @@ import Paper from '@material-ui/core/Paper';
 
 const checkColumns = [
     { field: 'id', headerName: 'ID' },
-    { field: 'model', headerName: 'Model' },
+    { field: 'model', headerName: 'Model', width:180},
     { field: 'owner', headerName: 'Owner' },
-    { field: 'accuracy', headerName: 'Accuracy', type: 'number' },
-    { field: 'loss', headerName: 'Loss', type: 'number' },
+    { field: 'accuracy', headerName: '정확도', type: 'number' },
+    { field: 'loss', headerName: '손실값', type: 'number' },
+    { field: 'label', headerName: 'Label', width:200},
 ];
 
 
@@ -27,7 +28,7 @@ export function CheckTable(props) {
             <DataGrid
                 rows={props.rows}
                 columns={checkColumns}
-                pageSize={5}
+                pageSize={10}
                 rowHeight={35}
                 headerHeight={40}
                 checkboxSelection

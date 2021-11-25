@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -47,9 +48,26 @@ export default function AIChoose(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const [open, setOpen] = React.useState(false);
+    const [tags, setTags] = React.useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
+        const api = axios.create({
+            baseURL: 'http://localhost:8080'
+        })
+        api.get('/tags', {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('refresh-token'),
+            }
+        }).then(function (response) {
+            console.log(response.data);
+            response.data.map((tag, idx) =>{
+                console.log(tag)
+            })
+            setTags(response.data);
+        }).catch(function (error) {
+            console.log(error);
+        });
     };
 
     const handleClickClose = () =>{
@@ -125,7 +143,7 @@ export default function AIChoose(props) {
                 </Grid>
             </Grid>
 
-            <CustomizedDialogs handleClickClose={handleClickClose} open={open}></CustomizedDialogs>
+            <CustomizedDialogs tags={tags} handleClickClose={handleClickClose} open={open}></CustomizedDialogs>
         </>
     );
 }
