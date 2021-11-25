@@ -47,7 +47,7 @@ export default function LoginPage(props) {
     })
     api.post('/signin', null, {
       params: {
-        userId: userId,
+        username: userId,
         password: userPw
       }
     }).then(function (response) {
