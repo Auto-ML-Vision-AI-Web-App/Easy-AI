@@ -38,20 +38,34 @@ public class AppRunner implements ApplicationRunner {
         accountService.signUp(account2);
         accountService.signUp(account3);
 
-        Project prj1 = new Project("dog_cat");
-        Project prj2 = new Project("cat_frog");
+        Project prj1 = new Project("pretrained_model_test");
+        Project prj2 = new Project("flower_class");
+        Project prj3 = new Project("rose_and_daisy");
         projectRepository.save(prj1);
         projectRepository.save(prj2);
-        Tag tag1 = new Tag("dog");
-        Tag tag2 = new Tag("cat");
-        Tag tag3 = new Tag("frog");
+        projectRepository.save(prj3);
+        Tag tag1 = new Tag("꽃");
+        Tag tag2 = new Tag("해바라기");
+        Tag tag3 = new Tag("꽃분류");
+        Tag tag4 = new Tag("장미");
+        Tag tag5 = new Tag("데이지");
         tagRepository.save(tag1);
         tagRepository.save(tag2);
         tagRepository.save(tag3);
+        tagRepository.save(tag4);
+        tagRepository.save(tag5);
+
         prj1.addTag(tag1);
         prj1.addTag(tag2);
-        prj2.addTag(tag2);
+        prj1.addTag(tag3);
+
+        prj2.addTag(tag1);
         prj2.addTag(tag3);
+
+        prj3.addTag(tag1);
+        prj3.addTag(tag4);
+        prj3.addTag(tag5);
+
         account2.addProject(prj1);
         account2.addProject(prj2);
 
