@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 
-import DataTable from "components/Table.js";
+import * as DataTable from "components/Table.js";
 
 const styles = (theme) => ({
     root: {
@@ -83,7 +83,7 @@ export default function CustomizedDialogs(props) {
                     <br></br>
                     <br></br>
                     <Grid container spacing={3}>
-                        <DataTable rows={modelList}></DataTable>
+                        <DataTable.CheckTable rows={modelList}></DataTable.CheckTable>
                     </Grid>
                 </DialogContent>
                 <DialogActions>

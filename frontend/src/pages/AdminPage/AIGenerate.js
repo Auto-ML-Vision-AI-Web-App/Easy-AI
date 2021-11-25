@@ -137,8 +137,8 @@ function AIGenerate(props) {
         epochs: checked?epochs:-1
       }
     }).then(function (response) {
-      console.log(response.data);
-      props.setAIHistory(response.data.history[0]);
+      console.log(response.data.pretrained_info);
+      props.setAIResult(response.data.history[0], response.data.pretrained_info);
       setLoadingStatus(false);
       history.push({
         pathname: '/admin/ai-checking',

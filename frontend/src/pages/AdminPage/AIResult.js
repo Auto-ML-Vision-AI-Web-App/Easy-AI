@@ -14,6 +14,8 @@ import CustomButton from "components/CustomButtons/Button.js";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
+import * as DataTable from "components/Table.js";
+
 
 const useStyles = makeStyles((theme) => ({
     stepButton: {
@@ -46,7 +48,8 @@ export default function AIResult(props) {
     const [projectName, setProjectName] = useState(localStorage.getItem("projectName") == undefined ? "" : localStorage.getItem("projectName"));
     const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
     const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
-
+    console.log("hhhhhheeeeeere");
+    console.log(props.AIPretrainedInfo);
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper);
     //const getParams = this.props.location.state.result_model;
@@ -128,6 +131,16 @@ export default function AIResult(props) {
                                     <Link to={`/admin/ai-testing`} className={classes.link}>
                                         <CustomButton style={{ color: 'white', backgroundColor: '#6F3637' }}>생성된 모델로 테스트 하러 가기</CustomButton>
                                     </Link>
+                                    <br></br>
+                                    <DataTable.ModelTable
+                                        final_accuracy={props.AIPretrainedInfo[1].final_accuracy}
+                                        final_loss={props.AIPretrainedInfo[1].final_loss}
+                                    ></DataTable.ModelTable>
+                                    <div>
+                                        {props.AIPretrainedInfo[1].final_accuracy>=0.7?
+                                            <center><div>정확도가 0.7 이상입니다.</div></center> : <></>
+                                        }
+                                    </div>
                                     <hr style={{ color: 'gray' }}></hr>
                                     <Grid container spacing={3}>
                                         <Grid item xs={6}>

@@ -142,6 +142,7 @@ export default function Admin() {
   const [AIType, setAIType_Admin] = React.useState("");
   const [projectName, setProjectName_Admin] = React.useState("");
   const [AIHistory, setAIHistory_Admin] = React.useState();
+  const [AIPretrainedInfo, setPretrainedInfo_Admin] = React.useState();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -154,8 +155,9 @@ export default function Admin() {
     setProjectName_Admin(_projectName);
   }
 
-  const setAIHistory = (_history) => { 
+  const setAIResult = (_history, _pretrained_infoained) => { 
     setAIHistory_Admin(_history);
+    setPretrainedInfo_Admin(_pretrained_infoained);
   }
 
   return (
@@ -223,7 +225,7 @@ export default function Admin() {
             component={()=>
             <AIGenerate
               AIType={AIType}
-              setAIHistory={setAIHistory}
+              setAIResult={setAIResult}
             ></AIGenerate>}
           />
           
@@ -231,6 +233,7 @@ export default function Admin() {
             <AIResult
               projectName={projectName}
               AIType={AIType}
+              AIPretrainedInfo={AIPretrainedInfo}
               AIHistory={AIHistory}
             ></AIResult>}
           />
