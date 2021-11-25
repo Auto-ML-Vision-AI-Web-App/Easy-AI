@@ -14,7 +14,7 @@ public class Project {
     @Id
     @GeneratedValue
     Integer id;
-    String name;
+    String projectName;
     LocalDate created = LocalDate.now();
     LocalDate lastModified = LocalDate.now();
     @ManyToOne
@@ -34,18 +34,8 @@ public class Project {
         tag.getProjects().add(this);
     }
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "name='" + name + '\'' +
-                ", createTime=" + created +
-                ", lastModified=" + lastModified +
-                ", account=" + account.getUserId() +
-                '}';
-    }
-
     public Project(String name) {
-        this.name = name;
+        this.projectName = name;
     }
 
     public LocalDate getCreated() {
@@ -80,12 +70,12 @@ public class Project {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectName(String name) {
+        this.projectName = name;
     }
 
     public Account getAccount() {

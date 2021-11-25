@@ -64,7 +64,7 @@ class TagControllerTest extends ControllerTest {
 
         mockMvc.perform(get("/tags/" + tag.getName()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].projectName", hasItems(project1.getName(), project2.getName())))
+                .andExpect(jsonPath("$[*].projectName", hasItems(project1.getProjectName(), project2.getProjectName())))
                 .andExpect(jsonPath("$[*].projectName", hasSize(tag.getProjects().size())))
                 .andDo(print());
     }
@@ -79,7 +79,7 @@ class TagControllerTest extends ControllerTest {
         Tag tag = new Tag("t1");
 
         mockMvc.perform(post("/tags")
-                        .param("projectName", project.getName())
+                        .param("projectName", project.getProjectName())
                         .param("tagName", tag.getName()))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -105,7 +105,7 @@ class TagControllerTest extends ControllerTest {
         account.addProject(newProject);
 
         mockMvc.perform(post("/tags")
-                        .param("projectName", newProject.getName())
+                        .param("projectName", newProject.getProjectName())
                         .param("tagName", tag.getName()))
                 .andExpect(status().isOk())
                 .andDo(print());
