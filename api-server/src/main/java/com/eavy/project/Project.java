@@ -21,6 +21,10 @@ public class Project {
     Account account;
     @ManyToMany
     List<Tag> tags = new ArrayList<>();
+    @ElementCollection
+    List<String> classes = new ArrayList<>();
+    double accuracy;
+    double loss;
 
     public Project() {
     }
@@ -90,5 +94,29 @@ public class Project {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<String> classes) {
+        this.classes = classes;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public double getLoss() {
+        return loss;
+    }
+
+    public void setLoss(double loss) {
+        this.loss = loss;
     }
 }
