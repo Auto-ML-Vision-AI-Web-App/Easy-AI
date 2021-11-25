@@ -2,8 +2,8 @@ package com.eavy.project;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
-    Optional<Project> findByName(String name);
+    List<Project> findAllByName(String name);
 }

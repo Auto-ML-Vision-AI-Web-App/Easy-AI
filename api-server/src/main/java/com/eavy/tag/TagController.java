@@ -1,11 +1,14 @@
 package com.eavy.tag;
 
+import com.eavy.account.Account;
+import com.eavy.account.AccountService;
 import com.eavy.project.Project;
 import com.eavy.project.ProjectDto;
 import com.eavy.project.ProjectRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,10 +20,12 @@ public class TagController {
 
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
+    private final AccountService accountService;
 
-    public TagController(TagRepository tagRepository, ProjectRepository projectRepository) {
+    public TagController(TagRepository tagRepository, ProjectRepository projectRepository, AccountService accountService) {
         this.tagRepository = tagRepository;
         this.projectRepository = projectRepository;
+        this.accountService = accountService;
     }
 
     @GetMapping
@@ -40,16 +45,19 @@ public class TagController {
     // 태그가 존재할 경우 기존 태그에 프로젝트 추가
     // 존재하지 않는 경우 새로 태그 만들고 프로젝트 추가
     @PostMapping
-    public ResponseEntity createOrUpdateTag(@RequestParam String projectName,
+    public ResponseEntity createOrUpdateTag(Principal principal,
+                                            @RequestParam String projectName,
                                             @RequestParam String tagName) {
-        Optional<Project> optionalProject = projectRepository.findByName(projectName);
+        Account account = accountService.findByUserId(principal.getName()).get();
+        Optional<Project> optionalProject = account.getProjects().stream().filter(p -> p.getName().equals(projectName)).findFirst();
         Optional<Tag> optionalTag = tagRepository.findByName(tagName);
 
+        Project project;
         if (optionalProject.isEmpty()) {
             return ResponseEntity.badRequest().body("Project '" + projectName + "' not exists");
         }
+        project = optionalProject.get();
 
-        Project project = optionalProject.get();
         Tag tag = optionalTag.orElseGet(() -> new Tag(tagName));
         tag.getProjects().add(project);
         project.getTags().add(tag);

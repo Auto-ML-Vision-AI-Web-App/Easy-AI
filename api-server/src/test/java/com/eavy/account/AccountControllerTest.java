@@ -106,7 +106,7 @@ class AccountControllerTest extends ControllerTest {
     @Test
     void getUser() throws Exception {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.userId);
+        String accessToken = TokenManager.generateAccessToken(account.getUserId());
 
         mockMvc.perform(get("/users")
                         .header("Authorization", "Bearer " + accessToken))

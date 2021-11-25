@@ -2,11 +2,9 @@ package com.eavy.project;
 
 import com.eavy.account.Account;
 import com.eavy.tag.Tag;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

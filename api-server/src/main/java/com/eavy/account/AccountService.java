@@ -40,7 +40,7 @@ public class AccountService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         Account account = accountRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " not found in the database"));
-        return new User(account.userId, account.getPassword(), Collections.<SimpleGrantedAuthority>emptyList());
+        return new User(account.getUserId(), account.getPassword(), Collections.<SimpleGrantedAuthority>emptyList());
     }
 
     public Optional<Account> findByUserId(String userId) {
