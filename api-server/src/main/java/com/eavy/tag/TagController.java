@@ -49,7 +49,7 @@ public class TagController {
                                             @RequestParam String projectName,
                                             @RequestParam String tagName) {
         Account account = accountService.findByUserId(principal.getName()).get();
-        Optional<Project> optionalProject = account.getProjects().stream().filter(p -> p.getName().equals(projectName)).findFirst();
+        Optional<Project> optionalProject = account.getProjects().stream().filter(p -> p.getProjectName().equals(projectName)).findFirst();
         Optional<Tag> optionalTag = tagRepository.findByName(tagName);
 
         Project project;

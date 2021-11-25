@@ -32,17 +32,16 @@ class ProjectControllerTest extends ControllerTest {
 
         double accuracy = 0.82;
         double loss = 0.26;
-        List<String> classes = List.of("c1, c2");
+        List<String> classes = List.of("c1", "c2");
 
         mockMvc.perform(patch("/projects")
-                        .param("projectName", project.getName())
+                        .param("projectName", project.getProjectName())
                         .param("accuracy", "0.82")
                         .param("classes", classes.get(0), classes.get(1))
                         .param("loss", "0.26")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(project.getName()));
+                .andExpect(status().isOk());
 
         assertThat(savedProject.getAccuracy()).isEqualTo(accuracy);
         assertThat(savedProject.getLoss()).isEqualTo(loss);
@@ -73,7 +72,7 @@ class ProjectControllerTest extends ControllerTest {
         String accessToken = TokenManager.generateAccessToken(TEST_ID);
 
         mockMvc.perform(post("/projects")
-                        .param("projectName", project.getName())
+                        .param("projectName", project.getProjectName())
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
