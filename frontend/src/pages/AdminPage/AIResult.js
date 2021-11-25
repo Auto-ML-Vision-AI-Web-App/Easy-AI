@@ -135,6 +135,7 @@ export default function AIResult(props) {
                                     <DataTable.ModelTable
                                         final_accuracy={props.AIPretrainedInfo[1].final_accuracy}
                                         final_loss={props.AIPretrainedInfo[1].final_loss}
+                                        type={props.AIType}
                                     ></DataTable.ModelTable>
                                     <div>
                                         {props.AIPretrainedInfo[1].final_accuracy>=0.7?

@@ -57,7 +57,7 @@ export function ModelTable(props) {
     }
     
     const modelRows = [
-        createData(0, 'Frozen yoghurt', props.final_accuracy, props.final_loss),
+        createData(0, props.type, props.final_accuracy, props.final_loss),
     ];
 
     return (
