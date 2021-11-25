@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectDto {
-    String userId;
+    String username;
     String projectName;
     LocalDate created;
     LocalDate lastModified;
@@ -18,7 +18,7 @@ public class ProjectDto {
     }
 
     public ProjectDto(Project project) {
-        this.userId = project.getAccount().getUserId();
+        this.username = project.getAccount().getUsername();
         this.projectName = project.getProjectName();
         this.created = project.getCreated();
         this.lastModified = project.getLastModified();
@@ -52,12 +52,12 @@ public class ProjectDto {
         this.classes = classes;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getProjectName() {

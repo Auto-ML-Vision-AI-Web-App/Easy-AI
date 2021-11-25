@@ -28,13 +28,13 @@ class AccountServiceTest {
 
     @Test
     void loadByUsername_success() {
-        String userId = "USERID";
+        String username = "USERID";
         String password = "PASSWORD";
-        Account account = new Account(userId, password);
+        Account account = new Account(username, password);
         accountService.signUp(account);
 
         UserDetailsService userDetailsService = this.accountService;
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         assertThat(passwordEncoder.matches(password, userDetails.getPassword())).isTrue();
     }

@@ -29,7 +29,7 @@ class AccountControllerTest extends ControllerTest {
         accountService.signUp(account);
 
         MvcResult mvcResult = mockMvc.perform(post("/signin")
-                        .param("userId", TEST_ID)
+                        .param("username", TEST_ID)
                         .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -48,7 +48,7 @@ class AccountControllerTest extends ControllerTest {
     @Test
     void signInFailure() throws Exception {
         mockMvc.perform(post("/signin")
-                .param("userId", TEST_ID)
+                .param("username", TEST_ID)
                 .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -67,7 +67,7 @@ class AccountControllerTest extends ControllerTest {
     @Test
     void signUpSuccess() throws Exception {
         mockMvc.perform(post("/signup")
-                        .param("userId", TEST_ID)
+                        .param("username", TEST_ID)
                         .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -77,13 +77,13 @@ class AccountControllerTest extends ControllerTest {
     @Test
     void signUpFailure_emptyValue() throws Exception {
         mockMvc.perform(post("/signup")
-                        .param("userId", "")
+                        .param("username", "")
                         .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
         mockMvc.perform(post("/signup")
-                        .param("userId", TEST_ID)
+                        .param("username", TEST_ID)
                         .param("password", ""))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -96,7 +96,7 @@ class AccountControllerTest extends ControllerTest {
         accountService.signUp(account);
 
         mockMvc.perform(post("/signup")
-                        .param("userId", TEST_ID)
+                        .param("username", TEST_ID)
                         .param("password", TEST_PASSWORD))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -106,13 +106,13 @@ class AccountControllerTest extends ControllerTest {
     @Test
     void getUser() throws Exception {
         Account account = accountService.signUp(new Account(TEST_ID, TEST_PASSWORD));
-        String accessToken = TokenManager.generateAccessToken(account.getUserId());
+        String accessToken = TokenManager.generateAccessToken(account.getUsername());
 
         mockMvc.perform(get("/users")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(account.getUserId()))
+                .andExpect(jsonPath("$.username").value(account.getUsername()))
                 .andExpect(jsonPath("$.numOfProjects").exists());
     }
 
